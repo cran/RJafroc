@@ -14,26 +14,21 @@
 #' 
 #' @examples
 #' 
-#' fullName <- "http://www.devchakraborty.com/RocData/rocData.xlsx"
-#' download.file(url = fullName, basename(fullName), mode = "wb")
-#' RocDataXlsx<- ReadDataFile(basename(fullName))
+#' fileName <- system.file("tests", "rocData.xlsx", package = "RJafroc")
+#' RocDataXlsx<- ReadDataFile(fileName)
 #' 
 #' \dontrun{
-#' fullName <- "http://www.devchakraborty.com/RocData/rocData.csv"
-#' download.file(url = fullName, basename(fullName))
-#' RocDataCsv<- ReadDataFile(basename(fullName), format = "MRMC")
+#' fileName <- system.file("tests", "rocData.csv", package = "RJafroc")
+#' RocDataCsv<- ReadDataFile(fileName, format = "MRMC")
 #' 
-#' fullName <- "http://www.devchakraborty.com/RocData/rocData.imrmc"
-#' download.file(url = fullName, basename(fullName))
-#' RocDataImrmc<- ReadDataFile(basename(fullName), format = "iMRMC")
+#' fileName <- system.file("tests", "rocData.imrmc", package = "RJafroc")
+#' RocDataImrmc<- ReadDataFile(fileName, format = "iMRMC")
 #' 
-#' fullName <- "http://www.devchakraborty.com/FrocData/frocData.xlsx"
-#' download.file(url = fullName, basename(fullName), mode = "wb")
-#' FrocDataXlsx <- ReadDataFile(basename(fullName))
+#' fileName <- system.file("tests", "frocData.xlsx", package = "RJafroc")
+#' FrocDataXlsx <- ReadDataFile(fileName)
 #' 
-#' fullName <- "http://www.devchakraborty.com/RoiData/roiData.xlsx"
-#' download.file(url = fullName, basename(fullName), mode = "wb")
-#' RoiDataXlsx <- ReadDataFile(basename(fullName))
+#' fileName <- system.file("tests", "roiData.xlsx", package = "RJafroc")
+#' RoiDataXlsx <- ReadDataFile(fileName)
 #' }
 #' 
 #' @importFrom tools file_ext

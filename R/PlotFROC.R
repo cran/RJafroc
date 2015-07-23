@@ -1,5 +1,5 @@
 #' @import ggplot2
-PlotFROC <- function(dataset, plottingModalities, plottingReaders, legendPosition = "bottom") {
+PlotFROC <- function(dataset, plottingModalities, plottingReaders, legendPosition) {
   NL <- dataset$NL
   LL <- dataset$LL
   lesionNum <- dataset$lesionNum
@@ -51,29 +51,78 @@ PlotFROC <- function(dataset, plottingModalities, plottingReaders, legendPositio
         }
       }
     } else {
-      stop("Lengths of plottingModalities and plottingReaders do not match.")
+      stop("Lengths of trts and rdrs do not match.")
     }
   }
   
-  xLim <- ceiling(max(FROCPoints$NLF))
+  xLim <- ceiling(max(FROCPoints$NLF) / 0.1 ) * 0.1
   yLim <- ceiling(max(FROCPoints$LLF))
+  classes <- unique(FROCPoints$class)
+  if (missing(legendPosition)){
+    tooSmall <- FALSE
+    for (i in 1:length(classes)){
+      indices <- FROCPoints$class == classes[i]
+      maxLLF <- max(FROCPoints$LLF[indices])
+      if (maxLLF < 0.25){
+        tooSmall <- TRUE
+        legendPosition <- "bottom"        
+      }
+      if (sum(indices) > 20 && all(FROCPoints$type[indices] == "individual")){
+        typeTmp <- as.character(FROCPoints$type)
+        typeTmp[indices] <- "continuous"
+        FROCPoints$type <- typeTmp
+      }
+    }
+    if (!tooSmall){
+      legendPosition <- c(1, 0)
+    }
+  }
+  
+  if (legendPosition == "right" || legendPosition == "left" ){
+    legDir <- "vertical"
+  }else{
+    legDir <- "horizontal"
+  }
+  
   if (!is.list(plottingModalities) && !is.list(plottingReaders)) {
     mr <- unlist(strsplit(as.character(FROCPoints$class), split = "\n"))
     dim(mr) <- c(2, length(mr)/2)
     FROCPoints <- cbind(FROCPoints, data.frame(Modality = mr[1, ], Reader = mr[2, ]))
     opratingPoints <- FROCPoints[FROCPoints$type == "individual" & !((FROCPoints$NLF == 0 & FROCPoints$LLF == 0) | (FROCPoints$NLF == 1 & FROCPoints$LLF == 1)), ]
-    
-    FROCPlot <- with(FROCPoints, {
-      FROCPlotTemp <- ggplot()
-      mStrings <- unique(as.character(FROCPoints$Modality))
-      for (i in 1:length(plottingModalities)) {
-        FROCPlotTemp <- FROCPlotTemp + geom_line(data = FROCPoints[FROCPoints$Modality == mStrings[i], ], aes(x = NLF, y = LLF, color = Reader, linetype = Modality), size = 1)
-      }
-      FROCPlotTemp <- FROCPlotTemp + geom_point(data = opratingPoints, size = 4, aes(x = NLF, y = LLF, color = Reader)) + theme(legend.title = element_blank(), legend.position = legendPosition) + scale_x_continuous(expand = c(0, 
-                                                                                                                                                                                                                                  0), limits = c(0, xLim)) + scale_y_continuous(expand = c(0, 0), limits = c(0, yLim))
-    })
+    legendLength <- length(plottingReaders)
+    shapeVector <- rep(NA, length(plottingReaders))
+    for (n in 1:legendLength) {
+      index <- which(FROCPoints$Reader == levels(FROCPoints$Reader)[n])[1]
+      if (FROCPoints$type[index] == "individual") 
+        shapeVector[n] <- 16
+    }
+    if (length(plottingModalities) == 1){
+      FROCPlot <- with(FROCPoints, {
+        FROCPlotTemp <- ggplot()
+        mStrings <- unique(as.character(FROCPoints$Modality))
+        for (i in 1:length(plottingModalities)) {
+          FROCPlotTemp <- FROCPlotTemp + geom_line(data = FROCPoints, aes(x = NLF, y = LLF, color = class), size = 1)
+        }
+        FROCPlotTemp <- FROCPlotTemp + geom_point(data = opratingPoints, size = 4, aes(x = NLF, y = LLF, color = class)) +
+          theme(legend.title = element_blank(), legend.position = legendPosition, legend.direction = legDir, legend.justification = c(1, 0)) + 
+          guides(color = guide_legend(override.aes = list(shape = shapeVector))) + 
+          scale_x_continuous(expand = c(0, 0), limits = c(0, xLim)) + scale_y_continuous(expand = c(0, 0), limits = c(0, yLim))
+      })
+    } else {      
+      FROCPlot <- with(FROCPoints, {
+        FROCPlotTemp <- ggplot()
+        mStrings <- unique(as.character(FROCPoints$Modality))
+        for (i in 1:length(plottingModalities)) {
+          FROCPlotTemp <- FROCPlotTemp + geom_line(data = FROCPoints[FROCPoints$Modality == mStrings[i], ], aes(x = NLF, y = LLF, color = Reader, linetype = Modality), size = 1)
+        }
+        FROCPlotTemp <- FROCPlotTemp + geom_point(data = opratingPoints, size = 4, aes(x = NLF, y = LLF, color = Reader)) +
+          theme(legend.title = element_blank(), legend.position = legendPosition, legend.direction = legDir, legend.justification = c(1, 0)) + 
+          guides(color = guide_legend(override.aes = list(shape = shapeVector))) + 
+          scale_x_continuous(expand = c(0, 0), limits = c(0, xLim)) + scale_y_continuous(expand = c(0, 0), limits = c(0, yLim))
+      })
+    }
     FROCPoints <- data.frame(NLF = FROCPoints$NLF, LLF = FROCPoints$LLF, class = FROCPoints$class, type = FROCPoints$type)
-  } else {
+  } else {    
     opratingPoints <- FROCPoints[FROCPoints$type == "individual" & !((FROCPoints$NLF == 0 & FROCPoints$LLF == 0) | (FROCPoints$NLF == 1 & FROCPoints$LLF == 1)), ]
     
     legendLength <- length(levels(FROCPoints$class))
@@ -83,9 +132,12 @@ PlotFROC <- function(dataset, plottingModalities, plottingReaders, legendPositio
       if (FROCPoints$type[index] == "individual") 
         shapeVector[n] <- 16
     }
+    
     FROCPlot <- with(FROCPoints, {
-      ggplot(data = FROCPoints, aes(x = NLF, y = LLF, color = class)) + geom_line(size = 1) + geom_point(data = opratingPoints, size = 4) + theme(legend.title = element_blank(), legend.position = legendPosition) + 
-        guides(color = guide_legend(override.aes = list(shape = shapeVector))) + scale_x_continuous(expand = c(0, 0), limits = c(0, xLim)) + scale_y_continuous(expand = c(0, 0), limits = c(0, yLim))
+      ggplot(data = FROCPoints, aes(x = NLF, y = LLF, color = class)) + geom_line(size = 1) + geom_point(data = opratingPoints, size = 4) + 
+        theme(legend.title = element_blank(), legend.position = legendPosition, legend.direction = legDir, legend.justification = c(1, 0)) + 
+        guides(color = guide_legend(override.aes = list(shape = shapeVector))) + scale_x_continuous(expand = c(0, 0), limits = c(0, xLim)) + 
+        scale_y_continuous(expand = c(0, 0), limits = c(0, yLim))
     })
   }
   

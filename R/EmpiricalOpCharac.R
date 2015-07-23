@@ -46,7 +46,7 @@
 #' 
 #' @export
 #' 
-EmpiricalOpCharac <- function(dataset, trts, rdrs, lgdPos = "bottom", opChType = "ROC") {
+EmpiricalOpCharac <- function(dataset, trts, rdrs, lgdPos, opChType = "ROC") {
   if (dataset$dataType == "ROI")
     stop("The empirical operating characteristic of ROI dataset is unavailable.")
   if (opChType == "ROC") {

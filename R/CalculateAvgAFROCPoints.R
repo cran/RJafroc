@@ -52,13 +52,15 @@ CalculateAvgAFROCPoints <- function(NL, LL, modalityID, readerID, maxNL, lesionN
       } else {
         llScores <- as.numeric(unlist(attr(llTable, "dimnames")))
       }
-      llScores <- as.numeric(unlist(attr(llTable, "dimnames")))
       scores <- sort(unique(c(nlScores, llScores)), decreasing = TRUE)
       
       fpf <- cumsum(as.vector(nlTable))/K1
       llf <- cumsum(as.vector(llTable))/sumLL
       
-      if (llf[length(llf)] != 1) {
+      if (length(llf) == 0){
+        llScores <- -Inf
+        llf <- 0
+      }else if (llf[length(llf)] != 1) {
         llScores <- c(llScores, -Inf)
         llf <- c(llf, 1)  #dummy ll score and llf
       }

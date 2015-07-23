@@ -46,7 +46,6 @@ CalculateFROCPoints <- function(NL, LL, modalityID, readerID, maxNL, lesionNum, 
             } else {
                 llScores <- as.numeric(unlist(attr(llTable, "dimnames")))
             }
-            llScores <- as.numeric(unlist(attr(llTable, "dimnames")))
             scores <- sort(unique(c(nlScores, llScores)), decreasing = TRUE)
             
             nlf <- cumsum(as.vector(nlTable))/K

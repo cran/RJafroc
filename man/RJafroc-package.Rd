@@ -152,6 +152,7 @@
     \item \code{\link{DBMHAnalysis}}: Performs Dorfman-Berbaum-Metz analysis with Hillis improvements for the specified dataset.
     \item \code{\link{EmpiricalOpCharac}}: Plot empirical curves for specified modalities and readers in the dataset.
     \item \code{\link{FigureOfMerit}}: Calculate the figure of merit for each reader using each modality.
+    \item \code{\link{FROC2HrROC}}: Convert an FROC dataset to a highest rating inferred ROC dataset.
     \item \code{\link{ORHAnalysis}}: Performs Obuchowski-Rockette analysis with Hillis improvements for the specified dataset.
     \item \code{\link{OutputReport}}: Save the results of the analysis to a text file.  
     \item \code{\link{PowerGivenJK}}: Calculate the statistical power with the given number of readers, number of cases and DBM or OR variances components.

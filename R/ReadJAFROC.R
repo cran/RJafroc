@@ -11,6 +11,10 @@ ReadJAFROC <- function(fileName) {
   # truthTable <- readColumns(sheets[[truthFileIndex]], startColumn=1, endColumn = 3, startRow=1, endRow=NULL)
   truthTable <- read.xlsx2(fileName, truthFileIndex, colIndex = 1:3, colClasses = rep("numeric", 3))
   
+  for (i in 1:3){
+    truthTable[grep("^\\s*$", truthTable[ , i]), i] <- NA
+  }
+  
   naRows <- colSums(is.na(truthTable))
   if (max(naRows) > 0) {
     if (max(naRows) == min(naRows)) {
@@ -18,16 +22,22 @@ ReadJAFROC <- function(fileName) {
     }
   }
   
-  for (i in 1:3) {
-    if (any(is.na(as.numeric(as.character(truthTable[, i]))))) {
-      naLines <- which(is.na(as.numeric(as.character(truthTable[, i])))) + 1
-      errorMsg <- paste0("There are unavailable cell(s) at the line(s) ", paste(naLines, collapse = ", "), " in the TRUTH table.")
+  for (i in 1:2) {
+    if (any((as.numeric(as.character(truthTable[, i]))) %% 1 != 0 )) {
+      naLines <- which(!is.integer(as.numeric(as.character(truthTable[, i])))) + 1
+      errorMsg <- paste0("There are non-integer values(s) for CaseID or LesionID at the line(s) ", paste(naLines, collapse = ", "), " in the TRUTH table.")
       stop(errorMsg)
     }
   }
   
-  caseID <- truthTable[[1]]  # all 3 have same lenghts
-  lesionID <- truthTable[[2]]
+  if (any(is.na(as.numeric(as.character(truthTable[, 3]))))) {
+    naLines <- which(is.na(as.numeric(as.character(truthTable[, 3])))) + 1
+    errorMsg <- paste0("There are non-numeric values(s) for weights at the line(s) ", paste(naLines, collapse = ", "), " in the TRUTH table.")
+    stop(errorMsg)
+  }
+  
+  caseID <- as.integer(truthTable[[1]])  # all 3 have same lenghts
+  lesionID <- as.integer(truthTable[[2]])
   weights <- truthTable[[3]]
   
   normalCases <- sort(unique(caseID[lesionID == 0]))
@@ -48,6 +58,10 @@ ReadJAFROC <- function(fileName) {
     stop("FP table cannot be found in the dataset.")
   # NLTable <- readColumns(sheets[[nlFileIndex]], startColumn=1, endColumn = 4, startRow=1, endRow=NULL)
   NLTable <- read.xlsx2(fileName, nlFileIndex, colIndex = 1:4, colClasses = c(rep("character", 2), rep("numeric", 2)))
+  
+  for (i in 1:4){
+    NLTable[grep("^\\s*$", NLTable[ , i]), i] <- NA
+  }
   
   naRows <- colSums(is.na(NLTable))
   if (max(naRows) > 0) {
@@ -81,6 +95,10 @@ ReadJAFROC <- function(fileName) {
     stop("TP table cannot be found in the dataset.")
   # LLTable <- readColumns(sheets[[llFileIndex]], startColumn=1, endColumn = 5, startRow=1, endRow=NULL)
   LLTable <- read.xlsx2(fileName, llFileIndex, colIndex = 1:5, colClasses = c(rep("character", 2), rep("numeric", 3)))
+  
+  for (i in 1:5){
+    LLTable[grep("^\\s*$", LLTable[ , i]), i] <- NA
+  }
   
   naRows <- colSums(is.na(LLTable))
   if (max(naRows) > 0) {

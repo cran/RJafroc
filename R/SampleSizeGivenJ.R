@@ -95,8 +95,9 @@
 #' 
 SampleSizeGivenJ <- function(J, varYTR, varYTC, varYEps, cov1, cov2, cov3, varEps, msTR, KStar, 
                              alpha = 0.05, effectSize = 0.05, desiredPower = 0.8, randomOption = "ALL") {
-  if (((missing(varYTR)) || (missing(varYTC)) || (missing(varYEps)))) {
-    if (((!missing(cov1)) && (!missing(cov2)) && (!missing(cov3)) && (!missing(varEps)) && (!missing(msTR)))) {
+  if (((missing(varYTR)) || (missing(varYTC)) || (missing(varYEps)) || is.null(varYTR) || is.null(varYTC) || is.null(varYEps)
+       || is.na(varYTR) || is.na(varYTC) || is.na(varYEps))) {
+    if (((!missing(cov1)) && (!missing(cov2)) && (!missing(cov3)) && (!missing(varEps)) && (!missing(msTR)) && (!missing(KStar)))) {
       varYTR <- msTR - varEps + cov1 + max(cov2 - cov3, 0)
       varYTC <- max(cov2 - cov3, 0) * KStar
       varYRC <- max(cov1 - cov3, 0) * KStar

@@ -27,7 +27,7 @@ SaveJAFROC <- function(dataset, fileName) {
   lesionWeights <- as.vector(t(lesionWeight))
   lesionWeights <- lesionWeights[lesionWeights != UNINITIALIZED]
   lesionWeights <- c(rep(0, K1), lesionWeights)
-  dataSheet <- data.frame(CaseID = caseIDs, LesionID = lesionIDs, Weight = lesionWeights)
+  dataSheet <- data.frame(CaseID = as.integer(caseIDs), LesionID = as.integer(lesionIDs), Weight = lesionWeights)
   write.xlsx2(x = dataSheet, file = fileName, sheetName = "TRUTH", row.names = FALSE)
   
   dataSheet <- NULL
@@ -42,8 +42,8 @@ SaveJAFROC <- function(dataset, fileName) {
       }
     }
   }
-  dataSheet <- data.frame(ReaderID = readerID[dataSheet[, 1]], ModalityID = modalityID[dataSheet[, 2]], CaseID = dataSheet[, 3], NL_Rating = signif(dataSheet[, 4], 6))
-  write.xlsx2(x = dataSheet, file = fileName, sheetName = "NL", row.names = FALSE, append = TRUE)
+  dataSheet <- data.frame(ReaderID = readerID[dataSheet[, 1]], ModalityID = modalityID[dataSheet[, 2]], CaseID = as.integer(dataSheet[, 3]), NL_Rating = signif(dataSheet[, 4], 6))
+  write.xlsx2(x = dataSheet, file = fileName, sheetName = "FP", row.names = FALSE, append = TRUE)
   
   dataSheet <- NULL
   for (i in 1:I) {
@@ -51,12 +51,12 @@ SaveJAFROC <- function(dataset, fileName) {
       for (k in 1:K2) {
         for (l in 1:lesionNum[k]) {
           if (LL[i, j, k, l] != UNINITIALIZED) {
-            dataSheet <- rbind(dataSheet, c(j, i, k + K1, l, LL[i, j, k, l]))
+            dataSheet <- rbind(dataSheet, c(j, i, k + K1, lesionID[k, l], LL[i, j, k, l]))
           }
         }
       }
     }
   }
-  dataSheet <- data.frame(ReaderID = readerID[dataSheet[, 1]], ModalityID = modalityID[dataSheet[, 2]], CaseID = dataSheet[, 3], LesionID = dataSheet[, 4], LL_Rating = signif(dataSheet[, 5], 6))
-  write.xlsx2(x = dataSheet, file = fileName, sheetName = "LL", row.names = FALSE, append = TRUE)
+  dataSheet <- data.frame(ReaderID = readerID[dataSheet[, 1]], ModalityID = modalityID[dataSheet[, 2]], CaseID = as.integer(dataSheet[, 3]), LesionID = as.integer(dataSheet[, 4]), LL_Rating = signif(dataSheet[, 5], 6))
+  write.xlsx2(x = dataSheet, file = fileName, sheetName = "TP", row.names = FALSE, append = TRUE)
 } 

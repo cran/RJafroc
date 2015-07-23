@@ -56,6 +56,7 @@
 #' Statistics in Medicine, 24(10), 1579-607.
 #' 
 #' @export
+#' @importFrom stats qf pf
 #' 
 PowerGivenJK <- function(J, K, varYTR, varYTC, varYEps, cov1, cov2, cov3, varEps, msTR, KStar, alpha = 0.05, effectSize = 0.05, randomOption = "ALL") {
   if (((missing(varYTR)) || (missing(varYTC)) || (missing(varYEps)))) {

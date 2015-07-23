@@ -67,7 +67,7 @@
 #' }
 #' 
 #' @export
-#' 
+#' @importFrom stats pf pt qt
 DBMHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, option = "ALL") {
   NL <- dataset$NL
   LL <- dataset$LL

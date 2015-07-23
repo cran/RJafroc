@@ -1,3 +1,4 @@
+#' @importFrom stats cov
 ResamplingEstimateVarCovs <- function(resampleMatrix) {
   I <- dim(resampleMatrix)[1]
   J <- dim(resampleMatrix)[2]

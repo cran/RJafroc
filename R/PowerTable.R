@@ -91,7 +91,7 @@ PowerTable <- function(dataset, alpha = 0.05, effectSize = 0.05, desiredPower = 
     } else if (nCases < 20) {
       randomSampleSize <- rbind(randomSampleSize, c(j, "<20", NA))
     } else {
-      randomSampleSize <- rbind(randomSampleSize, c(j, nCases, power))
+      randomSampleSize <- rbind(randomSampleSize, c(j, nCases, signif(power, 3)))
     }
   }
   randomSampleSize <- data.frame(numReaders = randomSampleSize[, 1], numCases = randomSampleSize[, 2], power = randomSampleSize[, 3])

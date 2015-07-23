@@ -38,8 +38,17 @@ CalculateAvgROCPoints <- function(NL, LL, modalityID, readerID, maxNL, lesionNum
       nlTable <- rev(table(nl))
       llTable <- rev(table(ll))
       
-      nlScores <- as.numeric(unlist(attr(nlTable, "dimnames")))
-      llScores <- as.numeric(unlist(attr(llTable, "dimnames")))
+      if (length(nlTable) == 1) {
+        nlScores <- as.numeric(attr(nlTable, "names"))
+      } else {
+        nlScores <- as.numeric(unlist(attr(nlTable, "dimnames")))
+      }
+      
+      if (length(nlTable) == 1) {
+        llScores <- as.numeric(attr(llTable, "names"))
+      } else {
+        llScores <- as.numeric(unlist(attr(llTable, "dimnames")))
+      }
       scores <- sort(unique(c(nlScores, llScores)), decreasing = TRUE)
       
       fpf <- cumsum(as.vector(nlTable))/K1

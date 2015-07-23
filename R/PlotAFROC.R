@@ -1,5 +1,5 @@
 #' @import ggplot2
-PlotAFROC <- function(dataset, plottingModalities, plottingReaders, legendPosition = "bottom") {
+PlotAFROC <- function(dataset, plottingModalities, plottingReaders, legendPosition) {
   NL <- dataset$NL
   LL <- dataset$LL
   lesionNum <- dataset$lesionNum
@@ -51,8 +51,35 @@ PlotAFROC <- function(dataset, plottingModalities, plottingReaders, legendPositi
         }
       }
     } else {
-      stop("Lengths of plottingModalities and plottingReaders do not match.")
+      stop("Lengths of trts and rdrs do not match.")
     }
+  }
+  
+  classes <- unique(AFROCPoints$class)
+  if (missing(legendPosition)){
+    tooSmall <- FALSE
+    for (i in 1:length(classes)){
+      indices <- AFROCPoints$class == classes[i]
+      maxLLF <- max(AFROCPoints$LLF[indices])
+      if (maxLLF < 0.25){
+        tooSmall <- TRUE
+        legendPosition <- "bottom"        
+      }
+      if (sum(indices) > 20 && all(AFROCPoints$type[indices] == "individual")){
+        typeTmp <- as.character(AFROCPoints$type)
+        typeTmp[indices] <- "continuous"
+        AFROCPoints$type <- typeTmp
+      }
+    }
+    if (!tooSmall){
+      legendPosition <- c(1, 0)
+    }
+  }  
+  
+  if (legendPosition == "right" || legendPosition == "left" ){
+    legDir <- "vertical"
+  }else{
+    legDir <- "horizontal"
   }
   
   if (!is.list(plottingModalities) && !is.list(plottingReaders)) {
@@ -60,16 +87,38 @@ PlotAFROC <- function(dataset, plottingModalities, plottingReaders, legendPositi
     dim(mr) <- c(2, length(mr)/2)
     AFROCPoints <- cbind(AFROCPoints, data.frame(Modality = mr[1, ], Reader = mr[2, ]))
     opratingPoints <- AFROCPoints[AFROCPoints$type == "individual" & !((AFROCPoints$FPF == 0 & AFROCPoints$LLF == 0) | (AFROCPoints$FPF == 1 & AFROCPoints$LLF == 1)), ]
-    
-    AFROCPlot <- with(AFROCPoints, {
-      AFROCPlotTemp <- ggplot()
-      mStrings <- unique(as.character(AFROCPoints$Modality))
-      for (i in 1:length(plottingModalities)) {
-        AFROCPlotTemp <- AFROCPlotTemp + geom_line(data = AFROCPoints[AFROCPoints$Modality == mStrings[i], ], aes(x = FPF, y = LLF, color = Reader, linetype = Modality), size = 1)
-      }
-      AFROCPlotTemp <- AFROCPlotTemp + geom_point(data = opratingPoints, size = 4, aes(x = FPF, y = LLF, color = Reader)) + theme(legend.title = element_blank(), legend.position = legendPosition) + scale_x_continuous(expand = c(0, 
-                                                                                                                                                                                                                                    0)) + scale_y_continuous(expand = c(0, 0))
-    })
+    legendLength <- length(plottingReaders)
+    shapeVector <- rep(NA, length(plottingReaders))
+    for (n in 1:legendLength) {
+      index <- which(AFROCPoints$Reader == levels(AFROCPoints$Reader)[n])[1]
+      if (AFROCPoints$type[index] == "individual") 
+        shapeVector[n] <- 16
+    }
+    if (length(plottingModalities) == 1){
+      AFROCPlot <- with(AFROCPoints, {
+        AFROCPlotTemp <- ggplot()
+        mStrings <- unique(as.character(AFROCPoints$Modality))
+        for (i in 1:length(plottingModalities)) {
+          AFROCPlotTemp <- AFROCPlotTemp + geom_line(data = AFROCPoints, aes(x = FPF, y = LLF, color = class), size = 1)
+        }
+        AFROCPlotTemp <- AFROCPlotTemp + geom_point(data = opratingPoints, size = 4, aes(x = FPF, y = LLF, color = class)) +
+          theme(legend.title = element_blank(), legend.position = legendPosition, legend.direction = legDir, legend.justification = c(1, 0)) + 
+          guides(color = guide_legend(override.aes = list(shape = shapeVector))) + 
+          scale_x_continuous(expand = c(0, 0)) + scale_y_continuous(expand = c(0, 0))
+      })
+    } else {      
+      AFROCPlot <- with(AFROCPoints, {
+        AFROCPlotTemp <- ggplot()
+        mStrings <- unique(as.character(AFROCPoints$Modality))
+        for (i in 1:length(plottingModalities)) {
+          AFROCPlotTemp <- AFROCPlotTemp + geom_line(data = AFROCPoints[AFROCPoints$Modality == mStrings[i], ], aes(x = FPF, y = LLF, color = Reader, linetype = Modality), size = 1)
+        }
+        AFROCPlotTemp <- AFROCPlotTemp + geom_point(data = opratingPoints, size = 4, aes(x = FPF, y = LLF, color = Reader)) +
+          theme(legend.title = element_blank(), legend.position = legendPosition, legend.direction = legDir, legend.justification = c(1, 0)) + 
+          guides(color = guide_legend(override.aes = list(shape = shapeVector))) + 
+          scale_x_continuous(expand = c(0, 0)) + scale_y_continuous(expand = c(0, 0))
+      })
+    }
     AFROCPoints <- data.frame(FPF = AFROCPoints$FPF, LLF = AFROCPoints$LLF, class = AFROCPoints$class, type = AFROCPoints$type)
   } else {
     opratingPoints <- AFROCPoints[AFROCPoints$type == "individual" & !((AFROCPoints$FPF == 0 & AFROCPoints$LLF == 0) | (AFROCPoints$FPF == 1 & AFROCPoints$LLF == 1)), ]
@@ -81,9 +130,12 @@ PlotAFROC <- function(dataset, plottingModalities, plottingReaders, legendPositi
       if (AFROCPoints$type[index] == "individual") 
         shapeVector[n] <- 16
     }
+    
     AFROCPlot <- with(AFROCPoints, {
-      ggplot(data = AFROCPoints, aes(x = FPF, y = LLF, color = class)) + geom_line(size = 1) + geom_point(data = opratingPoints, size = 4) + theme(legend.title = element_blank(), legend.position = legendPosition) + 
-        guides(color = guide_legend(override.aes = list(shape = shapeVector))) + scale_x_continuous(expand = c(0, 0)) + scale_y_continuous(expand = c(0, 0))
+      ggplot(data = AFROCPoints, aes(x = FPF, y = LLF, color = class)) + geom_line(size = 1) + geom_point(data = opratingPoints, size = 4) + 
+        theme(legend.title = element_blank(), legend.position = legendPosition, legend.direction = legDir, legend.justification = c(1, 0)) + 
+        guides(color = guide_legend(override.aes = list(shape = shapeVector))) + 
+        scale_x_continuous(expand = c(0, 0)) + scale_y_continuous(expand = c(0, 0))
     })
   }
   

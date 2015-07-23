@@ -1,3 +1,4 @@
+#' @importFrom utils read.delim
 ReadOrDbmMrmc <- function(fileName, delimiter) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   dataTableFrame <- read.delim(fileName, sep = delimiter)

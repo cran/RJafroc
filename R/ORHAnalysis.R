@@ -39,6 +39,7 @@
 #' print(retOR)
 #' 
 #' @export
+#' @importFrom stats pf pt qt
 #' 
 ORHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, covEstMethod = "Jackknife", nBoots = 200, option = "ALL") {
   NL <- dataset$NL

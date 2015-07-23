@@ -1,3 +1,4 @@
+#' @importFrom stats runif
 EstimateVarCov <- function(fomArray, NL, LL, lesionNum, lesionID, lesionWeight, maxNL, fom, covEstMethod, nBoots) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   Dim <- dim(NL)
@@ -134,14 +135,16 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionNum, lesionID, lesionWeight, 
         for (j in 1:J) {
           for (k in 1:I10) {
             for (el in 1:lesionNum[k]) {
-              V10[i, j, k, el] <- (sum(as.vector(NL[i, j, , ][NL[i, j, , ] != UNINITIALIZED]) < LL[i, j, k, el]) + 0.5 * sum(as.vector(NL[i, j, , ][NL[i, j, , ] != UNINITIALIZED]) == LL[i, j, k, el]))/N
+              V10[i, j, k, el] <- (sum(as.vector(NL[i, j, , ][NL[i, j, , ] != UNINITIALIZED]) < LL[i, j, k, el]) 
+                                   + 0.5 * sum(as.vector(NL[i, j, , ][NL[i, j, , ] != UNINITIALIZED]) == LL[i, j, k, el]))/N
             }
           }
-          for (k in kI01) {
+          for (k in 1:I01) {
             for (el in 1:maxNL) {
-              if (NL[i, j, k, el] == UNINITIALIZED) 
+              if (NL[i, j, kI01[k], el] == UNINITIALIZED) 
                 next
-              V01[i, j, k, el] <- (sum(NL[i, j, k, el] < as.vector(LL[i, j, , ][LL[i, j, , ] != UNINITIALIZED])) + 0.5 * sum(NL[i, j, k, el] == as.vector(LL[i, j, , ][LL[i, j, , ] != UNINITIALIZED])))/M
+              V01[i, j, k, el] <- (sum(NL[i, j, kI01[k], el] < as.vector(LL[i, j, , ][LL[i, j, , ] != UNINITIALIZED])) 
+                                   + 0.5 * sum(NL[i, j, kI01[k], el] == as.vector(LL[i, j, , ][LL[i, j, , ] != UNINITIALIZED])))/M
             }
           }
         }
@@ -154,18 +157,30 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionNum, lesionID, lesionWeight, 
           for (j in 1:J) {
             for (jp in 1:J) {
               for (k in 1:I10) {
-                s10[i, ip, j, jp] <- (s10[i, ip, j, jp] + (sum(V10[i, j, k, !is.na(V10[i, j, k, ])]) - lesionNum[k] * fomArray[i, j]) * (sum(V10[ip, jp, k, !is.na(V10[ip, jp, k, ])]) - lesionNum[k] * fomArray[ip, 
-                                                                                                                                                                                                                 jp]))
+                s10[i, ip, j, jp] <- (s10[i, ip, j, jp]
+                                      + (sum(V10[i, j, k, !is.na(V10[i, j, k, ])])
+                                         - lesionNum[k] * fomArray[i, j])
+                                      * (sum(V10[ip, jp, k, !is.na(V10[ip, jp, k, ])]) 
+                                         - lesionNum[k] * fomArray[ip, jp]))
               }
-              for (k in kI01) {
-                s01[i, ip, j, jp] <- (s01[i, ip, j, jp] + (sum(V01[i, j, k, !is.na(V01[i, j, k, ])]) - numKI01[k] * fomArray[i, j]) * (sum(V01[ip, jp, k, !is.na(V01[ip, jp, k, ])]) - numKI01[k] * fomArray[ip, 
-                                                                                                                                                                                                             jp]))
+              for (k in 1:I01) {
+                s01[i, ip, j, jp] <- (s01[i, ip, j, jp] 
+                                      + (sum(V01[i, j, k, !is.na(V01[i, j, k, ])]) 
+                                         - numKI01[kI01[k]] * fomArray[i, j]) 
+                                      * (sum(V01[ip, jp, k, !is.na(V01[ip, jp, k, ])]) 
+                                         - numKI01[kI01[k]] * fomArray[ip, jp]))
               }
+              allAbn <- 0
               for (k in 1:K2) {
-                if (all(NL[ip, jp, k + K1, ] == UNINITIALIZED)) 
+                if (all(NL[ip, jp, k + K1, ] == UNINITIALIZED)) {
+                  allAbn <- allAbn + 1
                   next
-                s11[i, ip, j, jp] <- (s11[i, ip, j, jp] + (sum(V10[i, j, k, !is.na(V10[i, j, k, ])]) - lesionNum[k] * fomArray[i, j]) * (sum(V01[ip, jp, k + K1, !is.na(V01[ip, jp, k + K1, ])]) - numKI01[K1 + 
-                                                                                                                                                                                                             k] * fomArray[ip, jp]))
+                }                  
+                s11[i, ip, j, jp] <- (s11[i, ip, j, jp] 
+                                      + (sum(V10[i, j, k, !is.na(V10[i, j, k, ])]) 
+                                         - lesionNum[k] * fomArray[i, j]) 
+                                      * (sum(V01[ip, jp, k + K1 - allAbn, !is.na(V01[ip, jp, k + K1 - allAbn, ])]) 
+                                         - numKI01[K1 + k] * fomArray[ip, jp]))
               }
             }
           }
@@ -185,7 +200,7 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionNum, lesionID, lesionWeight, 
         }
       }
     } else {
-      # ROI
+      # ROC
       V10 <- array(dim = c(I, J, K2))
       V01 <- array(dim = c(I, J, K1))
       for (i in 1:I) {

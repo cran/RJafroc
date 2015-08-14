@@ -16,7 +16,7 @@ PowerTable(dataset, alpha = 0.05, effectSize = 0.05, desiredPower = 0.8,
 
 \item{desiredPower}{The desired statistical power.}
 
-\item{randomOption}{The random option. It can be \code{ALL}, \code{READERS} or \code{CASES}, which indicate predictions for (1) random readers and random cases, (2) random readers only and
+\item{randomOption}{The random option. It can be \code{"ALL"}, \code{"READERS"} or \code{"CASES"}, which indicate predictions for (1) random readers and random cases, (2) random readers only and
 (3) random cases only.}
 }
 \value{

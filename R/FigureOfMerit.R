@@ -3,19 +3,19 @@
 #' Caclulate the figure of merit (an objective measure of observer performance) for each treatment-reader combination. 
 #' 
 #' @param dataset The dataset to be analyzed, see \link{RJafroc-package}.
-#' @param fom The figure of merit to be used in the calculation. The default is \code{wJAFROC}. See "Details".
+#' @param fom The figure of merit to be used in the calculation. The default is \code{"wJAFROC"}. See "Details".
 #' 
-#' @return An \code{c(I,J)} array, where the row names are the IDs of the treatments and column names are the IDs of the readers.
+#' @return An \code{c(I, J)} array, where the row names are the IDs of the treatments and column names are the IDs of the readers.
 #' 
-#' @details Allowed figures of merit are: (1) \code{Wilcoxon} for ROC data; (2) \code{JAFROC1},
-#' \code{JAFROC}, \code{wJAFROC1}, \code{wJAFROC} (the default), \code{HrAuc}, \code{SongA1}, \code{SongA2}\bold{**} , 
-#' \code{HrSe}, \code{HrSp}, \code{MaxLLF}, \code{MaxNLF}, \code{MaxNLFAllCases}, \code{ExpTrnsfmSp}, 
-#' for free-response data and (3) \code{ROI} for ROI data. 
+#' @details Allowed figures of merit are: (1) \code{"Wilcoxon"} for ROC data; (2) \code{"JAFROC1"},
+#' \code{"JAFROC"}, \code{"wJAFROC1"}, \code{"wJAFROC"} (the default), \code{"HrAuc"}, \code{"SongA1"}, \code{"SongA2"}\bold{**} , 
+#' \code{"HrSe"}, \code{"HrSp"}, \code{"MaxLLF"}, \code{"MaxNLF"}, \code{"MaxNLFAllCases"}, \code{"ExpTrnsfmSp"}, 
+#' for free-response data and (3) \code{"ROI"} for ROI data. 
 #' The JAFROC FOMs are described in the paper by Chakraborty and Berbaum. The Song FOMs are described in the paper by Song et al.
-#' The \code{MaxLLF}, \code{MaxNLF} and \code{MaxNLFAllCases} FOMs correspond to ordinate, abscissa and abscissa, respectively, of the highest 
+#' The \code{"MaxLLF"}, \code{"MaxNLF"} and \code{"MaxNLFAllCases"} FOMs correspond to ordinate, abscissa and abscissa, respectively, of the highest 
 #' point on the FROC operating characteristic obtained by counting all the LL marks on diseased, all NL marks on non-diseased cases, 
-#' and all NL marks on all cases, respectively). The \code{ExpTrnsfmSp} FOM is described in the paper by Popescu. 
-#' The \code{ROI} FOM is described in the paper by Obuchowski et al.
+#' and all NL marks on all cases, respectively). The \code{"ExpTrnsfmSp"} FOM is described in the paper by Popescu. 
+#' The \code{"ROI"} FOM is described in the paper by Obuchowski et al.
 #' 
 #' ** \bold{The Song A2 figure of merit is computationally very intensive.}   
 #'

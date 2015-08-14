@@ -5,9 +5,9 @@
 #' @param dataset See \link{DBMHAnalysis}.
 #' @param fom See \link{DBMHAnalysis}.
 #' @param alpha See \link{DBMHAnalysis}.
-#' @param covEstMethod The method used to estimate the covariance matrix; can be \code{Jackknife}, \code{Bootstrap} or \code{DeLong}, 
+#' @param covEstMethod The method used to estimate the covariance matrix; can be \code{"Jackknife"}, \code{"Bootstrap"} or \code{"DeLong"}, 
 #' the last assumes the Wilcoxon FOM is chosen, otherwise an error will result.
-#' @param nBoots The number of bootstraps (default is 200), used only if the \code{Bootstrap} method is used to estimate 
+#' @param nBoots The number of bootstraps (default is 200), used only if the \code{"Bootstrap"} method is used to estimate 
 #' the covariance matrix. 
 #' @param option See \link{DBMHAnalysis}.
 #' 
@@ -175,7 +175,7 @@ ORHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, covEstMethod = "
       CIRRRC <- array(dim = c(length(diffTRMeans), 2))
       for (i in 1:length(diffTRMeans)) {
         tStat[i] <- diffTRMeans[i]/stdErrRRRC
-        tPr[i] <- 2 * pt(tStat[i], ddfRRRC)
+        tPr[i] <- 2 * pt(abs(tStat[i]), ddfRRRC, lower.tail = FALSE) # critical correction, noted by user Lucy D'Agostino McGowan
         CIRRRC[i, ] <- sort(c(diffTRMeans[i] - qt(alpha/2, ddfRRRC) * stdErrRRRC, diffTRMeans[i] + qt(alpha/2, ddfRRRC) * stdErrRRRC))
       }
       ciDiffTrtRRRC <- data.frame(Treatment = diffTRName, Estimate = diffTRMeans, StdErr = rep(stdErrRRRC, choose(I, 2)), DF = rep(ddfRRRC, choose(I, 2)), t = tStat, p = tPr, CI = CIRRRC)
@@ -222,7 +222,7 @@ ORHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, covEstMethod = "
     CIFRRC <- array(dim = c(length(diffTRMeans), 2))
     for (i in 1:length(diffTRMeans)) {
       tStat[i] <- diffTRMeans[i]/stdErrFRRC
-      tPr[i] <- 2 * pt(tStat[i], ddfFRRC)
+      tPr[i] <- 2 * pt(abs(tStat[i]), ddfFRRC, lower.tail = FALSE)  # critical correction, noted by user Lucy D'Agostino McGowan
       CIFRRC[i, ] <- sort(c(diffTRMeans[i] - qt(alpha/2, ddfFRRC) * stdErrFRRC, diffTRMeans[i] + qt(alpha/2, ddfFRRC) * stdErrFRRC))
     }
     ciDiffTrtFRRC <- data.frame(Treatment = diffTRName, Estimate = diffTRMeans, StdErr = rep(stdErrFRRC, choose(I, 2)), DF = rep(ddfFRRC, choose(I, 2)), t = tStat, p = tPr, CI = CIFRRC)
@@ -269,7 +269,7 @@ ORHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, covEstMethod = "
     tPr <- vector()
     for (n in 1:length(stdErrFRRC)) {
       tStat[n] <- diffTRMeansFRRC[n]/stdErrFRRC[n]
-      tPr[n] <- 2 * pt(tStat[n], dfReaderFRRC[n])
+      tPr[n] <- 2 * pt(abs(tStat[n]), dfReaderFRRC[n], lower.tail = FALSE)  # critical correction, noted by user Lucy D'Agostino McGowan
       CIReaderFRRC[n, ] <- sort(c(diffTRMeansFRRC[n] - qt(alpha/2, dfReaderFRRC[n]) * stdErrFRRC[n], diffTRMeansFRRC[n] + qt(alpha/2, dfReaderFRRC[n]) * stdErrFRRC[n]))
     }
     ciDiffTrtEachRdr <- data.frame(Reader = readerNames, Treatment = trNames, Estimate = diffTRMeansFRRC, StdErr = stdErrFRRC, DF = dfReaderFRRC, t = tStat, p = tPr, CI = CIReaderFRRC)
@@ -297,7 +297,7 @@ ORHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, covEstMethod = "
       CIRRFC <- array(dim = c(length(diffTRMeans), 2))
       for (i in 1:length(diffTRMeans)) {
         tStat[i] <- diffTRMeans[i]/stdErrRRFC
-        tPr[i] <- 2 * pt(tStat[i], ddfRRFC)
+        tPr[i] <- 2 * pt(abs(tStat[i]), ddfRRFC, lower.tail = FALSE)  # critical correction, noted by user Lucy D'Agostino McGowan
         CIRRFC[i, ] <- sort(c(diffTRMeans[i] - qt(alpha/2, ddfRRFC) * stdErrRRFC, diffTRMeans[i] + qt(alpha/2, ddfRRFC) * stdErrRRFC))
       }
       ciDiffTrtRRFC <- data.frame(Treatment = diffTRName, Estimate = diffTRMeans, StdErr = rep(stdErrRRFC, choose(I, 2)), DF = rep(ddfRRFC, choose(I, 2)), t = tStat, p = tPr, CI = CIRRFC)

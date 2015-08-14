@@ -15,7 +15,7 @@
 #' @param alpha The significance level of the study, default value is 0.05.
 #' @param effectSize The effect size to be used in the study, default value is 0.05.
 #' @param desiredPower The desired statistical power, default value is 0.8.
-#' @param randomOption It can be \code{ALL}, \code{READERS} or \code{CASES}, which indicate predictions for (1) random readers and random cases, (2) random readers only and 
+#' @param randomOption It can be \code{"ALL"}, \code{"READERS"} or \code{"CASES"}, which indicate predictions for (1) random readers and random cases, (2) random readers only and 
 #' (3) random cases only.
 #' 
 #' @return A list of two elements:

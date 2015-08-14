@@ -10,12 +10,12 @@ ReadDataFile(fileName, format = "JAFROC", delimiter = ",")
 \item{fileName}{A string specifying the name of the file that contains the dataset.
 The extension of the file must match the corresponding format specified below.}
 
-\item{format}{A string specifying the format of the data file. It can be \code{JAFROC} (the default), \code{MRMC} or \code{iMRMC}.
-For \code{MRMC} the format is determined by the extension of the data file as specified in \url{http://perception.radiology.uiowa.edu/}:
+\item{format}{A string specifying the format of the data file. It can be \code{"JAFROC"} (the default), \code{"MRMC"} or \code{"iMRMC"}.
+For \code{"MRMC"} the format is determined by the extension of the data file as specified in \url{http://perception.radiology.uiowa.edu/}:
 the file extension can be .csv or .txt or .lrc. For file extension .imrmc the format is described in \url{https://code.google.com/p/imrmc/}.}
 
-\item{delimiter}{The string delimiter to be used for the MRMC format ("," is the default), see \url{http://perception.radiology.uiowa.edu/}.
-This parameter is not used when reading \code{JAFROC} or \code{iMRMC} data files.}
+\item{delimiter}{The string delimiter to be used for the \code{"MRMC"} format ("," is the default), see \url{http://perception.radiology.uiowa.edu/}.
+This parameter is not used when reading \code{"JAFROC"} or \code{"iMRMC"} data files.}
 }
 \value{
 A dataset with the specified structure, see \link{RJafroc-package}.

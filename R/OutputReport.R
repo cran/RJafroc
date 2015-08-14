@@ -12,7 +12,7 @@
 #' It is a string descriptor of the dataset object, the default is the variable name of \code{dataset}, see "Details". 
 #' @param reportFile The file name of the output report file. If this parameter is missing, the function will use \code{fileName} or \code{dataDscrpt} followed by the underscore 
 #' separated concatenation of \code{method} and \code{fom} as the output report file.
-#' @param method The analysis method: \code{ORH} or \code{DBMH}.
+#' @param method The analysis method: \code{"ORH"} or \code{"DBMH"}.
 #' @param fom See \link{DBMHAnalysis}.
 #' @param alpha See \link{DBMHAnalysis}.
 #' @param covEstMethod See \link{ORHAnalysis}.
@@ -34,6 +34,12 @@
 #'              dataDscrpt = "MyROCData", showWarnings = FALSE)
 #' 
 #' \dontrun{
+#' ## Generate a analysis report for a data file.
+#' fileName <- system.file("tests", "rocData.xlsx", package = "RJafroc")
+#' OutputReport(fileName = fileName, method = "DBMH", fom = "Wilcoxon",
+#'              showWarnings = FALSE)
+#'              
+#' ## Output report for an existing dataset
 #' OutputReport(dataset = rocData, method = "DBMH", fom = "Wilcoxon", 
 #'              reportFile = "MyROCDataAnalysis.txt", showWarnings = FALSE) 
 #' OutputReport(dataset = rocData, method = "ORH", fom = "Wilcoxon", showWarnings = FALSE)
@@ -49,7 +55,7 @@
 #'     
 #' @export
 #' 
-OutputReport <- function(fileName, format, delimiter = ",", dataset, dataDscrpt = deparse(substitute(dataset)), reportFile, 
+OutputReport <- function(fileName, format = "JAFROC", delimiter = ",", dataset, dataDscrpt = deparse(substitute(dataset)), reportFile, 
                          method = "DBMH", fom = "wJAFROC", alpha = 0.05, covEstMethod = "Jackknife", nBoots = 200, showWarnings = TRUE) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   if (!missing(fileName) && !missing(format)) {

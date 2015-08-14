@@ -12,7 +12,7 @@ SaveDataFile(dataset, fileName, format = "JAFROC",
 
 \item{fileName}{The file name of the output data file. The extension of the data file must match the corresponding format, see \link{RJafroc-package}.}
 
-\item{format}{The format of the data file, which can be \code{JAFROC}, \code{MRMC} or \code{iMRMC}, see \link{RJafroc-package}.}
+\item{format}{The format of the data file, which can be \code{"JAFROC"}, \code{"MRMC"} or \code{"iMRMC"}, see \link{RJafroc-package}.}
 
 \item{dataDscrpt}{An optional string variable describing the data file, the default value is the variable name of \code{dataset}.
 The decription appears on the first line of *.lrc or *imrmc data file. This parameter is not used when saving dataset in other formats.}

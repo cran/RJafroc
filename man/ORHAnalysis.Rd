@@ -14,10 +14,10 @@ ORHAnalysis(dataset, fom = "wJAFROC", alpha = 0.05,
 
 \item{alpha}{See \link{DBMHAnalysis}.}
 
-\item{covEstMethod}{The method used to estimate the covariance matrix; can be \code{Jackknife}, \code{Bootstrap} or \code{DeLong},
+\item{covEstMethod}{The method used to estimate the covariance matrix; can be \code{"Jackknife"}, \code{"Bootstrap"} or \code{"DeLong"},
 the last assumes the Wilcoxon FOM is chosen, otherwise an error will result.}
 
-\item{nBoots}{The number of bootstraps (default is 200), used only if the \code{Bootstrap} method is used to estimate
+\item{nBoots}{The number of bootstraps (default is 200), used only if the \code{"Bootstrap"} method is used to estimate
 the covariance matrix.}
 
 \item{option}{See \link{DBMHAnalysis}.}

@@ -15,7 +15,7 @@
 #' @param KStar See \link{SampleSizeGivenJ}.
 #' @param alpha The significantce level.
 #' @param effectSize The effect size to be used in the calculation.
-#' @param randomOption The random option. It can be \code{ALL}, \code{READERS} or \code{CASES}, which indicate predictions for (1) random readers and random cases, (2) random readers only and 
+#' @param randomOption The random option. It can be \code{"ALL"}, \code{"READERS"} or \code{"CASES"}, which indicate predictions for (1) random readers and random cases, (2) random readers only and 
 #' (3) random cases only.
 #' 
 #' @return The statistical power with given components and condition.

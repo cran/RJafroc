@@ -4,7 +4,7 @@
 \alias{OutputReport}
 \title{Generate a formatted report of the analysis}
 \usage{
-OutputReport(fileName, format, delimiter = ",", dataset,
+OutputReport(fileName, format = "JAFROC", delimiter = ",", dataset,
   dataDscrpt = deparse(substitute(dataset)), reportFile, method = "DBMH",
   fom = "wJAFROC", alpha = 0.05, covEstMethod = "Jackknife",
   nBoots = 200, showWarnings = TRUE)
@@ -26,7 +26,7 @@ It is a string descriptor of the dataset object, the default is the variable nam
 \item{reportFile}{The file name of the output report file. If this parameter is missing, the function will use \code{fileName} or \code{dataDscrpt} followed by the underscore
 separated concatenation of \code{method} and \code{fom} as the output report file.}
 
-\item{method}{The analysis method: \code{ORH} or \code{DBMH}.}
+\item{method}{The analysis method: \code{"ORH"} or \code{"DBMH"}.}
 
 \item{fom}{See \link{DBMHAnalysis}.}
 
@@ -57,6 +57,12 @@ OutputReport(dataset = rocData, method = "DBMH", fom = "Wilcoxon",
              dataDscrpt = "MyROCData", showWarnings = FALSE)
 
 \dontrun{
+## Generate a analysis report for a data file.
+fileName <- system.file("tests", "rocData.xlsx", package = "RJafroc")
+OutputReport(fileName = fileName, method = "DBMH", fom = "Wilcoxon",
+             showWarnings = FALSE)
+
+## Output report for an existing dataset
 OutputReport(dataset = rocData, method = "DBMH", fom = "Wilcoxon",
              reportFile = "MyROCDataAnalysis.txt", showWarnings = FALSE)
 OutputReport(dataset = rocData, method = "ORH", fom = "Wilcoxon", showWarnings = FALSE)

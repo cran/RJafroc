@@ -9,11 +9,11 @@ DBMHAnalysis(dataset, fom = "wJAFROC", alpha = 0.05, option = "ALL")
 \arguments{
 \item{dataset}{The dataset to be analyzed, see \link{RJafroc-package}.}
 
-\item{fom}{The figure of merit to be used in the analysis, default is \code{wJAFROC}, see \link{FigureOfMerit}.}
+\item{fom}{The figure of merit to be used in the analysis, default is \code{"wJAFROC"}, see \link{FigureOfMerit}.}
 
 \item{alpha}{The significance level of the test of the null hypothesis that all treatment effects are zero (default alpha is 0.05).}
 
-\item{option}{The analysis option: it can be \code{RRRC}, \code{FRRC}, \code{RRFC} or \code{ALL} (the default), corresponding
+\item{option}{The analysis option: it can be \code{"RRRC"}, \code{"FRRC"}, \code{"RRFC"} or \code{"ALL"} (the default), corresponding
 random readers and random cases, fixed readers and random cases and random readers and fixed cases, respectively; this option
 indicates which factors are treated as random and/or fixed factors in the analysis.}
 }

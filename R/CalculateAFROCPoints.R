@@ -41,7 +41,7 @@ CalculateAFROCPoints <- function(NL, LL, modalityID, readerID, maxNL, lesionNum,
         nlScores <- as.numeric(unlist(attr(nlTable, "dimnames")))
       }
       
-      if (length(nlTable) == 1) {
+      if (length(llTable) == 1) {
         llScores <- as.numeric(attr(llTable, "names"))
       } else {
         llScores <- as.numeric(unlist(attr(llTable, "dimnames")))

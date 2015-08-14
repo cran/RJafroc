@@ -13,13 +13,13 @@ EmpiricalOpCharac(dataset, trts, rdrs, lgdPos, opChType = "ROC")
 
 \item{rdrs}{List or vector. indices of readers to be plotted. See "Details".}
 
-\item{lgdPos}{The positioning of the legend: \code{right}(the default), \code{left}, \code{top} or \code{bottom}.}
+\item{lgdPos}{The positioning of the legend: \code{"right"}(the default), \code{"left"}, \code{"top"} or \code{"bottom"}.}
 
-\item{opChType}{Type of operating characteristic to be plotted. Available choices are \code{ROC}(the default), \code{AFROC} and \code{FROC}.}
+\item{opChType}{Type of operating characteristic to be plotted. Available choices are \code{"ROC"}(the default), \code{"AFROC"} and \code{"FROC"}.}
 }
 \value{
 A \pkg{ggplot2} object of the plotted operating characteristics and a data frame containing the points of the operating characteristics are returned. Following are the returned objects of
-\code{ROC} operating characteristics.
+\code{"ROC"} operating characteristics.
 
 \item{ROCPlot}{\pkg{ggplot2} object: Use \code{print} function to display the saved object.}
 

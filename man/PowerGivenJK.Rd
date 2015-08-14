@@ -34,7 +34,7 @@ PowerGivenJK(J, K, varYTR, varYTC, varYEps, cov1, cov2, cov3, varEps, msTR,
 
 \item{effectSize}{The effect size to be used in the calculation.}
 
-\item{randomOption}{The random option. It can be \code{ALL}, \code{READERS} or \code{CASES}, which indicate predictions for (1) random readers and random cases, (2) random readers only and
+\item{randomOption}{The random option. It can be \code{"ALL"}, \code{"READERS"} or \code{"CASES"}, which indicate predictions for (1) random readers and random cases, (2) random readers only and
 (3) random cases only.}
 }
 \value{

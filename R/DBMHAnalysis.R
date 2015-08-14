@@ -3,9 +3,9 @@
 #' Performs Dorfman-Berbaum-Metz significance testing, with Hillis improvements, for the specified dataset.
 #' 
 #' @param dataset The dataset to be analyzed, see \link{RJafroc-package}.
-#' @param fom The figure of merit to be used in the analysis, default is \code{wJAFROC}, see \link{FigureOfMerit}.
+#' @param fom The figure of merit to be used in the analysis, default is \code{"wJAFROC"}, see \link{FigureOfMerit}.
 #' @param alpha The significance level of the test of the null hypothesis that all treatment effects are zero (default alpha is 0.05).
-#' @param option The analysis option: it can be \code{RRRC}, \code{FRRC}, \code{RRFC} or \code{ALL} (the default), corresponding 
+#' @param option The analysis option: it can be \code{"RRRC"}, \code{"FRRC"}, \code{"RRFC"} or \code{"ALL"} (the default), corresponding 
 #' random readers and random cases, fixed readers and random cases and random readers and fixed cases, respectively; this option 
 #' indicates which factors are treated as random and/or fixed factors in the analysis.
 #' 
@@ -288,7 +288,7 @@ DBMHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, option = "ALL")
       CIRRRC <- array(dim = c(length(diffTRMeans), 2))
       for (i in 1:length(diffTRMeans)) {
         tStat[i] <- diffTRMeans[i]/stdErrRRRC
-        tPr[i] <- 2 * pt(tStat[i], ddfRRRC)
+        tPr[i] <- 2 * pt(abs(tStat[i]), ddfRRRC, lower.tail = FALSE)  # critical correction, noted by user Lucy D'Agostino McGowan
         CIRRRC[i, ] <- sort(c(diffTRMeans[i] - qt(alpha/2, ddfRRRC) * stdErrRRRC, diffTRMeans[i] + qt(alpha/2, ddfRRRC) * stdErrRRRC))
         
       }
@@ -331,7 +331,7 @@ DBMHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, option = "ALL")
     CIFRRC <- array(dim = c(length(diffTRMeans), 2))
     for (i in 1:length(diffTRMeans)) {
       tStat[i] <- diffTRMeans[i]/stdErrFRRC
-      tPr[i] <- 2 * pt(tStat[i], ddfFRRC)
+      tPr[i] <- 2 * pt(abs(tStat[i]), ddfFRRC, lower.tail = FALSE)  # critical correction, noted by user Lucy D'Agostino McGowan
       CIFRRC[i, ] <- sort(c(diffTRMeans[i] - qt(alpha/2, ddfFRRC) * stdErrFRRC, diffTRMeans[i] + qt(alpha/2, ddfFRRC) * stdErrFRRC))
     }
     ciDiffTrtFRRC <- data.frame(Treatment = diffTRName, Estimate = diffTRMeans, StdErr = rep(stdErrFRRC, choose(I, 2)), DF = rep(ddfFRRC, choose(I, 2)), t = tStat, p = tPr, CI = CIFRRC)
@@ -408,7 +408,7 @@ DBMHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, option = "ALL")
     tPr <- vector()
     for (n in 1:length(stdErrFRRC)) {
       tStat[n] <- diffTRMeansFRRC[n]/stdErrFRRC[n]
-      tPr[n] <- 2 * pt(tStat[n], dfReaderFRRC[n])
+      tPr[n] <- 2 * pt(abs(tStat[n]), dfReaderFRRC[n], lower.tail = FALSE)
       CIReaderFRRC[n, ] <- sort(c(diffTRMeansFRRC[n] - qt(alpha/2, dfReaderFRRC[n]) * stdErrFRRC[n], diffTRMeansFRRC[n] + qt(alpha/2, dfReaderFRRC[n]) * stdErrFRRC[n]))
     }
     ciDiffTrtEachRdr <- data.frame(Reader = readerNames, Treatment = trNames, Estimate = diffTRMeansFRRC, StdErr = stdErrFRRC, DF = dfReaderFRRC, t = tStat, p = tPr, CI = CIReaderFRRC)
@@ -432,7 +432,7 @@ DBMHAnalysis <- function(dataset, fom = "wJAFROC", alpha = 0.05, option = "ALL")
       CIRRFC <- array(dim = c(length(diffTRMeans), 2))
       for (i in 1:length(diffTRMeans)) {
         tStat[i] <- diffTRMeans[i]/stdErrRRFC
-        tPr[i] <- 2 * pt(tStat[i], ddfRRFC)
+        tPr[i] <- 2 * pt(abs(tStat[i]), ddfRRFC, lower.tail = FALSE)  # critical correction, noted by user Lucy D'Agostino McGowan
         CIRRFC[i, ] <- sort(c(diffTRMeans[i] - qt(alpha/2, ddfRRFC) * stdErrRRFC, diffTRMeans[i] + qt(alpha/2, ddfRRFC) * stdErrRRFC))
       }
       ciDiffTrtRRFC <- data.frame(Treatment = diffTRName, Estimate = diffTRMeans, StdErr = rep(stdErrRRFC, choose(I, 2)), DF = rep(ddfRRFC, choose(I, 2)), t = tStat, p = tPr, CI = CIRRFC)

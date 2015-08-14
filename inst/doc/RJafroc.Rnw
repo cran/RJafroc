@@ -92,7 +92,7 @@ URL: \url{http://www.devchakraborty.com}
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 <<setup, include=FALSE, cache=FALSE>>=
-library(knitr)
+library("knitr")
 render_sweave()
 # set global chunk options
 opts_chunk$set(prompt=TRUE)
@@ -160,7 +160,7 @@ of Iowa and University of Chicago websites have been used in several hundred pub
 (Professor Kevin Berbaum, University of Iowa, personal communication, ca 2014). JAFROC
 has been used in 78 publications: the list is viewable at
 \url{http://www.devchakraborty.com/JafrocApplications.pdf}.
-The purpose of this work is to describe \pkg{RJafroc} Version 0.0.2,
+The purpose of this work is to describe \pkg{RJafroc} Version 0.1.1,
 which is an enhanced implementation of JAFROC.\footnote{A number 
 of ROC packages are currently available on CRAN and Bioconductor: 
 \pkg{ROCR} \citep{SingSandROCRVisu2005}, 
@@ -368,7 +368,7 @@ and clinical relevance \citep{ChakraMeasu2012} of the measurement. Even for the 
 simple ROC paradigm, several FOMs have been proposed, e.g., partial
 area measures \citep{JiangMetzARece1996,YousWagnThePart2005}, the Youden index \citep{YoudenIndFor1950} and others \citep{PepeeTheStat2003}. 
 In the following sections we define the implemented ROC data FOM, two FOMs 
-commonly used in analyzing free-response data (several other implemented free-response FOMs are defined in Appendix \ref{subsec:otherfroc}), 
+commonly used in analyzing free-response data (several other implemented free-response FOMs are defined in Appendix~\ref{subsec:otherfroc}), 
 followed by the ROI FOM. Two implemented significance-testing methods are described followed by sample-size estimation for ROC studies.
 No derivations are given: we simply refer the interested reader to the literature.
 
@@ -501,7 +501,7 @@ the weighted JAFROC1 FOM, $\widehat{\theta}_{ij}^{wJAFROC1}$, is:
 
 
 The first term in the numerator compares LL ratings to the maximum
-NL ratings on non-diseased images, similar to Eqn. \ref{eq:wjafrocfom}.
+NL ratings on non-diseased images, similar to Eqn.~\ref{eq:wjafrocfom}.
 The second term compares LL ratings to the maximum NL ratings on diseased
 images. Since the maximum of NL ratings in ${k_{2}'}2$ is being compared with 
 each LL rating in ${k_{2}}2$, we should use the lesion weights corresponding to 
@@ -509,7 +509,7 @@ ${k_{2}}2$ and the ${l_{2}}$ index ranges from 1 to $N_{{k_{2}}2}$.
 The above two FOMs have covered the needs of most
 users of JAFROC. Other implemented free-response FOMs,
 sometimes needed for specific clinical reasons, are described in 
-Appendix \ref{subsec:otherfroc}.
+Appendix~\ref{subsec:otherfroc}.
 
 \subsection{Notation and FOM for ROI data}
 
@@ -655,7 +655,7 @@ MS_{Y}\left(\varepsilon\right)=\frac{{\sum\limits _{i=1}^{I}{\sum\limits _{j=1}^
 \end{equation}
 
 
-Hillis proposes the following F-statistic for testing the null hypothesis
+Hillis proposes the following $f$~statistic for testing the null hypothesis
 of no modality effect \citep{HillisAComp2007}:
 
 \begin{equation}
@@ -665,7 +665,7 @@ of no modality effect \citep{HillisAComp2007}:
 
 Here $H\left(x\right)$ is the unit step function, defined as unity
 for positive $x$ and zero otherwise. Hillis has shown that ${F_{DBMH}}$
-is distributed as an F-statistic with numerator degrees of freedom
+is distributed as an $f$~statistic with numerator degrees of freedom
 $ndf=I-1$ (i.e., one less than the number of treatments) and $ddf_{H}$
 denominator degrees of freedom, i.e.,
 
@@ -681,8 +681,8 @@ ddf_{H}=\frac{{{\left[{MS_{Y}\left({TR}\right)+H\left[{MS_{Y}\left({TC}\right)-M
 \end{equation}
 
 
-The critical value of the F-statistic for rejection of the null hypothesis
-is given by ${F_{1-\alpha,ndf,dd{f_{H}}}}$. The p-value of the test
+The critical value of the $f$~statistic for rejection of the null hypothesis
+is given by ${F_{1-\alpha,ndf,dd{f_{H}}}}$. The $p$~value of the test
 is given by:
 
 \begin{equation}
@@ -701,7 +701,7 @@ C{I_{1-\alpha}}=\left({\widehat{\theta}_{i\bullet}-\widehat{\theta}_{i'\bullet}}
 The analysis described so far treats both readers and cases as random
 factors, so it is termed \emph{random-reader random-case }(RRRC).
 Special cases of the analysis, which regards either readers or cases
-as fixed factors, is possible, and the results are given in Appendix \ref{subsec:spedbm}.
+as fixed factors, is possible, and the results are given in Appendix~\ref{subsec:spedbm}.
 These are sometimes necessary if the number of readers or the number
 of cases is not large enough to support treating them as random factors
 (for example, one could have a single reader interpret a set of cases
@@ -729,7 +729,7 @@ by the curly bracket notation) sampled from the patient
 population). In practice the dataset is limited to $c=1$, but resampling
 and other methods, are available to estimate the case-sample variability
 from a single case set realization. The first two terms on the right
-hand side of Eqn. \ref{eq:orcomp} have their usual meanings. The
+hand side of Eqn.~\ref{eq:orcomp} have their usual meanings. The
 remaining terms are mutually independent random samples: ${R_{j}}$
 denotes a random contribution to the figure-of-merit of reader {$j$},
 modeled as a sample from a zero-mean normal distribution with variance
@@ -798,7 +798,7 @@ NH:\Delta{\theta_{i}}=0\left({i=1,2,...,I}\right)\label{eq:26}
 \end{equation}
 
 
-A modified F-statistic is needed, denoted $F_{ORH}^{*}$ and defined
+A modified $f$~statistic is needed, denoted $F_{ORH}^{*}$ and defined
 by (this is different from that originally suggested by OR):
 
 \begin{equation}
@@ -806,7 +806,7 @@ F_{ORH}^{*}=\frac{{MS\left(T\right)}}{{MS\left({TR}\right)+H\left({J\left({\wide
 \end{equation}
 
 
-Eqn. \ref{eq:forh} incorporates Hillis' modification, which ensures
+Eqn.~\ref{eq:forh} incorporates Hillis' modification, which ensures
 that the constraint $Cov_{2}\ge Cov_{3}$ is always obeyed. The mean
 square ($MS$) terms are defined by (note the lack of the Y subscript,
 as these are calculated directly using FOM values):
@@ -820,7 +820,7 @@ MS\left({TR}\right)=\frac{1}{{\left({I-1}\right)\left({J-1}\right)}}\sum\limits 
 
 
 The observed statistic $F_{ORH}^{*}$ is distributed
-as an F-statistic with {$ndf=I-1$} and $ddf_{H}^{OR}$ degrees of
+as an $f$~statistic with {$ndf=I-1$} and $ddf_{H}^{OR}$ degrees of
 freedom:
 
 \begin{equation}
@@ -838,11 +838,11 @@ ddf_{H}^{OR}={\frac{{\left[{MS\left({TR}\right)+\left({J\left({\widehat{Cov_{2}}
 As long as the jackknife is used to estimate the variance-components 
 and co-variances in the two models, respectively, and  the Wilcoxon 
 or Wilcoxon-like statistic, the definitions of $ddf_{H}$ and $ddf_{H}^{OR}$ (Eqn. 
-\ref{eq:ddfhdbm} and Eqn. \ref{eq:ddfhor}) are the same; if the DeLong method
+\ref{eq:ddfhdbm} and Eqn.~\ref{eq:ddfhor}) are the same; if the DeLong method
 or the bootstrap are used to estimate the co-variances, the two will yield 
-slightly different results. The critical value of the F-statistic for 
+slightly different results. The critical value of the $f$~statistic for 
 rejection of the null hypothesis is given by ${F_{1-\alpha,ndf,ddf_{H}^{OR}}}$. 
-The p-value of the test is given by:
+The $p$~value of the test is given by:
 
 \begin{equation}
 p=P\left({F>F_{ORH}^{*}|F\sim{F_{ndf,ddf_{H}^{OR}}}}\right)\label{eq:31}
@@ -856,7 +856,7 @@ is given by
 C{I_{1-\alpha}}=\left({\widehat{{\theta_{i\bullet}}}-\widehat{{\theta_{i'\bullet}}}}\right)\pm{t_{\alpha/2;ddf_{H}^{OR}}}\sqrt{\frac{2}{J}\left({MS\left({TR}\right)+J\max\left({Cov_{2}-Cov_{3},0}\right)}\right)}\label{eq:32}
 \end{equation}
 
-The analysis described so far treats both readers and cases as random factors (RRRC). Special cases of the analysis, which regards either readers or cases as fixed factors, are given in Appendix \ref{subsec:orspcases}. 
+The analysis described so far treats both readers and cases as random factors (RRRC). Special cases of the analysis, which regards either readers or cases as fixed factors, are given in Appendix~\ref{subsec:orspcases}. 
 
 \subsection{Sample size estimation for ROC studies}
 
@@ -942,7 +942,7 @@ Windows JAFROC graphical user interface (GUI), who simply wish to analyze
 their data, can skip to subsection~\ref{subsec:gui}, which describes the GUI.
 
 <<echo=FALSE, results='hide', message=FALSE>>=
-library(RJafroc)
+library("RJafroc")
 @
 
 
@@ -953,7 +953,7 @@ named \code{rocData}, which has been repeatedly used by Berbaum,
 Hillis and colleagues to illustrate advances in ROC methodology \citep{HillisAComp2007}
 (and referred to in their papers as Van Dyke data \citep{VanDykeWhiteCineMRI1993}), (2) an
 FROC dataset named \code{frocData}, contributed by Dr. Zanca \citep{ZanJacoEvaluOfClin2009},
-and a simulated ROI dataset named \code{roiData} (see Appendix \ref{subsec:roisimu}
+and a simulated ROI dataset named \code{roiData} (see Appendix~\ref{subsec:roisimu}
 for details regarding the ROI simulator). The dataset structures are shown
 below:
 
@@ -1002,7 +1002,7 @@ and \code{readerID} are of length $I,J$, that are used to identify the modalitie
 The ROI dataset has two modalities, 5 readers, 50 non-diseased and
 40 diseased images, each with 4 ROIs. On the diseased images, the
 number of actually diseased ROIs varies from 1 to 4. The simulator, coded in \proglang{R},
-is describded in Appendix \ref{subsec:roisimu} and is available from \url{http://www.devchakraborty.com/RoiData/RoiSimulator.zip}.
+is describded in Appendix~\ref{subsec:roisimu} and is available from \url{http://www.devchakraborty.com/RoiData/RoiSimulator.zip}.
 
 
 \subsection[{Creating dataset objects}]{Creating \code{dataset} objects}
@@ -1087,13 +1087,13 @@ often used in combination: \code{Trt} = treatment, \code{Rdr}
 = fixed reader random case, \code{RRFC} = random reader fixed case,
 \code{ci} = $1-\alpha$ confidence interval, \code{fomArray} = 
 $\widehat{\theta}_{ij}$, \code{f} = value of observed
-F-statistic, \code{p} = p-value for rejecting the null hypothesis,
+$f$~statistic, \code{p} = $p$~value for rejecting the null hypothesis,
 \code{DiffTrt} = reader-averaged FOM differences between pairs
 of modalities, \code{ddf} = denominator degrees of freedom for
 F-test (the numerator degrees of freedom is always ${I}-1$), \code{
 AvgRdrEachTrt} = the FOM is averaged over all readers, separately
 for each treatment, \code{varComp} = the DBM pseudovalue variance
-components defined in connection with Eqn. \ref{eq:psvaluecomp}.
+components defined in connection with Eqn.~\ref{eq:psvaluecomp}.
 For the dataset shown, the reader-averaged difference between the
 two modalities is not significant for \code{RRRC} ($p = 0.0517$),
 but is significant if either reader ($p=0.021$) or case ($p=0.042$)
@@ -1110,22 +1110,22 @@ is regarded as a fixed factor.
     \code{anovaY} & The ANOVA table of the pseudovalues. \\
     \code{anovaYi} & The ANOVA table of the pseudovalues for each modality. \\
     \code{varComp} & The table of DBM variance components estimates. \\
-    \code{fRRRC}& The F statistic for testing the null hypothesis, for the RRRC condition. \\
-    \code{ddfRRRC} & The denominator degrees of freedom of the F statistic, for the RRRC condition. \\
-    \code{pRRRC}& The p-value of the significance test of the NH for the RRRC condition. \\
+    \code{fRRRC}& The $f$~statistic for testing the null hypothesis, for the RRRC condition. \\
+    \code{ddfRRRC} & The denominator degrees of freedom of the $f$~statistic, for the RRRC condition. \\
+    \code{pRRRC}& The $p$~value of the significance test of the NH for the RRRC condition. \\
     \code{ciDiffTrtRRRC} & The confidence intervals and related tests for the reader-averaged FOM differences between pairs of modalities, for the RRRC condition. \\
     \code{ciAvgRdrEachTrtRRRC} & The confidence intervals and related tests for reader averaged FOM in each modality, for the RRRC condition. \\
-    \code{fFRRC} & The F statistic for testing the null hypothesis, for the FRRC condition. \\
-    \code{ddfFRRC} & The denominator degrees of freedom of the FRRC F statistic. \\
-    \code{pFRRC} & The p-value of the significance test of the NH, for the FRRC condition. \\
+    \code{fFRRC} & The $f$~statistic for testing the null hypothesis, for the FRRC condition. \\
+    \code{ddfFRRC} & The denominator degrees of freedom of the FRRC $f$~statistic. \\
+    \code{pFRRC} & The $p$~value of the significance test of the NH, for the FRRC condition. \\
     \code{ciDiffTrtFRRC} & The confidence intervals and related tests for the reader-averaged FOM differences between pairs of modalities, for the FRRC condition. \\
     \code{ciAvgRdrEachTrtFRRC} & The confidence intervals and related tests for reader averaged FOM in each modality, for the FRRC condition. \\
     \code{ssAnovaEachRdr} & The sum of squares table of the ANOVA of the pseudovalues for each reader (based on the data only for the specified reader). \\
     \code{msAnovaEachRdr} & The mean squares table of the ANOVA of the pseudovalues for each reader (based on the data only for the specified reader). \\
     \code{ciDiffTrtEachRdr} & The confidence intervals and related tests of the FOM differences between pairs of modalities for each reader. \\
-    \code{fRRFC} & The F statistic for testing the null hypothesis, for the RRFC condition. \\
-    \code{ddfRRFC} & The denominator degrees of freedom of the F statistic, for the RRFC condition. \\
-    \code{pRRFC} & The p-value of the significance test of the NH, for the RRFC condition. \\
+    \code{fRRFC} & The $f$~statistic for testing the null hypothesis, for the RRFC condition. \\
+    \code{ddfRRFC} & The denominator degrees of freedom of the $f$~statistic, for the RRFC condition. \\
+    \code{pRRFC} & The $p$~value of the significance test of the NH, for the RRFC condition. \\
     \code{ciDiffTrtRRFC} & The confidence intervals and related tests for the FOM differences between pairs of modalities, for the RRFC condition. \\
     \code{ciAvgRdrEachTrtRRFC} & The confidence intervals and related tests for reader averaged FOM in each modality, for the RRFC condition. \\
     \bottomrule
@@ -1142,7 +1142,7 @@ estimation method: \code{CovEstMethod} = \code{Jackknife}, \code{Bootstrap}
 or \code{DeLong} (\code{Jackknife} is the default) and if the bootstrap
 method is selected one can optionally specify the number of bootstraps
 (default = 200). The function will generate an error if the DeLong
-method is selected with a FOM that is not the Wilcoxon
+method is selected with a FOM that is not "Wilcoxon"
 statistic on an ROC dataset. The return value of the \code{ORHAnalysis()}is a list
 of 21 elements, Table~\ref{tab:orret}, similar to that of \code{DBMHAnalysis()},
 but instead of 6 pseudovalue derived variance components, it returns
@@ -1178,21 +1178,21 @@ print(CovOR)
     \code{msT}   & The treatment mean square. \\
     \code{msTR}  & The treatment-reader mean square. \\
     \code{varComp} & The first two elements contain the reader and modality-reader variance components, the rest contain, in order, Cov1, Cov2, Cov3 and Var. \\
-    \code{fRRRC} & The F statistic for testing the null hypothesis, for the RRRC condition. \\
-    \code{ddfRRRC} & The denominator degrees of freedom of the F statistic, for the RRRC condition. \\
-    \code{pRRRC} & The p-value of the significance test of the NH for the RRRC condition. \\
+    \code{fRRRC} & The $f$~statistic for testing the null hypothesis, for the RRRC condition. \\
+    \code{ddfRRRC} & The denominator degrees of freedom of the $f$~statistic, for the RRRC condition. \\
+    \code{pRRRC} & The $p$~value of the significance test of the NH for the RRRC condition. \\
     \code{ciDiffTrtRRRC} & The confidence intervals and related tests for the reader-averaged FOM differences between pairs of modalities, for the RRRC condition. \\
     \code{ciAvgRdrEachTrtRRRC} & The confidence intervals and related tests for reader averaged FOM in each modality, for the RRRC condition. \\
-    \code{fFRRC} & The F statistic for testing the null hypothesis, for the FRRC condition. \\
-    \code{ddfFRRC} & The denominator degrees of freedom of the FRRC F statistic. \\
-    \code{pFRRC} & The p-value of the significance test of the NH, for the FRRC condition. \\
+    \code{fFRRC} & The $f$~statistic for testing the null hypothesis, for the FRRC condition. \\
+    \code{ddfFRRC} & The denominator degrees of freedom of the FRRC $f$~statistic. \\
+    \code{pFRRC} & The $p$~value of the significance test of the NH, for the FRRC condition. \\
     \code{ciDiffTrtFRRC} & The confidence intervals and related tests for the reader-averaged FOM differences between pairs of modalities, for the FRRC condition. \\
     \code{ciAvgRdrEachTrtFRRC} & The confidence intervals and related tests for reader averaged FOM in each modality, for the FRRC condition. \\
     \code{varCovEachRdr} & Obuchowski-Rockette Variance and Cov1 estimates for each reader. \\
     \code{ciDiffTrtEachRdr} & The confidence intervals and related tests of the FOM differences between pairs of modalities for each reader. \\
-    \code{fRRFC} & The F statistic for testing the null hypothesis, for the RRFC condition. \\
-    \code{ddfRRFC} & The denominator degrees of freedom of the F statistic, for the RRFC condition. \\
-    \code{pRRFC} & The p-value of the significance test of the NH, for the RRFC condition. \\
+    \code{fRRFC} & The $f$~statistic for testing the null hypothesis, for the RRFC condition. \\
+    \code{ddfRRFC} & The denominator degrees of freedom of the $f$~statistic, for the RRFC condition. \\
+    \code{pRRFC} & The $p$~value of the significance test of the NH, for the RRFC condition. \\
     \code{ciDiffTrtRRFC} & The confidence intervals and related tests for the FOM differences between pairs of modalities, for the RRFC condition. \\
     \code{ciAvgRdrEachTrtRRFC} & The confidence intervals and related tests for reader averaged FOM in each modality, for the RRFC condition. \\
     \bottomrule
@@ -1218,23 +1218,23 @@ henceforth we will only show results for DBMH.
     \midrule
           & $\widehat{\theta}_{1\bullet}, \widehat{\theta}_{2\bullet}$ & 0.897, 0.941 & 0.897, 0.941 \\ \hline
           & $\widehat{\theta}_{1\bullet} - \widehat{\theta}_{2\bullet}$ & -0.0438 & -0.0438 \\
-          & p-value & 0.0517 & 0.0517 \\
-    DBMH  & F-statistic & 4.46  & 4.46 \\
+          & $p$~value & 0.0517 & 0.0517 \\
+    DBMH  & $f$~statistic & 4.46  & 4.46 \\
           & ddf & 15.3  & 15.26 \\
           & Confidence interval & (-0.088, 0.000359) & (-0.088,0.00036) \\ \hline
           & $\widehat{\theta}_{1\bullet} - \widehat{\theta}_{2\bullet}$ & -0.0438 & -0.0438 \\
-          & p-value & 0.0517 & 0.0517 \\
-    ORH Jackknife & F-statistic & 4.46  & 4.46 \\
+          & $p$~value & 0.0517 & 0.0517 \\
+    ORH Jackknife & $f$~statistic & 4.46  & 4.46 \\
           & ddf & 15.3  & 15.26 \\
           & Confidence interval & (-0.088, 0.000359) & (-0.088,0.00036) \\ \hline
           & $\widehat{\theta}_{1\bullet} - \widehat{\theta}_{2\bullet}$ & -0.0438 & -0.0438 \\
-          & p-value & 0.0501 & 0.0558 \\
-    ORH Bootstrap boots = 200 & F-statistic & 4.56  & 4.21 \\
+          & $p$~value & 0.0501 & 0.0558 \\
+    ORH Bootstrap boots = 200 & $f$~statistic & 4.56  & 4.21 \\
           & ddf & 14.5  & 17.07 \\
           & Confidence interval & (-0.0876, 0.0000164) & (-0.0888, 0.00121) \\ \hline
           & $\widehat{\theta}_{1\bullet} - \widehat{\theta}_{2\bullet}$ & -0.0438 & -0.0438 \\
-          & p-value & 0.0512 & 0.0512 \\
-    ORH DeLong & F-statistic & 4.48  & 4.48 \\
+          & $p$~value & 0.0512 & 0.0512 \\
+    ORH DeLong & $f$~statistic & 4.48  & 4.48 \\
           & ddf & 15.1  & 15.07 \\
           & Confidence interval & (-0.0879, 0.000267) & (-0.0879,0.00027) \\
     \bottomrule
@@ -1327,7 +1327,7 @@ diseased images in the pre-loaded FROC dataset, with the number of
 lesions on the diseased images ranging from 1 to 3. The two modalities
 are labeled 4 and 5 (the full dataset, containing data for 5 modalities,
 is available from author DPC). The following example illustrates application of \code{DBMHAnalysis()} 
-to the \code{frocData} \code{dataset} object. Since the default FOM is wJAFROC,  explicit
+to the \code{frocData} \code{dataset} object. Since the default FOM is \code{wJAFROC},  explicit
 specification of the \code{fom} option is unnecessary.
 
 
@@ -1337,7 +1337,7 @@ print(retDbmwJafroc)
 @
 
 The following three examples illustrate other analyses possible with free-response data, with appropriate specification of
-the \code{fom} option. The first example analyzes the data using the wJAFROC1 FOM, which uses the highest rated NL mark on diseased cases and gives equal importance to all diseased cases. The second example uses the JAFROC FOM, which tends to give extra importance to cases with many lesions but ignores NL marks on diseased cases. The third example illustrates usage of the JAFROC1 FOM, which uses the highest rated NL mark on diseased cases and gives extra importance to cases with many lesions. \emph{The wJAFROC1 and JAFROC1 FOMs should only be used if the dataset contains no non-diseased cases.}
+the \code{fom} option. The first example analyzes the data using the \code{wJAFROC1} FOM, which uses the highest rated NL mark on diseased cases and gives equal importance to all diseased cases. The second example uses the \code{JAFROC} FOM, which tends to give extra importance to cases with many lesions but ignores NL marks on diseased cases. The third example illustrates usage of the \code{JAFROC1} FOM, which uses the highest rated NL mark on diseased cases and gives extra importance to cases with many lesions. \emph{The \code{wJAFROC1} and \code{JAFROC1} FOMs should only be used if the dataset contains no non-diseased cases.}
 
 
 <<results='hide', eval=FALSE>>=
@@ -1392,26 +1392,26 @@ FOMs for characterizing free-response performance.
           &  $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$     & 0.768, 0.714 & 0.768, 0.714 \\ 
           &  $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$ & 0.0548 & 0.0548 \\
     \code{wJAFROC} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$      & (0.0328, 0.0769) & (0.0328, 0.0769) \\
-          & p-value & 6.46E-06 & <0.0001 \\
-          & F-statistic & 24.9  & 24.88 \\
+          & $p$~value & 6.46E-06 & <0.0001 \\
+          & $f$~statistic & 24.9  & 24.88 \\
           & ddf & 54.96 & 54.96 \\ \hline
           & $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$      & 0.758, 0.703 & 0.758, 0.703 \\
           & $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$  & 0.0548 & 0.0548 \\
     \code{JAFROC} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$     & (0.0315, 0.0780) & (0.0316, 0.0780) \\
-          & p-value & 5.63E-06 & <0.0001 \\
-          & F-statistic & 21.6  & 21.6 \\
+          & $p$~value & 5.63E-06 & <0.0001 \\
+          & $f$~statistic & 21.6  & 21.6 \\
           & ddf & 236.4 & 236.4 \\ \hline
           & $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$      & 0.783, 0.729 & 0.783, 0.729 \\
           & $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$  & 0.054 & 0.054 \\
     \code{wJAFROC1} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$     & (0.036, 0.0715) & (0.036, 0.0715) \\
-          & p-value & 1.91E-09 & <0.0001 \\
-          & F-statistic & 36.5  & 36.51 \\
+          & $p$~value & 1.91E-09 & <0.0001 \\
+          & $f$~statistic & 36.5  & 36.51 \\
           & ddf & 1491  & 1492 \\ \hline
           & $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$      & (0.773, 0.720) & (0.773, 0.720) \\
           & $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$      & 0.0535 & 0.0535 \\
     \code{JAFROC1} & $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$      & (0.0291, 0.0779) & (0.0291, 0.078) \\
-          & p-value & 5.55E-05 & <0.0001 \\
-          & F-statistic & 19.3  & 19.4 \\
+          & $p$~value & 5.55E-05 & <0.0001 \\
+          & $f$~statistic & 19.3  & 19.4 \\
           & ddf & 51.07 & 51.07 \\
     \bottomrule
     \end{tabular}%
@@ -1452,20 +1452,20 @@ required to acquire the data, often 6 months or more).
           &  $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$     & 0.851, 0.808 & 0.851, 0.808 \\ 
           &  $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$ & 0.04219 & 0.04219 \\
     \code{HrAuc} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$      & (0.0098, 0.0746) & (0.0098, 0.0746) \\
-          & p-value & 0.0240 & 0.0240 \\
-          & F-statistic & 14.96  & 14.96 \\
+          & $p$~value & 0.0240 & 0.0240 \\
+          & $f$~statistic & 14.96  & 14.96 \\
           & ddf & 3.429 & 3.43 \\ \hline
           & $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$      & 0.853, 0.808 & 0.853, 0.808 \\
           & $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$  & 0.04505 & 0.04505 \\
     \code{SongA1} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$     & (0.0186, 0.0715) & (0.0186, 0.0715) \\
-          & p-value & 0.0095 & 0.0095 \\
-          & F-statistic & 23.1  & 23.1 \\
+          & $p$~value & 0.0095 & 0.0095 \\
+          & $f$~statistic & 23.1  & 23.1 \\
           & ddf & 3.84 & 3.84 \\ \hline
           & $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$      & 0.847, 0.800 & 0.847, 0.800 \\
           & $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$  & 0.0468 & 0.0468 \\
     \code{SongA2} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$     & (0.0156, 0.0780) & (0.0156, 0.0780) \\
-          & p-value & 0.0173 & 0.0173 \\
-          & F-statistic & 22.5  & 22.53 \\
+          & $p$~value & 0.0173 & 0.0173 \\
+          & $f$~statistic & 22.5  & 22.53 \\
           & ddf & 3.03  & 3.03 \\ 
     \bottomrule
     \end{tabular}%
@@ -1477,10 +1477,10 @@ to the included free-response dataset}
 
 Besides showing that the package gives identical results
 to JAFROC, the results illustrate some general principles. (1) While
-all methods reject the NH, the p-value is considerably smaller for
+all methods reject the NH, the $p$~value is considerably smaller for
 weighted JAFROC (6.46e-06) as compared to the inferred ROC methods
 (range 0.0095 to 0.024). While one cannot infer statistical power
-from a comparison of p-values on a single dataset, the increased statistical
+from a comparison of $p$~values on a single dataset, the increased statistical
 power of JAFROC analysis has been confirmed with simulation studies \citep{ChakraStat2002,ChaBerObser2004,ChakraVali2008}
 and is one reason this paradigm is gaining acceptance. (2) The \code{JAFROC}
 FOM for each modality is smaller than the corresponding
@@ -1526,8 +1526,8 @@ are summarized in Table~\ref{tab:resroi}.
           & $\widehat{\theta}_{4\bullet}, \widehat{\theta}_{5\bullet}$      & 0.884, 0.922 & 0.884, 0.922 \\
           & $\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}$  & -0.038 & -0.038 \\
     \code{ROI} &  $CI\left(\widehat{\theta}_{4\bullet} - \widehat{\theta}_{5\bullet}\right)$     & (-0.064, -0.0116) & (-0.064, -0.0116) \\
-          & p-value & 0.00823 & 0.00823 \\
-          & F-statistic & 9.687  & 9.69 \\
+          & $p$~value & 0.00823 & 0.00823 \\
+          & $f$~statistic & 9.687  & 9.69 \\
           & ddf & 13.0  & 13.0 \\ 
     \bottomrule
     \end{tabular}%
@@ -1568,7 +1568,7 @@ OutputReport(dataset = rocData, method = "ORH", fom = "Wilcoxon",
   showWarnings = FALSE)
 @
 
-The next example is deliberately included as an example of erroneaus usage of the function. It will generate an error since the \code{fom} option set to \code{Wilcoxon} is incompatible with the FROC dataset (see Table~\ref{tab:terminology} for valid FOMs with FROC data). 
+The next example is deliberately included as an example of erroneous usage of the function. It will generate an error since the \code{fom} option set to \code{Wilcoxon} is incompatible with the FROC dataset (see Table~\ref{tab:terminology} for valid FOMs with FROC data). 
 
 <<message=FALSE,eval=FALSE>>=
 OutputReport(dataset = frocData, fom = "Wilcoxon",
@@ -2043,14 +2043,14 @@ These are summarized in Table~\ref{tab:frocfomsum}:
 \subsubsection{Fixed-reader random-case (FRRC) analysis}
 
 When readers are treated as a fixed effect, the appropriate
-F statistic for testing the null hypothesis is
+$f$~statistic for testing the null hypothesis is
 
 \begin{equation}
 {F_{DBM|R}}=\frac{{MS_{Y}\left(T\right)}}{{MS_{Y}\left({TC}\right)}}\label{eq:40}
 \end{equation}
 
 
-This is distributed as an F statistic with \emph{$ndf=I-1$}, and
+This is distributed as an $f$~statistic with \emph{$ndf=I-1$}, and
 \emph{$ddf=(I-1)(K-1)$}:
 
 \begin{equation}
@@ -2061,7 +2061,7 @@ This is distributed as an F statistic with \emph{$ndf=I-1$}, and
 The critical value of the statistic is ${F_{1-\alpha;I-1,\left({I-1}\right)\left({K-1}\right)}}$
 which is that value such that fraction $\left({1-\alpha}\right)$
 of the distribution lies to the left of the critical value. The null
-hypothesis is rejected if the observed value of the F statistic exceeds
+hypothesis is rejected if the observed value of the $f$~statistic exceeds
 the critical value:
 
 \begin{equation}
@@ -2087,7 +2087,7 @@ CI_{1-\alpha}=\left(\widehat{\theta}_{i\bullet}-\widehat{\theta}_{i'\bullet}\rig
 
 \subsubsection{Random-reader fixed case (RRFC) analysis}
 
-When cases are treated as a fixed effect, the appropriate F statistic
+When cases are treated as a fixed effect, the appropriate $f$~statistic
 for testing the null hypothesis is
 
 \begin{equation}
@@ -2095,7 +2095,7 @@ for testing the null hypothesis is
 \end{equation}
 
 
-This is distributed as an F statistic with \emph{$ndf=I-1$}, and
+This is distributed as an $f$~statistic with \emph{$ndf=I-1$}, and
 \emph{$ddf=(I-1)(J-1)$}:
 
 \begin{equation}
@@ -2106,7 +2106,7 @@ This is distributed as an F statistic with \emph{$ndf=I-1$}, and
 The critical value of the statistic is ${F_{1-\alpha;I-1,\left({I-1}\right)\left({J-1}\right)}}$
 which is that value such that fraction $\left({1-\alpha}\right)$
 of the distribution lies to the left of the critical value. The null
-hypothesis is rejected if the observed value of the F statistic exceeds
+hypothesis is rejected if the observed value of the $f$~statistic exceeds
 the critical value:
 
 \begin{equation}
@@ -2133,7 +2133,7 @@ CI_{1-\alpha}=\left(\widehat{\theta}_{i\bullet}-\widehat{\theta}_{i'\bullet}\rig
 
 \subsubsection{Fixed-reader random-case (FRRC) analysis}
 
-When readers are treated as a fixed effect, the appropriate F statistic
+When readers are treated as a fixed effect, the appropriate $f$~statistic
 for testing the null hypothesis is
 
 \begin{equation}
@@ -2141,7 +2141,7 @@ for testing the null hypothesis is
 \end{equation}
 
 
-This is distributed as an F statistic with {$ndf=I-1$}, and
+This is distributed as an $f$~statistic with {$ndf=I-1$}, and
 {$ddf=\infty$}, or equivalently a chi-square distribution with
 I-1 degrees of freedom:
 
@@ -2153,14 +2153,14 @@ I-1 degrees of freedom:
 The critical value of the statistic is ${F_{1-\alpha;I-1,\infty}}=\chi_{1-\alpha;I-1,}^{2}$ which is
 that value such that fraction $\left({1-\alpha}\right)$ of the distribution
 lies to the left of the critical value. The null hypothesis is rejected
-if the observed value of the F statistic exceeds the critical value:
+if the observed value of the $f$~statistic exceeds the critical value:
 
 \begin{equation}
 {F_{OR|R}}>{F_{1-\alpha;I-1,\infty}}=\chi_{1-\alpha;I-1,}^{2}\label{eq:52}
 \end{equation}
 
 
-The p-value of the test is the probability that a random sample from
+The $p$~value of the test is the probability that a random sample from
 the distribution exceeds the observed value:
 
 \begin{equation}
@@ -2176,7 +2176,7 @@ CI_{1-\alpha}=\left(\widehat{\theta}_{i\bullet}-\widehat{\theta}_{i'\bullet}\rig
 
 \subsubsection{Random-reader fixed case (RRFC) analysis}
 
-When cases are treated as a fixed effect, the appropriate F statistic
+When cases are treated as a fixed effect, the appropriate $f$~statistic
 for testing the null hypothesis is:
 
 \begin{equation}
@@ -2194,14 +2194,14 @@ This is distributed as:
 The critical value of the statistic is ${F_{1-\alpha;I-1,\left({I-1}\right)\left({J-1}\right)}}$ which is
 that value such that fraction $\left({1-\alpha}\right)$ of the distribution
 lies to the left of the critical value. The null hypothesis is rejected
-if the observed value of the F statistic exceeds the critical value:
+if the observed value of the $f$~statistic exceeds the critical value:
 
 \begin{equation}
 {F_{DBM|C}}>{F_{1-\alpha;I-1,\left({I-1}\right)\left({J-1}\right)}}\label{eq:57}
 \end{equation}
 
 
-The p-value of the test is the probability that a random sample from
+The $p$~value of the test is the probability that a random sample from
 the distribution exceeds the observed value:
 
 \begin{equation}

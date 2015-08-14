@@ -35,7 +35,7 @@ SampleSizeGivenJ(J, varYTR, varYTC, varYEps, cov1, cov2, cov3, varEps, msTR,
 
 \item{desiredPower}{The desired statistical power, default value is 0.8.}
 
-\item{randomOption}{It can be \code{ALL}, \code{READERS} or \code{CASES}, which indicate predictions for (1) random readers and random cases, (2) random readers only and
+\item{randomOption}{It can be \code{"ALL"}, \code{"READERS"} or \code{"CASES"}, which indicate predictions for (1) random readers and random cases, (2) random readers only and
 (3) random cases only.}
 }
 \value{

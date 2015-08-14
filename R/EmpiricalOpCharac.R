@@ -5,8 +5,8 @@
 #' @param dataset Dataset to be used for plotting.
 #' @param trts List or vector: indices of modalities to be plotted. See "Details".
 #' @param rdrs List or vector. indices of readers to be plotted. See "Details".
-#' @param lgdPos The positioning of the legend: \code{right}(the default), \code{left}, \code{top} or \code{bottom}.
-#' @param opChType Type of operating characteristic to be plotted. Available choices are \code{ROC}(the default), \code{AFROC} and \code{FROC}.
+#' @param lgdPos The positioning of the legend: \code{"right"}(the default), \code{"left"}, \code{"top"} or \code{"bottom"}.
+#' @param opChType Type of operating characteristic to be plotted. Available choices are \code{"ROC"}(the default), \code{"AFROC"} and \code{"FROC"}.
 #' 
 #' @details \strong{Note} that \code{trts} and \code{rdrs} are the vectors or list of \strong{indices} not \strong{IDs}. For example, if the ID of the 
 #' first reader is "0". The corresponding value in \code{trts} should be \strong{1}  not \strong{0}. 
@@ -17,7 +17,7 @@
 #' plotted. If some elements of the lists are vectors, the averaged operating characteristic over them will be plotted. See "Examples".
 #' 
 #' @return A \pkg{ggplot2} object of the plotted operating characteristics and a data frame containing the points of the operating characteristics are returned. Following are the returned objects of 
-#' \code{ROC} operating characteristics.
+#' \code{"ROC"} operating characteristics.
 #' @return \item{ROCPlot}{\pkg{ggplot2} object: Use \code{print} function to display the saved object.}
 #' @return \item{ROCPoints}{Data frame with four columns: abscissa, ordinate, class  (coding modality and reader) and type, 
 #' which can be "individual" or "averaged".}

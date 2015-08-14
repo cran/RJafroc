@@ -1,12 +1,12 @@
 ## ----setup, include=FALSE, cache=FALSE--------------------------------------------------
-library(knitr)
+library("knitr")
 render_sweave()
 # set global chunk options
 opts_chunk$set(prompt=TRUE)
 options(replace.assign=TRUE, width=90, prompt="R> ")
 
 ## ----echo=FALSE, results='hide', message=FALSE------------------------------------------
-library(RJafroc)
+library("RJafroc")
 
 ## ---------------------------------------------------------------------------------------
 str(rocData)

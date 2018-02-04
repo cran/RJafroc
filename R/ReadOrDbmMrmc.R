@@ -1,5 +1,5 @@
 #' @importFrom utils read.delim
-ReadOrDbmMrmc <- function(fileName, delimiter) {
+ReadOrDbmMrmc <- function(fileName, delimiter, renumber) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   dataTableFrame <- read.delim(fileName, sep = delimiter)
   dataTable <- NULL
@@ -56,6 +56,17 @@ ReadOrDbmMrmc <- function(fileName, delimiter) {
   lesionWeight <- lesionID
   maxNL <- 1
   dataType <- "ROC"
+  
+  modalityNames <- modalityID
+  readerNames <- readerID
+  
+  if (renumber){
+    modalityID <- 1:I
+    readerID <- 1:J
+  }
+  
+  names(modalityID) <- modalityNames
+  names(readerID) <- readerNames
   
   return(list(NL = NL, LL = LL, lesionNum = lesionNum, lesionID = lesionID, lesionWeight = lesionWeight, dataType = dataType, modalityID = modalityID, readerID = readerID))
 } 

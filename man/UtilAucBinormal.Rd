@@ -8,10 +8,10 @@ UtilAucBinormal (a, b)
 }
 \arguments{
 \item{a}{The \code{a} parameter of the binormal model (separation of 
-non-diseased and disesed pdfs)}
+non-diseased and diseased pdfs)}
 
 \item{b}{The \code{b} parameter of the binormal model (std. dev. of 
-non-diseased disesed pdf; diseased pdf has unit std. dev)}
+non-diseased diseased pdf; diseased pdf has unit std. dev)}
 }
 \value{
 Binormal model-predicted ROC-AUC

@@ -94,7 +94,6 @@ lesDistr <- UtilLesionDistribution(dataset)
 retFit <- FitRsmRoc(dataset, lesDistr);print(retFit$fittedPlot)
 
 
-
 }
 \references{
 Chakraborty DP (2006) A search model and figure of merit for observer data acquired according to the free-response 

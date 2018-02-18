@@ -8,14 +8,14 @@
 #' @param method The method, in which the mean squares are calculated. The two 
 #'    valid options are \code{"DBMH"} (default) and \code{"ORH"}. 
 #' 
-#' @return A list contating all possible mean squares
+#' @return A list containing all possible mean squares
 #' 
 #' @details 
 #' For \code{DBMH} method, \code{msT, msTR, msTC, msTRC} will not be available 
 #'    if the dataset contains only one modality. Similarly, 
 #'    \code{msR, msTR, msRC, msTRC} will not be returned for single reader dataset. 
 #'    For \code{ORH} method, \code{msT, msR, msTR} will be returned for multiple 
-#'    reader multiple modality dataset. \code{msT} is not available for sinlge 
+#'    reader multiple modality dataset. \code{msT} is not available for single 
 #'    modality dataset, and \code{msR} is not available for single reader dataset.
 #' 
 #' @examples

@@ -18,7 +18,7 @@ of the test of the null hypothesis that FOMs of all levels of
 the fixed factor are identical.}
 }
 \value{
-The return value is a list contaning:
+The return value is a list containing:
 
 \item{f}{The observed F-statistic for testing the null 
    hypothesis of no treatment effect.}
@@ -45,7 +45,7 @@ Significance testing for datasets with single reader in
 This function performs implements Hillis et al. 2005, Eqn. 23. 
    Following an overall F-test, reader-pairings are compared using paired 
    t-tests. \strong{In order for a specific pairing to be declared 
-   signficant, the F-test must also be significant.}
+   significant, the F-test must also be significant.}
 }
 \examples{
 ## Create a single modality ROC dataset with one modality and four readers
@@ -62,6 +62,6 @@ Statistics in Medicine, 24(10), 1579-607.
 Hillis SL (2007) A comparison of denominator degrees of freedom methods 
 for multiple observer ROC studies, Statistics in Medicine. 26:596-619.
 
-Hillis SL (2014) A marginalmean ANOVA approach for analyzing multireader multicase radiological imaging data,
+Hillis SL (2014) A marginal mean ANOVA approach for analyzing multireader multicase radiological imaging data,
 Statistics in medicine 33, 330-360.
 }

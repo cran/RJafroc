@@ -43,7 +43,7 @@ Excel file respectively. "txt" is the default.}
 
 \item{nBoots}{See \link{StSignificanceTesting}.}
 
-\item{renumber}{A logical varible: if \code{TRUE}, consecutive integers 
+\item{renumber}{A logical variable: if \code{TRUE}, consecutive integers 
 (staring from 1) will be used as the modality and reader IDs in the 
 output report. Otherwise, modality and reader IDs in the original data 
 file will be used. This option may be needed for aesthetics.}

@@ -12,7 +12,7 @@
   \tabular{ll}{
     Package: \tab RJafroc\cr
     Type: \tab Package\cr
-    Version: \tab 1.0.0\cr
+    Version: \tab 1.0.1\cr
     Date: \tab 2017-08-31\cr
     License: \tab GPL-3\cr
     URL: \tab \url{http://www.devchakraborty.com}\cr
@@ -114,7 +114,7 @@
     \item ORH: Hillis' modification of the OR method
     \item Physical parameter: Used in connection with RSM; a parameter whose 
        meaning is more transparent than the corresponding intrinsic parameter, 
-       but which depends on the RSM \eqn{\mu} paramter
+       but which depends on the RSM \eqn{\mu} parameter
     \item Proximity criterion / acceptance radius: Used in connection with FROC 
        (or LROC data); the "nearness" criterion is used to determine if a mark 
        is close enough to a lesion to be counted as a LL (or correct localization); 
@@ -134,7 +134,7 @@
     \item RJafroc: the current software
     \item ROC: receiver operating characteristic, a data collection paradigm where 
        each image yields a single rating and location information is ignored
-    \item ROC curve: plot of TPF (ordinate) vs. FPF, as threhold is varied; 
+    \item ROC curve: plot of TPF (ordinate) vs. FPF, as threshold is varied; 
        an example of an operating characteristic
     \item ROCFIT: Metz software for binormal model based fitting of ROC data
     \item ROI: region-of-interest (each case is divided into a number of ROIs and 
@@ -156,9 +156,9 @@
        independent of \eqn{\mu}
     \item RSM-\eqn{\nu}': binomial parameter of RSM, probability that lesion is found
     \item SE: sensitivity, same as \eqn{TPF}
-    \item Signficance testing: determining the p-value of a statistical test
+    \item Significance testing: determining the p-value of a statistical test
     \item SP: specificity, same as \eqn{1-FPF}
-    \item Threshold: Reporting criteria: if confidence exceeds a threhold value, 
+    \item Threshold: Reporting criteria: if confidence exceeds a threshold value, 
        report case as diseased, otherwise report non-diseased
     \item TN: true negative, a non-diseased case classified as non-diseased
     \item TP: true positive, a diseased case classified as diseased

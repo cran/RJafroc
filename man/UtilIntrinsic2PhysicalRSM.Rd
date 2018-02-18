@@ -29,7 +29,7 @@ A list containing \eqn{\lambda}' and \eqn{\nu}'
 Convert \strong{intrinsic} RSM parameters \eqn{lambda} and \eqn{nu} 
    correspond to the \strong{physical} RSM parameters \eqn{lambda'} 
    and \eqn{nu'}. The physical parameters are more meaningful but they 
-   depend on \eqn{mu}. The intrinsic paramters are independent of 
+   depend on \eqn{mu}. The intrinsic parameters are independent of 
    \eqn{mu}. See book for details.
 }
 \details{

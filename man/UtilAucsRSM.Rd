@@ -34,7 +34,7 @@ A list containing the ROC and AFROC AUCs corresponding to the
 }
 \details{
 The RSM parameters (\code{mu}, \code{lambdaP} and 
-   \code{nuP}) can be vectors, provided they are of the samne length; 
+   \code{nuP}) can be vectors, provided they are of the same length; 
    the first parameter of each array is used, followed by the second, 
    etc; a common lesion distribution is assumed.
 }

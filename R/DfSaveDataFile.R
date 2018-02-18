@@ -13,7 +13,7 @@
 #' @param format {The format of the data file, which can be \code{"JAFROC"}, 
 #'    \code{"MRMC"} or \code{"iMRMC"}, see \link{RJafroc-package}}
 #' @param dataDescription {An optional string variable describing the data file, the 
-#'    default value is the variable name of \code{dataset} The decription appears on 
+#'    default value is the variable name of \code{dataset} The description appears on 
 #'    the first line of *.lrc or *imrmc data file. This parameter is not used 
 #'    when saving dataset in other formats}
 #' 

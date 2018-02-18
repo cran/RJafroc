@@ -3,7 +3,7 @@
 #' Convert \strong{physical} RSM parameters \eqn{\lambda}' and \eqn{\nu}' to the 
 #'    \strong{intrinsic} RSM parameters \eqn{\lambda} and \eqn{\nu}. The physical 
 #'    parameters are more meaningful but they depend on \eqn{\mu}. The intrinsic 
-#'    paramters are independent of \eqn{\mu}. See book for details.
+#'    parameters are independent of \eqn{\mu}. See book for details.
 #' 
 #'  @usage UtilIntrinsic2PhysicalRSM (mu, lambda, nu)  
 #' 

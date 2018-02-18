@@ -14,7 +14,7 @@
 #' \item{\code{LL}}{ Ratings array [1:2, 1:5, 1:89, 1:2], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:89], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:89, 1:2], labels of lesions on diseased cases}
-#' \item{\code{lesionWeight}}{ array [1:89, 1:2], weights (or clinical importances) of lesions}
+#' \item{\code{lesionWeight}}{ array [1:89, 1:2], weights (or clinical importance) of lesions}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "BT" "DM", modality labels}
 #' \item{\code{readerID}}{ [1:5] "1" "2" "3" "4" ..., reader labels}
@@ -24,7 +24,7 @@
 #'
 #' @references Chakraborty DP, Svahn T (2011) Estimating the parameters of a model 
 #' of visual search from ROC data: an alternate method for fitting proper ROC curves. 
-#' Proc SPIE 7966.
+#' PROC SPIE 7966.
 #' 
 #' @examples
 #' str(dataset01)
@@ -34,14 +34,14 @@
 #'
 #' dataset02
 #'
-#' This is referred to in the book as the "VD" dataset. It consists of 114 cases, 
-#' 45 of which are diseased, interpreted in two modalities
-#' ("0" = single spin echo MRI, "1" = cine-MRI) by five radiologists using the ROC paradigm. 
-#' Each diseased cases had an aortic dissection; the ROC paradigm grenerates one 
-#' rating per case.  Often referred to in the ROC literature as the 
-#' Van Dyke dataset, which, along the the Franken dataset, has been widely used to illustrate
-#' advances in ROC methodology. The example below displays the ROC plot for 
-#' the first modality and first reader.
+#' This is referred to in the book as the "VD" dataset. It consists of 114 cases,
+#'    45 of which are diseased, interpreted in two modalities ("0" = single spin echo 
+#'    MRI, "1" = cine-MRI) by five radiologists using the ROC 
+#'    paradigm. Each diseased cases had an aortic dissection; the ROC paradigm 
+#'    generates one rating per case.  Often referred to in the ROC literature as the 
+#'    Van Dyke dataset, which, along with the Franken dataset, has been widely 
+#'    used to illustrate advances in ROC methodology. The example below displays 
+#'    the ROC plot for the first modality and first reader.
 #' 
 #' @format A list with 8 elements:
 #' \itemize{
@@ -49,7 +49,7 @@
 #' \item{\code{LL}}{ Ratings array [1:2, 1:5, 1:45, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:45], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:45, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:45, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:45, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "0" "1", modality labels}
 #' \item{\code{readerID}}{ [1:5] "0" "1" "2" ..., reader labels}
@@ -83,7 +83,7 @@
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:67, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:67], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:67, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:67, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:67, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "0" "1", modality labels}
 #' \item{\code{readerID}}{ [1:4] "0" "1" "2" ..., reader labels}
@@ -116,7 +116,7 @@
 #' \item{\code{LL}}{ Ratings array [1:5, 1:4, 1:100, 1:3], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:100], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:100, 1:3], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:100, 1:3] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:100, 1:3] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:5] "1" "2" ... modality labels}
 #' \item{\code{readerID}}{ [1:4] "1" "3" "4" "5" reader labels}
@@ -149,7 +149,7 @@
 #' \item{\code{LL}}{ Ratings array [1:2, 1:9, 1:47, 1:3, of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:47], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:47, 1:3], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:67, 1] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:67, 1] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "1" "2", modality labels}
 #' \item{\code{readerID}}{ [1:4] "1" "2" "3" "4", reader labels}
@@ -181,7 +181,7 @@
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:42, 1:15], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:42], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:42, 1:15], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:42, 1:15] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:42, 1:15] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "1" "2", modality labels}
 #' \item{\code{readerID}}{ [1:4] "1" "2" ..., reader labels}
@@ -211,7 +211,7 @@
 #' \item{\code{LL}}{ Ratings array [1:5, 1:7, 1:81, 1:3], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:81], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:81, 1:3], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:81, 1:3] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:81, 1:3] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:5] "1" "2", ..., modality labels}
 #' \item{\code{readerID}}{ [1:7] "1" "2" ..., reader labels}
@@ -244,7 +244,7 @@
 #' \item{\code{LL}}{ Ratings array [1:5, 1:5, 1:64, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:64], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:64, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:64, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:64, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1:5] "0" "1", modality labels}
 #' \item{\code{readerID}}{ [1:5] "0" "1" "2" ..., reader labels}
@@ -279,7 +279,7 @@
 #' \item{\code{LL}}{ Ratings array [1, 1:10, 1:80, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:80], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:80, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1] "1" modality label}
 #' \item{\code{readerID}}{ [1:10] "1" "2" ..., reader labels}
@@ -312,7 +312,7 @@
 #' \item{\code{LL}}{ Ratings array [1:3, 1:8, 1:40, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:40], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:40, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:40, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:40, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1:3] "1" "2" "3", modality labels}
 #' \item{\code{readerID}}{ [1:8] "1" "2" ..., reader labels}
@@ -352,7 +352,7 @@
 #' \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:115, 1:20], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:115], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:115, 20], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:115, 20] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:115, 20] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:4] "1" "2" ..., modality labels}
 #' \item{\code{readerID}}{ [1:5] "1" "2" ..., reader labels}
@@ -382,7 +382,7 @@
 #' \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:88, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:88], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:88, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:88, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:88, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "0" "1", modality labels}
 #' \item{\code{readerID}}{ [1:4] "0" "1" "2" ..., reader labels}
@@ -410,7 +410,7 @@
 #' \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:106, 1:15], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:106], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:106, 15], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:106, 15] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:106, 15] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID}}{ [1:4] "1" "2" ..., modality labels}
 #' \item{\code{readerID}}{ [1:5] "1" "2" ..., reader labels}
@@ -438,11 +438,11 @@
 #' 
 #' @format A list with 8 elements:
 #' \itemize{
-#' \item{\code{NL}}{ Ratings array num 1:2, 1:4, 1:200, 1], of false positives, FPs}
+#' \item{\code{NL}}{ Ratings array [1:2, 1:4, 1:200, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:100, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:100], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:100, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:100, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:100, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "1" "2", modality labels}
 #' \item{\code{readerID}}{ [1:4] "1" "2" ..., reader labels}
@@ -476,7 +476,7 @@
 #' \item{\code{LLIl}}{ Ratings array [1, 1:10, 1:80, 1], of true positives with incorrect localization, TPIls}
 #' \item{\code{lesionNum}}{ array [1:80], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:80, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "LROC", the data type}
 #' \item{\code{modalityID}}{ [1:2] "0" "1", modality labels}
 #' \item{\code{readerID}}{ [1:10] "1" "2" ..., reader labels}
@@ -507,7 +507,7 @@
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:11, 1:34, 1:3], of lesion localizations, LLs}
 #' \item{\code{lesionNum}}{ array [1:34], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:34, 3], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:34, 3] weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:34, 3] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
 #' \item{\code{modalityID1}}{ [1:2] "F" "I", modality labels}
 #' \item{\code{modalityID2}}{ [1:4] "20" "40"  "60"  "80", modality labels}
@@ -539,7 +539,7 @@
 #' \item{\code{LL}}{ Ratings array [1, 1, 1:10, 1], of true positives, TPs}
 #' \item{\code{lesionNum}}{ array [1:10], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:10, 1], labels of lesions on diseased cases, all set to 1}
-#' \item{\code{lesionWeight}}{ array [1:10, 1], weights (or clinical importances) of lesions, all set to 1}
+#' \item{\code{lesionWeight}}{ array [1:10, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
 #' \item{\code{modalityID}}{ "1", modality label}
 #' \item{\code{readerID}}{ "1", reader label}

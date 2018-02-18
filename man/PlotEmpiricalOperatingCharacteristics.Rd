@@ -25,7 +25,7 @@ are returned. For example, the returned objects for \code{"ROC"} operating
 characteristics are as follows:
 
 \item{Plot}{\pkg{ggplot2} object. 
-For continous or averaged data, operating characteristics curves are plotted 
+For continuous or averaged data, operating characteristics curves are plotted 
 \strong{without} showing operating points. For binned individual data, both operating 
 points and connecting lines are shown. To avoid clutter, if there are more than 20 
 operating points, they are not shown}
@@ -35,7 +35,7 @@ codes modality and reader) and type, which can be \code{"individual"}, \code{"co
 \code{"average"}; \code{"individual"} refers to a one modality and one reader.}
 }
 \description{
-Plot emprirical operating characteristics (operating points connected by straight 
+Plot empirical operating characteristics (operating points connected by straight 
    lines) for specified treatments and readers, or if desired, plots only 
    (no operating points) averaged over specified treatments and / or readers
 }

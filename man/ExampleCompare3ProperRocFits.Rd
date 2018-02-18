@@ -26,12 +26,12 @@ is \code{FALSE} in which case the previously saved results are used.}
 }
 \value{
 The returned value \code{allResults} is a \code{list} containing all
-   results from the three parameteric model fits. See details.
+   results from the three parametric model fits. See details.
 }
 \description{
-Applies the radiological search model (RSM) and the 
-   contaminated binormal model (CBM) ROC-curve fitting methods to 14 
-   datasets and compares the fits to proper ROC (PROPROC) 
+Applies the Radiological Search Model (RSM) and the 
+   Contaminated Binormal Model (CBM) ROC-curve fitting methods to 14 
+   datasets and compares the fits to Proper ROC (PROPROC) 
    fits obtained using Windows software downloaded from the Univ. of 
    Iowa ROC website ca. June 2017.
 }
@@ -66,19 +66,19 @@ The PROPROC parameters were obtained by running Windows software OR
    is \code{TRUE}, the \code{.lrc} files will be written to the \code{File-Panes}
    directory, \strong{overwriting} any existing files with the same names.
 
-##  Notes on updating the results
+##  DPC notes on updating the results 2/17/18
 ##  First run PROPROC on all datasets
 ##  1. ret14 <- ExampleCompare3ProperRocFits(saveProprocLrcFile = TRUE) 
-##     this generates 14 .lrc files in rjafroc
+##     this generates 14 .lrc files in RJafroc
 ##  2. Move these files to VmWareShared folder
 ##  3. Start VmWare and Windows 8
-##  4. Start OR DBM MRMC, select .lrc file, set PROPROC AUC and run all
-##  5. Repeat for each datset
-##  6. Move 2 files (ending with .lroc and proproc area pooled.csv) from 
-##     VmWareShared to rjafroc/inst/MRMCRuns to appropriate subdirectories.
+##  4. Start OR DBM MRMC, select .lrc file, select PROPROC AUC and RUN ALL
+##  5. Repeat for each dataset
+##  6. Move 2 files (ending with .lroc and PROPROC area pooled.csv) from 
+##     VmWareShared to RJafroc/inst/MRMCRuns to appropriate subdirectories.
 ##  7. Remove spaces in names of all "proproc area pooled.csv" files  
 ##  8. ret14 <- ExampleCompare3ProperRocFits(reAnalyze = TRUE) 
-##     this generates new results files in rjafroc/inst/ANALYZED/RSM6
+##     this generates new results files in RJafroc/inst/ANALYZED/RSM6
 ##
 }
 \examples{

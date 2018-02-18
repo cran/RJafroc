@@ -10,7 +10,7 @@
 \item{\code{LL}}{ Ratings array [1:5, 1:5, 1:64, 1], of true positives, TPs}
 \item{\code{lesionNum}}{ array [1:64], number of lesions per diseased case, all set to 1}
 \item{\code{lesionID}}{ array [1:64, 1], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:64, 1], weights (or clinical importances) of lesions, all set to 1}
+\item{\code{lesionWeight}}{ array [1:64, 1], weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "ROC", the data type}
 \item{\code{modalityID}}{ [1:5] "0" "1", modality labels}
 \item{\code{readerID}}{ [1:5] "0" "1" "2" ..., reader labels}

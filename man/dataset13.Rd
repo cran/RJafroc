@@ -10,7 +10,7 @@
 \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:106, 1:15], of lesion localizations, LLs}
 \item{\code{lesionNum}}{ array [1:106], number of lesions per diseased case, all set to 1}
 \item{\code{lesionID}}{ array [1:106, 15], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:106, 15] weights (or clinical importances) of lesions, all set to 1}
+\item{\code{lesionWeight}}{ array [1:106, 15] weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "FROC", the data type}
 \item{\code{modalityID}}{ [1:4] "1" "2" ..., modality labels}
 \item{\code{readerID}}{ [1:5] "1" "2" ..., reader labels}

@@ -18,7 +18,7 @@
 #' 
 #' @param lambda Array, max length 2. The Poisson distribution \emph{intrinsic} 
 #'    parameter(s), which model the random numbers of latent NLs (suspicious 
-#'    regions that do not correspond to actual lesions) per case, for upto two 
+#'    regions that do not correspond to actual lesions) per case, for up to two 
 #'    treatments. The corresponding \emph{physical} parameters are \code{lambda/mu}. 
 #'    Two conversion functions are provided: \link{UtilIntrinsic2PhysicalRSM} and 
 #'    \link{UtilPhysical2IntrinsicRSM}.
@@ -26,7 +26,7 @@
 #' @param nu Array, max length 2. The binomial distribution success probability 
 #'    \emph{intrinsic} parameters, which model the random numbers of latent LLs 
 #'    (suspicious regions that 
-#'    correspond to actual lesions) per diseased case for upto two treatments; 
+#'    correspond to actual lesions) per diseased case for up to two treatments; 
 #'    the corresponding \emph{physical} parameter is \code{1 - exp(nu*mu)}, 
 #'    the success probability of the binomial distribution(s).
 #' 
@@ -101,7 +101,7 @@
 #' 
 #' @note For \code{lesDistr}, the sum over the second column must equal one. 
 #'    If all cases contain same number of lesions, simply supply this number instead of 
-#'    the matrix. If the arugment is missing, the default value 
+#'    the matrix. If the argument is missing, the default value 
 #'    of one lesion per diseased case applies. 
 #'   
 #' In \code{lesionWeights}, the sum over each row (excluding \code{-Inf}) must be one. 
@@ -109,12 +109,12 @@
 #'    does not exist. Equal lesion weighting is applied if this argument is missing.
 #' 
 #'    For example, if the maximum number of distinct lesion configurations per case 
-#'    is 3 (eg., 1, 2 and 4, implying there are no cases with 3 lesions), the 
+#'    is 3 (e.g., 1, 2 and 4, implying there are no cases with 3 lesions), the 
 #'    first column of \code{lesDistr} will be c(1,2,4). The second column might be
 #'    c(0.8, 0.15, 0.05), which sums to one, meaning 80\% of cases have only one 
 #'    lesion, 15\% have two lesions and 5\% have three lesions. The 
 #'    \code{lesionWeights} matrix will be 
-#'    \code{[1:3,1:3]}, where each row will sum to one (excluding negative infinites). 
+#'    \code{[1:3,1:3]}, where each row will sum to one (excluding negative infinities). 
 #' 
 #' @import ggplot2
 #' 
@@ -455,3 +455,18 @@ intwAFROC <- function(FPF, mu, lambdaP, nuP, lesDistr, lesionWeights){
 }
 
 is.wholenumber <- function(x)  round(x) == x
+
+
+xROC <- function (zeta, lambdaP){
+  return (1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2))))
+}
+
+xROCVect <- function(zeta, lambdaP) {
+    FPF = 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2.0)))
+  return (FPF);
+}
+
+
+erfcpp <- function(x){
+  return (2 * pnorm(sqrt(2) * x) - 1)
+}

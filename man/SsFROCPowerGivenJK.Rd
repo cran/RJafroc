@@ -11,7 +11,7 @@ SsFROCPowerGivenJK(dataset, trts, rdrs, effectSizeROC, J, K)
 for variability information. The dataType can be "ROC", "FROC", or "LROC".}
 
 \item{trts}{The indices of the modalities in the pilot dataset that
-will be regarded as representive of null hypothesis modalities. 
+will be regarded as representative of null hypothesis modalities. 
 Two or more modalities, specified by indices, e.g., c(1,2,3).}
 
 \item{rdrs}{The indices of the readers  in the pilot dataset

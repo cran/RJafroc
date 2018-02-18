@@ -6,11 +6,11 @@
 \title{dataset14}
 \format{A list with 8 elements:
 \itemize{
-\item{\code{NL}}{ Ratings array num 1:2, 1:4, 1:200, 1], of false positives, FPs}
+\item{\code{NL}}{ Ratings array [1:2, 1:4, 1:200, 1], of false positives, FPs}
 \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:100, 1], of true positives, TPs}
 \item{\code{lesionNum}}{ array [1:100], number of lesions per diseased case, all set to 1}
 \item{\code{lesionID}}{ array [1:100, 1], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:100, 1], weights (or clinical importances) of lesions, all set to 1}
+\item{\code{lesionWeight}}{ array [1:100, 1], weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "ROC", the data type}
 \item{\code{modalityID}}{ [1:2] "1" "2", modality labels}
 \item{\code{readerID}}{ [1:4] "1" "2" ..., reader labels}

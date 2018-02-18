@@ -26,7 +26,7 @@ for each treatment-reader combination in the ROC, FROC or LROC dataset
 \details{
 The allowed FOMs depend on the type of dataset (i.e., \code{dataType} 
    field of dataset object). 
-   For \strong{ROC datasets:} the \code{"Wilcoxon"} is alllowed.
+   For \strong{ROC datasets:} the \code{"Wilcoxon"} is allowed.
    For \strong{FROC datasets:} The following FOMs are allowed:
    \code{"AFROC1"}, 
    \code{"AFROC"}, 

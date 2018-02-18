@@ -15,7 +15,7 @@ The \strong{LROC} dataset.
 }
 \description{
 Read the Hupse-Karssemeijer LROC data file, a study comparing 
-   standlalone performance of breast CAD vs. radiologists; the study 
+   standalone performance of breast CAD vs. radiologists; the study 
    actually included radiologists and residents; the following usage 
    includes only the radiologists
 }

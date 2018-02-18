@@ -10,7 +10,7 @@
 \item{\code{LL}}{ Ratings array [1:2, 1:5, 1:89, 1:2], of lesion localizations, LLs}
 \item{\code{lesionNum}}{ array [1:89], number of lesions per diseased case}
 \item{\code{lesionID}}{ array [1:89, 1:2], labels of lesions on diseased cases}
-\item{\code{lesionWeight}}{ array [1:89, 1:2], weights (or clinical importances) of lesions}
+\item{\code{lesionWeight}}{ array [1:89, 1:2], weights (or clinical importance) of lesions}
 \item{\code{dataType}}{ "FROC", the data type}
 \item{\code{modalityID}}{ [1:2] "BT" "DM", modality labels}
 \item{\code{readerID}}{ [1:5] "1" "2" "3" "4" ..., reader labels}
@@ -34,6 +34,6 @@ PlotEmpiricalOperatingCharacteristics(dataset = dataset01, opChType = "wAFROC")$
 \references{
 Chakraborty DP, Svahn T (2011) Estimating the parameters of a model 
 of visual search from ROC data: an alternate method for fitting proper ROC curves. 
-Proc SPIE 7966.
+PROC SPIE 7966.
 }
 \keyword{datasets}

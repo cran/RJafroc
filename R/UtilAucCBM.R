@@ -6,7 +6,7 @@
 #' @usage UtilAucCBM (mu, alpha)
 #' 
 #' @param mu The \code{mu} parameter of CBM (separation of non-diseased 
-#'    and disesed pdfs)
+#'    and diseased pdfs)
 #' @param alpha The \code{alpha} parameter of CBM, i.e., the fraction 
 #'    of diseased cases on which the disease is visible
 #' 

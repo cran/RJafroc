@@ -268,7 +268,7 @@ FitCbmRoc <- function(dataset, trt = 1, rdr = 1){
     parameters <- c(list(mu, alpha), as.list(zetas))
     names(parameters) <- namesVector
     
-    CBMNLLNewNoTransf <- AddArguments2(CBMNLLNoTransf, length(zetas))
+    CBMNLLNewNoTransf <- AddArguments2(nLLCBMNoTransf, length(zetas))
     
     ret <- suppressWarnings(mle2(CBMNLLNewNoTransf, start = parameters, method = "BFGS",
                                  data = list(fi = fpCounts, ti = tpCounts)))
@@ -338,7 +338,7 @@ CBMNLL <- function(muFwd, alphaFwd, fi, ti, maxMu){
 
 
 # CBM paradigm negative of log likelihood function, without transformations
-CBMNLLNoTransf <- function (mu, alpha, fi, ti){
+nLLCBMNoTransf <- function (mu, alpha, fi, ti){
   
   allParameters <- names(formals())
   zetaPos <- regexpr("zeta", allParameters)

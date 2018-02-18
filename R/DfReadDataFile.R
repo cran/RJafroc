@@ -17,7 +17,7 @@
 #'    format ("," is the default), see \url{http://perception.radiology.uiowa.edu/}.
 #'    This parameter is not used when reading \code{"JAFROC"} 
 #'    or \code{"iMRMC"} data files.
-#' @param renumber A logical varible: if \code{TRUE}, consecutive integers 
+#' @param renumber A logical variable: if \code{TRUE}, consecutive integers 
 #'    (starting from 1) will be used as the 
 #'    modality and reader IDs. Otherwise, modality 
 #'    and reader IDs in the original data file will be used.

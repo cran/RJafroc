@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 double erf(double x){
-  return 2 * R::pnorm(sqrt(2) * x, 0, 1, 1, 0) - 1;
+  return 2 * R::pnorm(sqrt(2.0) * x, 0, 1, 1, 0) - 1;
 }
 
 // [[Rcpp::export]]
@@ -12,18 +12,18 @@ NumericVector erfVect(NumericVector x){
   int l = x.size();
   NumericVector erfx(l);
   for (int il = 0; il < l; il ++){
-    erfx[il] = 2 * R::pnorm(sqrt(2) * x[il], 0, 1, 1, 0) - 1;
+    erfx[il] = 2 * R::pnorm(sqrt(2.0) * x[il], 0, 1, 1, 0) - 1;
   }
   return erfx;
 }
 
 double erfcpp(double x){
-  return 2 * R::pnorm(sqrt(2) * x, 0, 1, 1, 0) - 1;
+  return 2 * R::pnorm(sqrt(2.0) * x, 0, 1, 1, 0) - 1;
 }
 
 // [[Rcpp::export]]
 double xROC(double zeta, double lambdaP){
-  return 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2)));
+  return 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2.0)));
 }
 
 // [[Rcpp::export]]
@@ -31,7 +31,7 @@ NumericVector xROCVect(NumericVector zeta, double lambdaP){
   int l = zeta.size();
   NumericVector FPF(l);
   for (int il = 0; il < l; il ++){
-    FPF[il] = 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta[il] / sqrt(2)));
+    FPF[il] = 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta[il] / sqrt(2.0)));
   }
   return FPF;
 }
@@ -42,7 +42,7 @@ double yROC(double zeta, double mu, double lambdaP, double nuP, NumericMatrix le
   double TPF = 0;
   
   for (int i = 0; i < lesDistr.nrow(); i++){
-    TPF = TPF + fl[i] * (1 - pow(1 - nuP/2 + nuP/2  * erfcpp( (zeta - mu) / sqrt(2) ) , lesDistr(i, 0)) * exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2))));
+    TPF = TPF + fl[i] * (1 - pow(1 - nuP/2 + nuP/2  * erfcpp( (zeta - mu) / sqrt(2.0) ) , lesDistr(i, 0)) * exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2.0))));
   }
   return TPF;
 }
@@ -55,7 +55,7 @@ NumericVector yROCVect(NumericVector zeta, double mu, double lambdaP, double nuP
   
   for (int il = 0; il < l; il ++){
     for (int i = 0; i < lesDistr.nrow(); i++){
-      TPF[il] = TPF[il] + fl[i] * (1 - pow(1 - nuP/2 + nuP/2  * erfcpp( (zeta[il] - mu) / sqrt(2) ) , lesDistr(i, 0)) * exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta[il] / sqrt(2))));
+      TPF[il] = TPF[il] + fl[i] * (1 - pow(1 - nuP/2 + nuP/2  * erfcpp( (zeta[il] - mu) / sqrt(2.0) ) , lesDistr(i, 0)) * exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta[il] / sqrt(2.0))));
     }
   }
   
@@ -70,7 +70,7 @@ NumericVector yROCVectNuP(double zeta, double mu, double lambdaP, NumericVector 
   
   for (int il = 0; il < l; il ++){
     for (int i = 0; i < lesDistr.nrow(); i++){
-      TPF[il] = TPF[il] + fl[i] * (1 - pow(1 - nuP[il]/2 + nuP[il]/2  * erfcpp( (zeta - mu) / sqrt(2) ) , lesDistr(i, 0)) * exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2))));
+      TPF[il] = TPF[il] + fl[i] * (1 - pow(1 - nuP[il]/2 + nuP[il]/2  * erfcpp( (zeta - mu) / sqrt(2.0) ) , lesDistr(i, 0)) * exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2.0))));
     }
   }
   

@@ -44,7 +44,7 @@
 #'    the chi-square statistic often cannot be calculated. 
 #' 
 #' 
-#' @examples 
+#' @examples
 #' ## Test with included ROC data (some bins have zero counts)
 #' lesDistr <- UtilLesionDistribution(dataset02)
 #' retFit <- FitRsmRoc(dataset02, lesDistr)
@@ -75,7 +75,6 @@
 #' dataset <- Df2RJafrocDataset(fp, tp)
 #' lesDistr <- UtilLesionDistribution(dataset)
 #' retFit <- FitRsmRoc(dataset, lesDistr);print(retFit$fittedPlot)
-#' 
 #' 
 #' 
 #' @references 

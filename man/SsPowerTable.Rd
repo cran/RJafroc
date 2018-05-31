@@ -38,7 +38,7 @@ Generate combinations of numbers of readers J and numbers of cases K
 Regarding other parameters (...), see details in \link{SsPowerGivenJK}
 }
 \note{
-The procedure is valid for ROC studies only; for FROC studies see \link{SsFROCPowerGivenJK}.
+The procedure is valid for ROC studies only; for FROC studies see Online Appendix Chapter 19.
 }
 \examples{
 ## Example of sample size calculation with DBM method

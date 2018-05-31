@@ -15,7 +15,8 @@
 #' 
 #' @return The return list contains the same items with \link{StSignificanceTesting}.
 #' 
-#' @examples 
+#' @examples
+#' \dontrun{ 
 #' ## read the raw data file in extdata directory
 #' crossedFileName <- system.file("extdata", "includedCrossedModalitiesData.xlsx", 
 #' package = "RJafroc", mustWork = TRUE)
@@ -24,6 +25,7 @@
 #' 
 #' ## read the built in dataset
 #' retCrossed2 <- StSignificanceTestingCrossedModalities(datasetCrossedModality, 1)
+#' }
 #' 
 #' @export
 StSignificanceTestingCrossedModalities <- function(crossedData, avgIndx, FOM = "wAFROC", 

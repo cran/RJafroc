@@ -25,11 +25,11 @@
 #' @return A dataset with the structure specified in \link{RJafroc-package}.
 #' 
 #' @examples
+#' \dontrun{
 #' fileName <- system.file("extdata", "includedRocData.xlsx", 
 #' package = "RJafroc", mustWork = TRUE)
 #' RocDataXlsx <- DfReadDataFile(fileName)
 #' 
-#' \dontrun{
 #' fileName <- system.file("extdata", "includedRocData.csv", 
 #' package = "RJafroc", mustWork = TRUE)
 #' RocDataCsv<- DfReadDataFile(fileName, format = "MRMC")

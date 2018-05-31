@@ -26,6 +26,7 @@ Performs ORH analysis for specified crossed modalities dataset
    averaged over specified modality factor
 }
 \examples{
+\dontrun{ 
 ## read the raw data file in extdata directory
 crossedFileName <- system.file("extdata", "includedCrossedModalitiesData.xlsx", 
 package = "RJafroc", mustWork = TRUE)
@@ -34,5 +35,6 @@ retCrossed1 <- StSignificanceTestingCrossedModalities(crossedData, 1)
 
 ## read the built in dataset
 retCrossed2 <- StSignificanceTestingCrossedModalities(datasetCrossedModality, 1)
+}
 
 }

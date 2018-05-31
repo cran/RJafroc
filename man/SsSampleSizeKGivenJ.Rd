@@ -40,7 +40,7 @@ Regarding other parameters (...), see details in \link{SsPowerGivenJK}.
    \strong{is required when using OR variability parameters}.
 }
 \note{
-The procedure is valid for ROC studies only; for FROC studies see \link{SsFROCPowerGivenJK}.
+The procedure is valid for ROC studies only; for FROC studies see Online Appendix Chapter 19.
 }
 \examples{
 ## Following is an example of sample size calculation using the DBM variance 

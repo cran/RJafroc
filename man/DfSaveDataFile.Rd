@@ -27,6 +27,7 @@ Save ROC data file in a different format so it can be analyzed
    with alternate software
 }
 \examples{
+\dontrun{
 DfSaveDataFile(dataset = dataset05, 
    fileName = "rocData2.xlsx", format = "JAFROC")
 DfSaveDataFile(dataset = dataset02, 
@@ -40,5 +41,6 @@ DfSaveDataFile(dataset = dataset02,
 DfSaveDataFile(dataset = dataset02, 
    fileName = "dataset05.imrmc", format = "iMRMC", 
    dataDescription = "ExampleROCdata3") 
-
+}
+ 
 }

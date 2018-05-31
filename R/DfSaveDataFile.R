@@ -18,6 +18,7 @@
 #'    when saving dataset in other formats}
 #' 
 #' @examples
+#' \dontrun{
 #' DfSaveDataFile(dataset = dataset05, 
 #'    fileName = "rocData2.xlsx", format = "JAFROC")
 #' DfSaveDataFile(dataset = dataset02, 
@@ -31,7 +32,8 @@
 #' DfSaveDataFile(dataset = dataset02, 
 #'    fileName = "dataset05.imrmc", format = "iMRMC", 
 #'    dataDescription = "ExampleROCdata3") 
-#' 
+#' }
+#'  
 #' @importFrom tools file_ext
 #' 
 #' @export

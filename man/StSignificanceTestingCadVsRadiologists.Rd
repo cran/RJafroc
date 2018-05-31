@@ -135,15 +135,31 @@ PCL is the probability of a correct localization. The LROC is the plot of PCL
 The extension of the code to FROC will be addressed in a future update.
 }
 \examples{
-ret1 <- StSignificanceTestingCadVsRadiologists (dataset09, 
+ret1M <- StSignificanceTestingCadVsRadiologists (dataset09, 
 FOM = "Wilcoxon", method = "singleModality")
+
 \dontrun{
-ret2 <- StSignificanceTestingCadVsRadiologists (dataset09, 
+ret2M <- StSignificanceTestingCadVsRadiologists (dataset09, 
 FOM = "Wilcoxon", method = "dualModality")
 
-ret1 <- StSignificanceTestingCadVsRadiologists (datasetCadLroc, 
+retLroc1M <- StSignificanceTestingCadVsRadiologists (datasetCadLroc, 
 FOM = "PCL", option = "RRRC", method = "singleModality", FPFValue = 0.05)
-ret2 <- StSignificanceTestingCadVsRadiologists (datasetCadLroc, 
+
+retLroc2M <- StSignificanceTestingCadVsRadiologists (datasetCadLroc, 
+FOM = "PCL", option = "RRRC", method = "dualModality", FPFValue = 0.05)
+
+## test with fewer readers
+dataset09a <- DfExtractDataset(dataset09, rdrs = seq(1:7))
+ret1M7 <- StSignificanceTestingCadVsRadiologists (dataset09a, 
+FOM = "Wilcoxon", method = "singleModality")
+ret2M7 <- StSignificanceTestingCadVsRadiologists (dataset09a, 
+FOM = "Wilcoxon", method = "dualModality")
+
+datasetCadLroc7 <- DfExtractDataset(datasetCadLroc, rdrs = seq(1:7))
+ret1MLroc7 <- StSignificanceTestingCadVsRadiologists (datasetCadLroc7, 
+FOM = "PCL", option = "RRRC", method = "singleModality", FPFValue = 0.05)
+
+ret2MLroc7 <- StSignificanceTestingCadVsRadiologists (datasetCadLroc7, 
 FOM = "PCL", option = "RRRC", method = "dualModality", FPFValue = 0.05)
 }
 

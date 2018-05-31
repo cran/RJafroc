@@ -23,7 +23,7 @@
 #' @details Regarding other parameters (...), see details in \link{SsPowerGivenJK}
 #' 
 #' 
-#'@note The procedure is valid for ROC studies only; for FROC studies see \link{SsFROCPowerGivenJK}.
+#'@note The procedure is valid for ROC studies only; for FROC studies see Online Appendix Chapter 19.
 #'
 #'
 #' @examples

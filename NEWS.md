@@ -1,6 +1,15 @@
 Update History
 
 ==========================
+## RJafroc 1.0.2
+### Minor bug
+StSignificanceTestingCadVsRadiologists was not working for different numbers of readers.
+   As noted by Alejandro, the number of readers was hard coded. Fixed this and extended
+   DfExtractDataset to include LROC datasets.
+Removed function SsFROCPowerGivenJK: FROC power is implemented in Online
+  Appendix Chapter 19 (see email exchange with Kota Aoyagi)
+   
+==========================
 ## RJafroc 1.0.1
 ### Minor bug
 Package was not installing on Solaris - overloading errors. Changed sqrt(2) in 

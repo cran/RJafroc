@@ -210,8 +210,9 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
   for (r in 1:nrow(lesionWeights)){
     rowWeight <- lesionWeights[r, ]
     nWeight <- sum(rowWeight != -Inf)
-    if (sum(rowWeight[rowWeight != -Inf]) != 1){
-      errMsg <- sprintf("Line %d of lesion weights matrix should be summed up to 1.", r)
+    if (abs(sum(rowWeight[rowWeight != -Inf]) - 1.0) > 1e-6){
+    #if (sum(rowWeight[rowWeight != -Inf]) != 1){ # this generated Solaris error
+        errMsg <- sprintf("Line %d of lesion weights matrix should be summed up to 1.", r)
       stop(errMsg)
     }
     if (nWeight != lesDistr[r , 1]){

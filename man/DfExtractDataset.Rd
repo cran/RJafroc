@@ -7,7 +7,8 @@
 DfExtractDataset(dataset, trts, rdrs)
 }
 \arguments{
-\item{dataset}{The original dataset from which the subset is to be extracted}
+\item{dataset}{The original dataset from which the subset is to be extracted;
+can be ROC, FROC or LROC}
 
 \item{trts}{A vector contains the indices of the modalities to be extracted. 
 \strong{If this parameter is not supplied, all modalities are extracted.}}
@@ -29,10 +30,11 @@ Extract a dataset consisting of a subset of treatments/readers from a larger dat
 }
 \examples{
 ## Extract the data corresponding to the second reader in the 
-## first modality from an include ROC dataset
+## first modality from an included ROC dataset
 dataset1_2 <- DfExtractDataset(dataset05, trts = 1, rdrs = 2)
 
-## Extract the data of the first and third reader in all modality from the include ROC dataset
+## Extract the data of the first and third reader in all 
+## modality from the included ROC dataset
 datasetA_123 <- DfExtractDataset(dataset05, rdrs = c(1, 3))
 
 }

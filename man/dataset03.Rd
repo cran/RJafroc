@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataset03}
 \alias{dataset03}
-\title{dataset03}
+\title{Franken ROC dataset}
 \format{A list with 8 elements:
 \itemize{
 \item{\code{NL}}{ Ratings array [1:2, 1:4, 1:100, 1], of false positives, FPs}
@@ -12,7 +12,7 @@
 \item{\code{lesionID}}{ array [1:67, 1], labels of lesions on diseased cases, all set to 1}
 \item{\code{lesionWeight}}{ array [1:67, 1], weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "ROC", the data type}
-\item{\code{modalityID}}{ [1:2] "0" "1", modality labels}
+\item{\code{modalityID}}{ [1:2] "0" "1", treatment labels}
 \item{\code{readerID}}{ [1:4] "0" "1" "2" ..., reader labels}
 }}
 \usage{
@@ -20,7 +20,7 @@ dataset03
 }
 \description{
 This is referred to in the book as the "FR" dataset. It consists of 100 cases, 
-69 of which are diseased, interpreted in two modalities,
+69 of which are diseased, interpreted in two treatments,
 "0" = conventional film radiographs, "1" = digitized  images viewed on monitors, by four 
 radiologists using the ROC paradigm. Often referred to in the ROC literature as the 
 Franken-dataset, which, along the the Van Dyke dataset, has been widely used to illustrate

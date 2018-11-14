@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataset12}
 \alias{dataset12}
-\title{dataset12}
+\title{Dobbins 2 ROC dataset}
 \format{A list with 8 elements:
 \itemize{
 \item{\code{NL}}{ Ratings array [1:4, 1:5, 1:152, 1], of false positives, FPs}
@@ -12,7 +12,7 @@
 \item{\code{lesionID}}{ array [1:88, 1], labels of lesions on diseased cases, all set to 1}
 \item{\code{lesionWeight}}{ array [1:88, 1], weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "ROC", the data type}
-\item{\code{modalityID}}{ [1:2] "0" "1", modality labels}
+\item{\code{modalityID}}{ [1:2] "0" "1", treatment labels}
 \item{\code{readerID}}{ [1:4] "0" "1" "2" ..., reader labels}
 }}
 \usage{

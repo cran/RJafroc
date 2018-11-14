@@ -4,10 +4,10 @@
 \alias{FitRsmRoc}
 \title{Fit the radiological search model (RSM) to ROC data}
 \usage{
-FitRsmRoc(dataset, lesDistr, trt = 1, rdr = 1)
+FitRsmRoc(binnedRocData, lesDistr, trt = 1, rdr = 1)
 }
 \arguments{
-\item{dataset}{The \strong{binned} dataset containing the data}
+\item{binnedRocData}{The \strong{binned ROC} dataset containing the data}
 
 \item{lesDistr}{The lesion distribution matrix}
 
@@ -46,20 +46,21 @@ The return value is a list with the following elements:
    Use \code{print} to display the object}
 }
 \description{
-Fit an RSM-predicted ROC curve to a binned dataset
+Fit an RSM-predicted ROC curve to a binned ROC dataset
 }
 \details{
-In the RSM: (1) The (random) number of latent NLs per case is Poisson distributed 
+If dataset is FROC, first convert it to ROC, using \link{DfFroc2Roc}. MLE ROC algorithms 
+   require binned datasets. Use \link{DfBinDataset} to perform the binning prior to calling 
+   this function. 
+   In the RSM: (1) The (random) number of latent NLs per case is Poisson distributed 
    with mean parameter lambdaP, and the corresponding ratings are sampled from 
    \eqn{N(0,1)}. The (2) The (random) number of latent LLs per diseased case is 
    binomial distributed with success probability nuP and trial size equal to 
    the number of lesions in the case, and the corresponding ratings are sampled from 
    N(\eqn{mu},1). (3) A latent NL or LL is actually marked if its rating exceeds 
    the lowest threshold zeta1. To avoid clutter error bars are only shown for the 
-   lowest and uppermost operating points. MLE ROC algorithms require binned datasets. 
-   Use \link{DfBinDataset} to perform the binning prior to calling this function. 
-   Because of the extra parameter, and the requirement to have five counts, 
-   the chi-square statistic often cannot be calculated.
+   lowest and uppermost operating points. Because of the extra parameter, and the 
+   requirement to have five counts, the chi-square statistic often cannot be calculated.
 }
 \examples{
 ## Test with included ROC data (some bins have zero counts)
@@ -74,24 +75,31 @@ retFit <- FitRsmRoc(datasetDegenerate, lesDistr);print(retFit$fittedPlot)
 ## Test with single interior point data
 fp <- c(rep(1,7), rep(2, 3))
 tp <- c(rep(1,5), rep(2, 5))
-dataset <- Df2RJafrocDataset(fp, tp)
-lesDistr <- UtilLesionDistribution(dataset)
-retFit <- FitRsmRoc(dataset, lesDistr);print(retFit$fittedPlot)
+binnedRocData <- Df2RJafrocDataset(fp, tp)
+lesDistr <- UtilLesionDistribution(binnedRocData)
+retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
 
 ## Test with two interior data points
 fp <- c(rep(1,7), rep(2, 5), rep(3, 3))
 tp <- c(rep(1,3), rep(2, 5), rep(3, 7))
-dataset <- Df2RJafrocDataset(fp, tp)
-lesDistr <- UtilLesionDistribution(dataset)
-retFit <- FitRsmRoc(dataset, lesDistr);print(retFit$fittedPlot)
+binnedRocData <- Df2RJafrocDataset(fp, tp)
+lesDistr <- UtilLesionDistribution(binnedRocData)
+retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
 
 
 ## Test with three interior data points
 fp <- c(rep(1,12), rep(2, 5), rep(3, 3), rep(4, 5)) #25
 tp <- c(rep(1,3), rep(2, 5), rep(3, 7), rep(4, 10)) #25
-dataset <- Df2RJafrocDataset(fp, tp)
-lesDistr <- UtilLesionDistribution(dataset)
-retFit <- FitRsmRoc(dataset, lesDistr);print(retFit$fittedPlot)
+binnedRocData <- Df2RJafrocDataset(fp, tp)
+lesDistr <- UtilLesionDistribution(binnedRocData)
+retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
+
+## test for TONY data, i = 2 and j = 3; only case permitting chisqure calculation
+lesDistr <- UtilLesionDistribution(dataset01)
+rocData <- DfFroc2Roc(dataset01)
+retFit <- FitRsmRoc(rocData, lesDistr, trt = 2, rdr = 3)
+print(retFit$fittedPlot)
+retFit$ChisqrFitStats
 
 
 }

@@ -1,3 +1,5 @@
+#' @importFrom stats approx
+
 gpfMyFOM <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, maxLL, K1, K2, FOM, FPFValue = NULL) {
   if (!FOM %in% c("Wilcoxon", "HrAuc", "HrSe", "HrSp", "SongA1", 
                   "SongA2", "AFROC1", "AFROC", "wAFROC1", "wAFROC",
@@ -81,5 +83,15 @@ Wilcoxon <- function (zk1, zk2)
   
   return (W)
   
+}
+
+#
+# copied from caTools; July 5th, 2018, after threatening email that CaTools and my package would be 
+# archived, whatever that means; see email from Kurt Hornik <Kurt.Hornik@wu.ac.at> dated 7/5/2018
+# 
+trapz = function(x, y) 
+{ ### computes the integral of y with respect to x using trapezoidal integration. 
+  idx = 2:length(x)
+  return (as.double( (x[idx] - x[idx-1]) %*% (y[idx] + y[idx-1])) / 2)
 }
 

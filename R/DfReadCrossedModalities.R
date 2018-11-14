@@ -1,26 +1,26 @@
-#' Read a crossed-modality data file
+#' Read a crossed-treatment data file
 #' 
-#' @description Read an crossed-modality data file, in which the 
-#' two modality factors are crossed
+#' @description Read an crossed-treatment data file, in which the 
+#' two treatment factors are crossed
 #' 
 #' @usage DfReadCrossedModalities (fileName, renumber = FALSE)
 #' 
 #' @param fileName A string specifying the name of the file that contains the dataset, 
 #'    which must be an extended-JAFROC format data file containing an 
-#'    additional modality factor.
+#'    additional treatment factor.
 #' @param renumber If \code{TRUE}, consecutive integers (starting from 1) will be used 
-#'    as the modality and reader IDs. Otherwise, modality and reader IDs in the 
+#'    as the treatment and reader IDs. Otherwise, treatment and reader IDs in the 
 #'    original data file will be used. The default is \code{FALSE}. 
 #' 
 #' @details The data format is  similar to the JAFROC format (see \link{RJafroc-package}). 
-#'    The notable difference is that there are two modality factors. A sample crossed 
-#'    modality file "includedCrossedModalitiesData.xlsx" is in the \code{inst\\extdata} 
+#'    The notable difference is that there are two treatment factors. A sample crossed 
+#'    treatment file "includedCrossedModalitiesData.xlsx" is in the \code{inst\\extdata} 
 #'    subdirectory of \code{RJafroc}.
 #' 
 #' @return A dataset with the specified structure, similar to a standard 
-#'    \pkg{RJafroc}(see \link{RJafroc-package}). Because of the extra modality factor, 
+#'    \pkg{RJafroc}(see \link{RJafroc-package}). Because of the extra treatment factor, 
 #'    \code{NL} and \code{LL} are each five dimensional arrays. There are also two 
-#'    modality IDS: \code{modalityID1} and \code{modalityID2}.
+#'    treatment IDS: \code{modalityID1} and \code{modalityID2}.
 #' 
 #' @examples
 #' 
@@ -34,7 +34,7 @@
 #' @references 
 #' Thompson JD, Chakraborty DP, Szczepura K, et al. (2016) Effect of reconstruction 
 #' methods and x-ray tube current-time product  on nodule detection in an 
-#' anthropomorphic thorax phantom: a crossed-modality JAFROC observer study. 
+#' anthropomorphic thorax phantom: a crossed-treatment JAFROC observer study. 
 #' Medical Physics. 43(3):1265-1274.
 #' 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
@@ -42,19 +42,17 @@
 #' \url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #' 
-#' @import xlsx
+#' @import openxlsx
 #' @export
 DfReadCrossedModalities <- function(fileName, renumber = FALSE) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   wb <- loadWorkbook(fileName)
-  sheets <- getSheets(wb)
-  sheetNames <- toupper(names(sheets))
+  sheetNames <- toupper(names(wb))
   
   truthFileIndex <- which(!is.na(match(sheetNames, "TRUTH")))
   if (truthFileIndex == 0) 
     stop("TRUTH table cannot be found in the dataset.")
-  # truthTable <- readColumns(sheets[[truthFileIndex]], startColumn=1, endColumn = 3, startRow=1, endRow=NULL)
-  truthTable <- read.xlsx2(fileName, truthFileIndex, colIndex = 1:3, colClasses = rep("numeric", 3))
+  truthTable <- read.xlsx(fileName, truthFileIndex, cols = 1:3)
   
   for (i in 1:3){
     truthTable[grep("^\\s*$", truthTable[ , i]), i] <- NA
@@ -101,8 +99,8 @@ DfReadCrossedModalities <- function(fileName, renumber = FALSE) {
   nlFileIndex <- which(!is.na(match(sheetNames, c("FP", "NL"))))
   if (nlFileIndex == 0) 
     stop("FP table cannot be found in the dataset.")
-  # NLTable <- readColumns(sheets[[nlFileIndex]], startColumn=1, endColumn = 4, startRow=1, endRow=NULL)
-  NLTable <- read.xlsx2(fileName, nlFileIndex, colIndex = 1:5, colClasses = c(rep("character", 3), rep("numeric", 2)))
+
+  NLTable <- read.xlsx(fileName, nlFileIndex, cols = 1:5)
   
   for (i in 1:5){
     NLTable[grep("^\\s*$", NLTable[ , i]), i] <- NA
@@ -139,8 +137,7 @@ DfReadCrossedModalities <- function(fileName, renumber = FALSE) {
   llFileIndex <- which(!is.na(match(sheetNames, c("TP", "LL"))))
   if (llFileIndex == 0) 
     stop("TP table cannot be found in the dataset.")
-  # LLTable <- readColumns(sheets[[llFileIndex]], startColumn=1, endColumn = 5, startRow=1, endRow=NULL)
-  LLTable <- read.xlsx2(fileName, llFileIndex, colIndex = 1:6, colClasses = c(rep("character", 3), rep("numeric", 3)))
+  LLTable <- read.xlsx(fileName, llFileIndex, cols = 1:6)
   
   for (i in 1:6){
     LLTable[grep("^\\s*$", LLTable[ , i]), i] <- NA

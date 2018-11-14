@@ -19,7 +19,7 @@
 #'    or \code{"iMRMC"} data files.
 #' @param renumber A logical variable: if \code{TRUE}, consecutive integers 
 #'    (starting from 1) will be used as the 
-#'    modality and reader IDs. Otherwise, modality 
+#'    treatment and reader IDs. Otherwise, treatment 
 #'    and reader IDs in the original data file will be used.
 #' 
 #' @return A dataset with the structure specified in \link{RJafroc-package}.
@@ -72,14 +72,12 @@ DfReadDataFile <- function(fileName, format = "JAFROC", delimiter = ",", renumbe
 ReadJAFROC <- function(fileName, renumber) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   wb <- loadWorkbook(fileName)
-  sheets <- getSheets(wb)
-  sheetNames <- toupper(names(sheets))
-  
+  sheetNames <- toupper(names(wb))
+
   truthFileIndex <- which(!is.na(match(sheetNames, "TRUTH")))
   if (truthFileIndex == 0) 
     stop("TRUTH table cannot be found in the dataset.")
-  # truthTable <- readColumns(sheets[[truthFileIndex]], startColumn=1, endColumn = 3, startRow=1, endRow=NULL)
-  truthTable <- read.xlsx2(fileName, truthFileIndex, colIndex = 1:3, colClasses = rep("numeric", 3))
+  truthTable <- read.xlsx(fileName, truthFileIndex, cols = 1:3)
   
   for (i in 1:3){
     truthTable[grep("^\\s*$", truthTable[ , i]), i] <- NA
@@ -126,8 +124,7 @@ ReadJAFROC <- function(fileName, renumber) {
   nlFileIndex <- which(!is.na(match(sheetNames, c("FP", "NL"))))
   if (nlFileIndex == 0) 
     stop("FP table cannot be found in the dataset.")
-  # NLTable <- readColumns(sheets[[nlFileIndex]], startColumn=1, endColumn = 4, startRow=1, endRow=NULL)
-  NLTable <- read.xlsx2(fileName, nlFileIndex, colIndex = 1:4, colClasses = c(rep("character", 2), rep("numeric", 2)))
+  NLTable <- read.xlsx(fileName, nlFileIndex, cols = 1:4)
   
   for (i in 1:4){
     NLTable[grep("^\\s*$", NLTable[ , i]), i] <- NA
@@ -163,8 +160,7 @@ ReadJAFROC <- function(fileName, renumber) {
   llFileIndex <- which(!is.na(match(sheetNames, c("TP", "LL"))))
   if (llFileIndex == 0) 
     stop("TP table cannot be found in the dataset.")
-  # LLTable <- readColumns(sheets[[llFileIndex]], startColumn=1, endColumn = 5, startRow=1, endRow=NULL)
-  LLTable <- read.xlsx2(fileName, llFileIndex, colIndex = 1:5, colClasses = c(rep("character", 2), rep("numeric", 3)))
+  LLTable <- read.xlsx(fileName, llFileIndex, cols = 1:5)
   
   for (i in 1:5){
     LLTable[grep("^\\s*$", LLTable[ , i]), i] <- NA
@@ -556,7 +552,7 @@ ReadImrmc <- function(fileName, renumber) {
   
   modalityID <- as.character(sort(unique(c(fpTable[, 3], tpTable[, 3]))))
   if (I != length(modalityID)) {
-    errMsg <- "The number of modalities in the dataset is different from the number in the study description."
+    errMsg <- "The number of treatments in the dataset is different from the number in the study description."
     stop(errMsg)
   }
   

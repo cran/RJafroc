@@ -7,7 +7,7 @@
 #' 
 #' @param dataset The dataset to be analyzed, see \link{RJafroc-package}
 #' @param FOM The figure of merit to be used in the calculation. 
-#'    The default is \code{"wJAFROC"}
+#'    The default is \code{"wAFROC"}
 #' @param FPFValue Only needed for LROC data; where to evaluate a partial 
 #'    curve based figure of merit. The default is 0.2.
 #' 
@@ -97,7 +97,7 @@ UtilFigureOfMerit <- function(dataset, FOM = "wAFROC", FPFValue = 0.2) { # dpc
   K1 <- K - K2  
   
   if (dataType != "ROC" && FOM == "Wilcoxon") 
-    stop("Cannot use Wilcoxon with FROC or ROI data")
+    stop("Cannot use Wilcoxon FOM with FROC or ROI data")
   
   if (dataType == "ROI" && FOM != "ROI") {
     errMsg <- paste0("ROI dataset cannot be analyzed using ", FOM, " figure of merit.")

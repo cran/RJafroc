@@ -3,7 +3,7 @@
 \docType{data}
 \name{datasetDegenerate}
 \alias{datasetDegenerate}
-\title{datasetDegenerate}
+\title{Simulated degenerate ROC dataset; for testing purposes}
 \format{A list with 8 elements:
 \itemize{
 \item{\code{NL}}{ Ratings array [1, 1, 1:15, 1], of false positives, FPs}
@@ -12,7 +12,7 @@
 \item{\code{lesionID}}{ array [1:10, 1], labels of lesions on diseased cases, all set to 1}
 \item{\code{lesionWeight}}{ array [1:10, 1], weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "ROC", the data type}
-\item{\code{modalityID}}{ "1", modality label}
+\item{\code{modalityID}}{ "1", treatment label}
 \item{\code{readerID}}{ "1", reader label}
 }}
 \usage{

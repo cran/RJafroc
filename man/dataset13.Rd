@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataset13}
 \alias{dataset13}
-\title{dataset13}
+\title{Dobbins 3 FROC dataset}
 \format{A list with 8 elements:
 \itemize{
 \item{\code{NL}}{ Ratings array [1:4, 1:5, 1:158, 1:4], of non-lesion localizations, NLs}
@@ -12,7 +12,7 @@
 \item{\code{lesionID}}{ array [1:106, 15], labels of lesions on diseased cases, all set to 1}
 \item{\code{lesionWeight}}{ array [1:106, 15] weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "FROC", the data type}
-\item{\code{modalityID}}{ [1:4] "1" "2" ..., modality labels}
+\item{\code{modalityID}}{ [1:4] "1" "2" ..., treatment labels}
 \item{\code{readerID}}{ [1:5] "1" "2" ..., reader labels}
 }}
 \usage{
@@ -20,7 +20,7 @@ dataset13
 }
 \description{
 This is referred to in the code as the "DOB3" dataset. This is a subset of DOB1 which includes
-data for lesions not-visible on CXR, but visible to truth panel on all modalities.
+data for lesions not-visible on CXR, but visible to truth panel on all treatments.
 }
 \examples{
 str(dataset13)

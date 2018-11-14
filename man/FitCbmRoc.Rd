@@ -41,7 +41,7 @@ The return value is a list with the following elements:
    Use \code{print()} to display the object}
 }
 \description{
-Fit the CBM-predicted ROC curve for specified modality and reader
+Fit the CBM-predicted ROC curve for specified treatment and reader
 }
 \details{
 In  CBM ratings from diseased cases
@@ -76,6 +76,11 @@ retFit <- FitCbmRoc(dataset);print(retFit$fittedPlot)
 
 ## Test with included ROC data (some bins have zero counts)
 retFit <- FitCbmRoc(dataset02, 2, 1);print(retFit$fittedPlot)
+
+## Test with TONY data for which chisqr can be calculated
+ds <- DfFroc2Roc(dataset01)
+retFit <- FitCbmRoc(ds, 2, 3);print(retFit$fittedPlot)
+retFit$ChisqrFitStats
 
 }
 \references{

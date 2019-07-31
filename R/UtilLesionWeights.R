@@ -2,11 +2,9 @@
 #' 
 #' @description Computes the lesion weights  matrix, assuming equal weights.
 #' 
-#' @usage UtilLesionWeights(lesDistr) 
-#' 
 #' @param lesDistr The supplied lesion distribution matrix
 #'
-#' @return The lesion weights matrix, see \link{PlotRsmOperatingCharacteristics}
+#' @return The lesion weights matrix, see \code{\link{PlotRsmOperatingCharacteristics}}
 #' 
 #' 
 #' @examples

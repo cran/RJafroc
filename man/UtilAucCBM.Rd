@@ -4,7 +4,7 @@
 \alias{UtilAucCBM}
 \title{CBM AUC function}
 \usage{
-UtilAucCBM (mu, alpha)
+UtilAucCBM(mu, alpha)
 }
 \arguments{
 \item{mu}{The \code{mu} parameter of CBM (separation of non-diseased 
@@ -18,7 +18,7 @@ CBM-predicted ROC-AUC for the specified parameters
 }
 \description{
 {Returns the CBM ROC-AUC
-See also \link{UtilAucsRSM}, \link{UtilAucPROPROC} and \link{UtilAucBinormal}}
+See also \code{\link{UtilAucsRSM}}, \code{\link{UtilAucPROPROC}} and \code{\link{UtilAucBinormal}}}
 }
 \examples{
 mu <- 2;alpha <- 0.8

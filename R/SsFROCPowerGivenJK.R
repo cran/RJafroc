@@ -6,9 +6,7 @@
 #' #'    ROC/FROC/LROC paradigms, 
 #' #'    for J readers and K cases in the pivotal study.
 #' #' 
-#' #' @usage SsFROCPowerGivenJK(dataset, trts, rdrs, effectSizeROC, J, K)
-#' #' 
-#' #' @param dataset The pilot dataset to be analyzed, see \link{RJafroc-package},
+#' #' @param dataset The pilot dataset to be analyzed, see \code{\link{RJafroc-package}},
 #' #'    for variability information. The dataType can be "ROC", "FROC", or "LROC".
 #' #' @param trts The indices of the treatments in the pilot dataset that
 #' #'    will be regarded as representative of null hypothesis treatments. 
@@ -33,7 +31,7 @@
 #' #'    
 #' #'    
 #' #' @examples 
-#' #' \dontrun{
+#' #' \donttest{
 #' #' SsFROCPowerGivenJK(dataset04, trts = c(1,2), rdrs = c(1,2,3,4), 
 #' #'    effectSizeROC = seq(0.01, 0.09, 0.005), J = 5, K = 200)
 #' #'

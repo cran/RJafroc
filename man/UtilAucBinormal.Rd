@@ -4,7 +4,7 @@
 \alias{UtilAucBinormal}
 \title{Binormal model AUC function}
 \usage{
-UtilAucBinormal (a, b)
+UtilAucBinormal(a, b)
 }
 \arguments{
 \item{a}{The \code{a} parameter of the binormal model (separation of 
@@ -18,8 +18,8 @@ Binormal model-predicted ROC-AUC
 }
 \description{
 {Returns the Binormal model ROC-AUC corresponding to 
-   specified parameters. See also \link{UtilAucsRSM}, \link{UtilAucPROPROC} 
-   and \link{UtilAucCBM}}
+   specified parameters. See also \code{\link{UtilAucsRSM}}, \code{\link{UtilAucPROPROC}} 
+   and \code{\link{UtilAucCBM}}}
 }
 \examples{
 a <- 2;b <- 0.7

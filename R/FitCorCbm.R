@@ -7,9 +7,6 @@
 #'    pairing may be different, see details.
 #'
 #'
-#' @usage FitCorCbm(dataset)
-#'
-#'
 #' @param dataset A \strong{paired ROC} dataset
 #'
 #'
@@ -25,7 +22,7 @@
 #' @details The conditions (X, Y) can be two readers interpreting images in the same 
 #'    treatment, the same reader interpreting images in different treatments, or 
 #'    different readers interpreting images in 2 different treatments. Function 
-#'    \link{DfExtractCorCbmDataset} can be used to construct a dataset suitable for 
+#'    \code{\link{DfExtractCorCbmDataset}} can be used to construct a dataset suitable for 
 #'    \code{FitCorCbm}. With reference to the returned values, and assuming R bins 
 #'    in condition X and L bins in conditon Y, 
 #'    \code{FPCounts} is the R x L matrix containing the counts for non-diseased cases, 
@@ -42,39 +39,20 @@
 #'
 #' @examples
 #' \dontrun{
+#' ## this takes 85 sec to execute on OSX
 #' dataset <- DfExtractCorCbmDataset(dataset05, trts = 1, rdrs = c(4,7))
 #' ret <- FitCorCbm(dataset)
 #' print(ret$fitCorCbmRet)
 #' print(ret$stats)
 #' print(ret$fittedPlot)
-#'
-# $stdErr
-# [1] 0.37192841 0.07212328 0.33260480  NA 0.20425282 0.02396533 0.14710812 0.17012860 0.24993327 0.37155078 0.23526711 0.25115051 0.28283729
-# [14] 0.30878887 0.03605761 0.09099457
-# The NA is because the 4th paramter (alphaY) is held fixed (it is close to unity)
-# $fixParam
-# 4 
-# $muX
-# [1] 5.546846
-# $alphaX
-# [1] 0.4051067
-# $muY
-# [1] 2.331132
-# $alphaY
-# [1] 0.98
-# $rhoNor
-# [1] 0.3707467
-# $rhoAbn2
-# [1] 0.9582393
-# 
-#' ret <- FitCorCbm(binnedData123)
+#' 
+#' ## this takes very long to execute
+#' ret <- FitCorCbm(datasetBinned123)
 #' print(ret$fitCorCbmRet)
 #' print(ret$stats)
 #' print(ret$fittedPlot)
-#' 
 #' ## Also try two other datasets ending with 124 and 125
-
-#'}
+#' }
 #'
 #'
 #' @references

@@ -6,12 +6,6 @@
 #'    for non-diseased and diseased cases), for up to 2 sets of search model parameters.
 #'    This function is useful as an instructional tool towards understanding the RSM.
 #' 
-#' @usage PlotRsmOperatingCharacteristics (mu, lambda, nu, lesDistr, 
-#'    lesionWeights, type = "ALL", legendPosition = c(1,0), 
-#'    legendDirection = "horizontal", legendJustification = c(0,1), 
-#'    nlfRange = NULL, llfRange = NULL, nlfAlpha = NULL,myNegInf = -3)
-#' 
-#' 
 #' @param mu Array, max length 2. The mean(s) of the Gaussian distribution(s) for the 
 #'    ratings of latent LLs (continuous ratings of lesions that are found by the 
 #'    observer's search mechanism)
@@ -20,8 +14,8 @@
 #'    parameter(s), which model the random numbers of latent NLs (suspicious 
 #'    regions that do not correspond to actual lesions) per case, for up to two 
 #'    treatments. The corresponding \emph{physical} parameters are \code{lambda/mu}. 
-#'    Two conversion functions are provided: \link{UtilIntrinsic2PhysicalRSM} and 
-#'    \link{UtilPhysical2IntrinsicRSM}.
+#'    Two conversion functions are provided: \code{\link{UtilIntrinsic2PhysicalRSM}} and 
+#'    \code{\link{UtilPhysical2IntrinsicRSM}}.
 #' 
 #' @param nu Array, max length 2. The binomial distribution success probability 
 #'    \emph{intrinsic} parameters, which model the random numbers of latent LLs 
@@ -467,7 +461,7 @@ xROCVect <- function(zeta, lambdaP) {
   return (FPF);
 }
 
-
-erfcpp <- function(x){
-  return (2 * pnorm(sqrt(2) * x) - 1)
+# R-only implementation of erf function
+erf_R <- function(x){
+ return (2 * pnorm(sqrt(2) * x) - 1)
 }

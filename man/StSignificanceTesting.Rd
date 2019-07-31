@@ -4,39 +4,42 @@
 \alias{StSignificanceTesting}
 \title{Perform significance testing, DBMH or ORH}
 \usage{
-StSignificanceTesting (dataset, FOM = "wJAFROC", alpha = 0.05, 
-   method = "DBMH", covEstMethod = "Jackknife", nBoots = 200, option = "ALL", 
-   VarCompFlag = FALSE, FPFValue = 0.2)
+StSignificanceTesting(dataset, FOM = "Wilcoxon", alpha = 0.05,
+  method = "DBMH", covEstMethod = "Jackknife", nBoots = 200,
+  option = "ALL", VarCompFlag = FALSE, FPFValue = 0.2)
 }
 \arguments{
-\item{dataset}{The dataset to be analyzed, see \link{RJafroc-package}}
+\item{dataset}{The dataset to be analyzed, see \code{\link{RJafroc-package}}}
 
-\item{FOM}{The figure of merit, default \code{"wJAFROC"}, 
-see \link{UtilFigureOfMerit}}
+\item{FOM}{The figure of merit, default \code{"Wilcoxon"}, \code{\link{UtilFigureOfMerit}}}
 
 \item{alpha}{The significance level of the test of the null hypothesis that all 
-treatment effects are zero; the default alpha is 0.05}
+treatment effects are zero; the default is 0.05}
 
 \item{method}{The significance testing method to be used. There are two options: 
 \code{"DBMH"} (the default) or \code{"ORH"}, representing the Dorfman-Berbaum-Metz
 and the Obuchowski-Rockette significance testing methods, respectively.}
 
-\item{covEstMethod}{The method used to estimate the covariance matrix 
-in ORH analysis; it can be \code{"Jackknife"}, \code{"Bootstrap"} 
-or \code{"DeLong"}, the last assumes \code{FOM = "Wilcoxon"}, otherwise 
-an error results. This parameter is not relevant if the analysis method 
-is \code{"DBMH"}}
+\item{covEstMethod}{This parameter is not relevant if
+   \code{method = "DBMH"}. Specifies covariance matrix estimation method
+   in ORH analysis.
+   \itemize{ 
+   \item \code{"Jackknife"}, the default, 
+   \item \code{"Bootstrap"}, in which case \code{nBoots} is relevant 
+   \item \code{"DeLong"}; the last assumes \code{FOM = "Wilcoxon"}, otherwise 
+   an error results.
+}}
 
-\item{nBoots}{The number of bootstraps (default is 200), relevant only if 
-the \code{"Bootstrap"} method is used to estimate the covariance matrix
-in the ORH method}
+\item{nBoots}{The number of bootstraps (defaults to 200), relevant only if 
+\code{covEstMethod = "Bootstrap"} and \code{method = "ORH"}}
 
-\item{option}{Determines which factors are regarded as random vs. fixed: 
-\code{"RRRC"} = random-reader random case, 
-\code{"FRRC"} = fixed-reader random case, 
-\code{"RRFC"} = random-reader fixed case, 
-\code{"ALL"} outputs the results of \code{"RRRC"}, \code{"FRRC"} 
-and \code{"RRFC"} analyses}
+\item{option}{Determines which factors are regarded as random vs. fixed:
+\itemize{ 
+   \item \code{"RRRC"} = random-reader random case, 
+   \item \code{"FRRC"} = fixed-reader random case, 
+   \item \code{"RRFC"} = random-reader fixed case, 
+   \item \code{"ALL"} = outputs the results of \code{"RRRC"}, \code{"FRRC"} and \code{"RRFC"} analyses
+}}
 
 \item{VarCompFlag}{If TRUE, only the appropriate (DBM or OR) variance components 
 (six in all) are returned, default is FALSE}
@@ -114,7 +117,7 @@ For \code{method = "DBMH"}  the returned value is a list with 22 members:
 For method = "ORH" the return value is a list with with 21 members:
 
 \item{fomArray}{Figures of merit array. See the return of 
-   \link{UtilFigureOfMerit}}
+   \code{\link{UtilFigureOfMerit}}}
 
 \item{msT}{Mean square of the figure of merit corresponding to 
    the treatment effect}
@@ -164,48 +167,25 @@ the following order: c("Var(R)", "Var(T*R)", "COV1", "COV2", "COV3", "Var(Error)
 \description{
 Performs Dorfman-Berbaum-Metz (DBM) or Obuchowski-Rockette (OR) 
    significance testing with Hillis' improvements, for specified dataset; 
-   significance testing refers to analysis designed to assign a P-value for 
-   rejecting a null hypothesis (NH); the most common NH is that the reader-averaged 
+   significance testing refers to analysis designed to assign a P-value, 
+   and other statistics, for 
+   rejecting the null hypothesis (NH) that the reader-averaged 
    figure of merit (FOM) difference between treatments is zero. The results of 
-   the analysis are better visualized in the text or, preferably, 
-   Excel-formatted, files produced by \link{UtilOutputReport}.
+   the analysis are better visualized in the text or  
+   Excel-formatted files produced by \code{\link{UtilOutputReport}}.
 }
 \examples{
-retDbmRoc  <- StSignificanceTesting(dataset02, 
-FOM = "Wilcoxon", method = "DBMH") 
-
-\dontrun{
-retDbmwJAFROC  <- StSignificanceTesting(dataset05) # default is weighted JAFROC
-
-retDbmHrAuc  <- StSignificanceTesting(dataset05, 
-FOM = "HrAuc", method = "DBMH") 
-print(retDbmHrAuc) 
-
-retDbmSongA1  <- StSignificanceTesting(dataset05, 
-FOM = "SongA1", method = "DBMH") 
-print(retDbmSongA1)
-
-retDbmSongA2  <- StSignificanceTesting(dataset05, 
-FOM = "SongA2", method = "DBMH") 
-print(retDbmSongA2)
-
-retDbmwJafroc1  <- StSignificanceTesting(dataset05, 
-FOM = "wJAFROC1", method = "DBMH")
-print(retDbmwJafroc1)
- 
-retDbmJafroc1  <- StSignificanceTesting(dataset05, 
-FOM = "JAFROC1", method = "DBMH")
-print(retDbmJafroc1)
- 
-retDbmJAFROC  <- StSignificanceTesting(dataset05, 
-FOM = "JAFROC", method = "DBMH") 
-print(retDbmJAFROC)
- 
-}
-
-retOR <- StSignificanceTesting(dataset02, 
-FOM = "Wilcoxon", method = "ORH")
-print(retOR)
+StSignificanceTesting(dataset02,FOM = "Wilcoxon", method = "DBMH") 
+StSignificanceTesting(dataset02,FOM = "Wilcoxon", method = "ORH")
+\donttest{
+StSignificanceTesting(dataset05, FOM = "wAFROC")
+StSignificanceTesting(dataset05, FOM = "HrAuc", method = "DBMH") 
+StSignificanceTesting(dataset05, FOM = "SongA1", method = "DBMH") 
+StSignificanceTesting(dataset05, FOM = "SongA2", method = "DBMH") 
+StSignificanceTesting(dataset05, FOM = "wJAFROC1", method = "DBMH")
+StSignificanceTesting(dataset05, FOM = "JAFROC1", method = "DBMH")
+StSignificanceTesting(dataset05, FOM = "JAFROC", method = "DBMH")
+} 
 
 
 }

@@ -1,58 +1,68 @@
 #' Calculate empirical figures of merit (FOMs) for specified dataset
 #' 
 #' @description  Calculate the specified empirical figure of merit
-#' for each treatment-reader combination in the ROC, FROC or LROC dataset
+#' for each treatment-reader combination in the ROC, FROC, ROI or LROC dataset
 #' 
-#' @usage UtilFigureOfMerit(dataset, FOM = "wAFROC", FPFValue = 0.2) 
-#' 
-#' @param dataset The dataset to be analyzed, see \link{RJafroc-package}
-#' @param FOM The figure of merit to be used in the calculation. 
-#'    The default is \code{"wAFROC"}
-#' @param FPFValue Only needed for LROC data; where to evaluate a partial 
+#' @param dataset The dataset to be analyzed, \code{\link{RJafroc-package}}
+#' @param FOM The figure of merit; the default is \code{"wAFROC"}
+#' @param FPFValue Only needed for \code{LROC} data; where to evaluate a partial 
 #'    curve based figure of merit. The default is 0.2.
 #' 
-#' @return An \code{c(I, J)} array, where the row names are the IDs of the 
-#'    treatments and column names are the IDs of the readers.
+#' @return An \code{c(I, J)} array, where the row names are \code{modalityID}'s of the 
+#'    treatments and column names are the \code{readerID}'s of the readers.
 #' 
-#' @details The allowed FOMs depend on the type of dataset (i.e., \code{dataType} 
-#'    field of dataset object). 
-#'    For \strong{ROC datasets:} the \code{"Wilcoxon"} is allowed.
-#'    For \strong{FROC datasets:} The following FOMs are allowed:
-#'    \code{"AFROC1"}, 
-#'    \code{"AFROC"}, 
-#'    \code{"wAFROC1"}, 
-#'    \code{"wAFROC"} (the default), 
-#'    \code{"HrAuc"}, 
-#'    \code{"SongA1"}, 
-#'    \code{"SongA2"},  
-#'    \code{"HrSe"}, 
-#'    \code{"HrSp"}, 
-#'    \code{"MaxLLF"}, 
-#'    \code{"MaxNLF"}, 
-#'    \code{"MaxNLFAllCases"}, and 
-#'    \code{"ExpTrnsfmSp"}. 
-#'    The \code{"MaxLLF"}, \code{"MaxNLF"} and \code{"MaxNLFAllCases"} FOMs 
+#' @details The allowed FOMs depend on the \code{dataType} field of the 
+#'    \code{dataset} object.
+#' 
+#'    For a \strong{\code{dataType = "ROC" dataset} only \code{FOM = "Wilcoxon"} is allowed}.
+#'    
+#'    For a \strong{\code{dataType = "FROC"}} dataset the following FOMs are allowed:
+#'    \itemize{ 
+#'    \item \code{FOM = "AFROC1"} 
+#'    \item \code{FOM = "AFROC"} 
+#'    \item \code{FOM = "wAFROC1"} 
+#'    \item \code{FOM = "wAFROC"} (the default) 
+#'    \item \code{FOM = "HrAuc"} 
+#'    \item \code{FOM = "SongA1"} 
+#'    \item \code{FOM = "SongA2"}  
+#'    \item \code{FOM = "HrSe"} 
+#'    \item \code{FOM = "HrSp"} 
+#'    \item \code{FOM = "MaxLLF"} 
+#'    \item \code{FOM = "MaxNLF"} 
+#'    \item \code{FOM = "MaxNLFAllCases"} 
+#'    \item \code{FOM = "ExpTrnsfmSp"}  
+#'    } 
+#'    \code{"MaxLLF"}, \code{"MaxNLF"} and \code{"MaxNLFAllCases"}
 #'    correspond to ordinate, and abscissa, respectively, of the highest point 
-#'    on the FROC operating characteristic obtained by counting all the marks). 
+#'    on the FROC operating characteristic obtained by counting all the marks. 
 #'    The \code{"ExpTrnsfmSp"} FOM is described in the paper by Popescu. 
 #'    Given the large number of FOMs possible with FROC data, it is appropriate 
 #'    to make a recommendation: \strong{it is recommended that one use the wAFROC FOM.}
-#'    For \strong{LROC datasets:} The following FOMs are allowed:\code{"Wilcoxon"} for 
-#'    ROC data inferred from LROC data, which ignores localization information; 
-#'    or \code{"PCL"} or \code{"ALROC"}, in which case one needs to specify an 
-#'    additional argument, \code{FPFValue}: the desired FPF at which to evaluate 
-#'    PCL or ALROC; the default is 0.2.
+#'    
+#'    For a \strong{\code{dataType = "ROI"} dataset only \code{FOM = "ROI"} is allowed}.
+#'    
+#'    For a \strong{\code{dataType = "LROC"}} dataset the following FOMs are allowed:
+#'    \itemize{
+#'    \item \code{FOM = "Wilcoxon"} for ROC data inferred from LROC data 
+#'    \item \code{FOM = "PCL"} the probability of correct localization at specified \code{FPFValue}
+#'    \item \code{FOM = "ALROC"} the area under the LROC from zero to specified \code{FPFValue} 
+#'    }
+#'    \code{FPFValue} is the desired FPF at which to evaluate \code{PCL} or \code{ALROC}; 
+#'       the default is 0.2.
 #' 
 #'
 #' @examples
-#' # ROC data
-#' UtilFigureOfMerit(dataset = dataset02, FOM = "Wilcoxon") 
-#' # FROC dataset, converted to ROC, Wilcoxon FOM
-#' UtilFigureOfMerit(DfFroc2Roc(dataset01), FOM = "Wilcoxon") 
-#' # FROC dataset, default wAFROC FOM
-#' UtilFigureOfMerit(dataset = dataset01) 
-#' #LROC data
-#' UtilFigureOfMerit(dataset = datasetCadLroc, FOM = "ALROC", FPFValue = 0.2) 
+#' UtilFigureOfMerit(dataset02, FOM = "Wilcoxon") # ROC data
+#' UtilFigureOfMerit(DfFroc2Roc(dataset01), FOM = "Wilcoxon") # FROC dataset, converted to ROC
+#' UtilFigureOfMerit(dataset01) # FROC dataset, default wAFROC FOM
+#' UtilFigureOfMerit(datasetCadLroc, FOM = "Wilcoxon") #LROC data
+#' UtilFigureOfMerit(datasetCadLroc, FOM = "PCL") #LROC data
+#' UtilFigureOfMerit(datasetCadLroc, FOM = "ALROC") #LROC data
+#' UtilFigureOfMerit(datasetROI, FOM = "ROI") #ROI data
+#' \dontrun{ # these are meant to illustrate conditions which will throw an error
+#' UtilFigureOfMerit(dataset02, FOM = "wAFROC") #error
+#' UtilFigureOfMerit(dataset01, FOM = "Wilcoxon") #error
+#' }
 #' 
 #' @references
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
@@ -74,12 +84,32 @@
 #' Swensson RG (1996) Unified measurement of observer performance in detecting and localizing target objects on images, 
 #' Med Phys 23:10, 1709--1725.
 
-#'  
+#' @import dplyr  
 #' @export
 
 UtilFigureOfMerit <- function(dataset, FOM = "wAFROC", FPFValue = 0.2) { # dpc
+  
   dataType <- dataset$dataType
+  if (dataType == "ROC" && FOM != "Wilcoxon") {
+    errMsg <- paste0("Must use Wilcoxon figure of merit with ROC data.")
+    stop(errMsg)
+  }
+  
+  if (dataType == "ROI" && FOM != "ROI") {
+    cat("Incorrect FOM supplied, changing to 'ROI'\n")
+    FOM <- "ROI"
+  }
+ 
+  if (!(dataType %in% c("ROC", "LROC")) && FOM == "Wilcoxon")
+    stop("Cannot use `Wilcoxon` FOM with `FROC` or `ROI` data.")
+  
+  if (dataType != "ROI" && FOM == "ROI") {
+    errMsg <- paste0("Only ROI data can be analyzed using ROI figure of merit.")
+    stop(errMsg)
+  }
+  
   if (dataType == "LROC") {
+    if (!between(FPFValue, 0, 1)) stop("FPFValue is outside valid range")
     if (FOM %in% c("Wilcoxon", "ALROC", "PCL")) {
       NL <- dataset$NL
       LL <- dataset$LLCl
@@ -90,26 +120,14 @@ UtilFigureOfMerit <- function(dataset, FOM = "wAFROC", FPFValue = 0.2) { # dpc
     NL <- dataset$NL
     LL <- dataset$LL
   }
+  
   I <- dim(NL)[1]
   J <- dim(NL)[2]
   K <- dim(NL)[3]
   K2 <- dim(LL)[3]
   K1 <- K - K2  
   
-  if (dataType != "ROC" && FOM == "Wilcoxon") 
-    stop("Cannot use Wilcoxon FOM with FROC or ROI data")
-  
-  if (dataType == "ROI" && FOM != "ROI") {
-    errMsg <- paste0("ROI dataset cannot be analyzed using ", FOM, " figure of merit.")
-    stop(errMsg)
-  }
-  
-  if (dataType != "ROI" && FOM == "ROI") {
-    errMsg <- paste0("Only ROI data is allowed to be analyzed using ROI figure of merit.")
-    stop(errMsg)
-  }
-  
-  if (K1 == 0 && (FOM != "JAFROC1" && FOM != "wJAFROC1" && FOM != "AFROC1" && FOM != "wAFROC1")) {
+  if (K1 == 0 && !(FOM %in% c("JAFROC1", "wJAFROC1", "AFROC1", "wAFROC1"))) {
     errMsg <- paste0("Only JAFROC1/AFROC1 or wJAFROC1/wAFROC1 FOMs are allowed for datasets with zero non-diseased cases.")
     stop(errMsg)
   }

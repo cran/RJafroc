@@ -4,11 +4,9 @@
 \alias{SimulateCorCbmDataset}
 \title{Simulate paired binned data for testing FitCorCbm}
 \usage{
-SimulateCorCbmDataset(
-seed = 123, K1 = 50, K2 = 50, desiredNumBins = 5,
-muX = 1.5, muY = 3,
-alphaX = 0.4, alphaY = 0.7,
-rhoNor = 0.3, rhoAbn2 = 0.8)
+SimulateCorCbmDataset(seed = 123, K1 = 50, K2 = 50,
+  desiredNumBins = 5, muX = 1.5, muY = 3, alphaX = 0.4,
+  alphaY = 0.7, rhoNor = 0.3, rhoAbn2 = 0.8)
 }
 \arguments{
 \item{seed}{The seed variable, default is 123; set to NULL for truly random seed}
@@ -36,7 +34,7 @@ The return value is the desired dataset, suitable for testing FitCorCbm
 }
 \description{
 Simulates single treatment 2-reader binned ROC dataset, simulated according to the CORCBM model,
-for the purpose of testing the fitting program \link{FitCorCbm}
+for the purpose of testing the fitting program \code{\link{FitCorCbm}}.
 }
 \details{
 X and Y refer to the two arms of the pairing. \code{muX} and \code{alphaX} refer to the univariate CBM parameters
@@ -49,7 +47,7 @@ See referenced publication.
 dataset <- SimulateCorCbmDataset()
 
 \dontrun{
-
+## this takes very long
 dataset <- SimulateCorCbmDataset(K1 = 5000, K2 = 5000)
 
 }

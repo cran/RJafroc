@@ -4,7 +4,7 @@
 \alias{DfExtractCorCbmDataset}
 \title{Extract two arms of a pairing from an MRMC ROC dataset}
 \usage{
-DfExtractCorCbmDataset(dataset, trts, rdrs)
+DfExtractCorCbmDataset(dataset, trts = 1, rdrs = 1)
 }
 \arguments{
 \item{dataset}{The original dataset from which the pairing is to be extracted}
@@ -32,11 +32,13 @@ have length two and the pairing is implicit. If both are length two, then the pa
 is that implied by the first treatement
 and the second reader, which is one arm, and the other arm is that implied by the second
 treatment paired with the first
-reader. Using this method any allowed pairing can be extracted and analyzed by \link{FitCorCbm}.
+reader. Using this method any allowed pairing can be extracted and analyzed by \code{\link{FitCorCbm}}.
 The utility of this software is
 in designing a ratings simulator that is statistically matched to a real dataset.
 }
 \examples{
+
+\donttest{
 ## Extract the paired data corresponding to the second and third readers in the first treatment
 ##from the include ROC dataset
 dataset11_23 <- DfExtractCorCbmDataset(dataset05, trts = 1, rdrs = c(2,3))
@@ -50,5 +52,5 @@ dataset12_33 <- DfExtractCorCbmDataset(dataset05, trts = c(1,2), rdrs = 3)
 ## (the indices are at different positions in the respective arrays)
 dataset12_13 <- DfExtractCorCbmDataset(dataset05,
 trts = c(1,2), rdrs = c(1,3))
-
+}
 }

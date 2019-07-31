@@ -5,8 +5,6 @@
 #'    parameters are more meaningful but they depend on \eqn{\mu}. The intrinsic 
 #'    parameters are independent of \eqn{\mu}. See book for details.
 #' 
-#'  @usage UtilIntrinsic2PhysicalRSM (mu, lambda, nu)  
-#' 
 #' @param mu The mean of the Gaussian distribution for the ratings of latent LLs, 
 #'    i.e. continuous ratings of lesions that were found by the search mechanism 
 #'    ~ N(\eqn{\mu},1). The corresponding distribution for the ratings of 
@@ -25,7 +23,7 @@
 #' 
 #' @details RSM is the Radiological Search Model described in the book. A latent mark 
 #'    becomes an actual mark if the corresponding rating exceeds the lowest reporting 
-#'    threshold zeta1. See also \link{UtilIntrinsic2PhysicalRSM}.
+#'    threshold zeta1. See also \code{\link{UtilIntrinsic2PhysicalRSM}}.
 #' 
 #' @references
 #' Chakraborty DP (2006) A search model and figure of merit for observer data acquired according to the free-response 

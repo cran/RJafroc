@@ -4,8 +4,8 @@
 \alias{Compare3ProperRocFits}
 \title{Compare three proper-ROC curve fitting models}
 \usage{
-Compare3ProperRocFits(startIndx = 1, endIndx = 14, 
-   showPlot = FALSE, saveProprocLrcFile = FALSE, reAnalyze = FALSE)
+Compare3ProperRocFits(startIndx = 1, endIndx = 14, showPlot = FALSE,
+  saveProprocLrcFile = FALSE, reAnalyze = FALSE)
 }
 \arguments{
 \item{startIndx}{An integer in the range 1 to 14.}
@@ -55,8 +55,8 @@ allDatasetsResults is a list-array of length
    
 A specific member, e.g., \code{allDatasetsResults[[1]][[1]]}, has the following structure:   
 \itemize{
-\item{\code{retRsm}}{ The RSM parameters following the output structure of \link{FitRsmRoc}}
-\item{\code{retCbm}}{ The CBM parameters following the output structure of \link{FitCbmRoc}}
+\item{\code{retRsm}}{ The RSM parameters following the output structure of \code{\link{FitRsmRoc}}}
+\item{\code{retCbm}}{ The CBM parameters following the output structure of \code{\link{FitCbmRoc}}}
 \item{\code{lesDistr}}{ The lesion distribution matrix}
 \item{\code{c1}}{ The \code{c}-parameter of PROPROC}
 \item{\code{da}}{ The \code{d_sub_a} parameter of PROPROC}
@@ -77,18 +77,25 @@ The PROPROC parameters were obtained by running Windows software OR
    directory, to appropriate subdirectory, \strong{overwriting} any existing files.
 }
 \examples{
+ret <- Compare3ProperRocFits(1,1) # analyze first two datasets
+
 \dontrun{
+## takes longer than 5 sec on OSX
 ret <- Compare3ProperRocFits(1,2,reAnalyze = TRUE) # analyze first two datasets
 x <- ret$allDatasetsResults
 str(x[[1]][[1]]) # parameters for dataset 1 trt 1 and rdr 1
 str(x[[1]][[2]]) # parameters for dataset 1 trt 1 and rdr 2
 str(x[[1]][[10]])# parameters for dataset 1 trt 2 and rdr 5
-str(x[[1]][[11]])# error
 str(x[[2]][[1]]) # parameters for dataset 2 trt 1 and rdr 1
 str(x[[2]][[2]]) # parameters for dataset 2 trt 1 and rdr 2
 str(x[[2]][[10]])# parameters for dataset 2 trt 2 and rdr 5
-str(x[[3]][[1]]) # error
+}
 
+\dontrun{ 
+## these examples will cause errors; 
+##these are intended to illustrate the structure of the functions return object
+str(x[[1]][[11]])# error
+str(x[[3]][[1]]) # error
 }
 
 

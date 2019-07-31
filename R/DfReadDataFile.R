@@ -2,9 +2,6 @@
 #' 
 #' @description Read a disk file and create a dataset object from it.
 #' 
-#' @usage DfReadDataFile(fileName, format = "JAFROC", 
-#'    delimiter = ",", renumber = FALSE) 
-#' 
 #' @param fileName A string specifying the name of the file. 
 #'    The file-extension must match the format specified below
 #' @param format A string specifying the format of the data in the file. 
@@ -22,10 +19,10 @@
 #'    treatment and reader IDs. Otherwise, treatment 
 #'    and reader IDs in the original data file will be used.
 #' 
-#' @return A dataset with the structure specified in \link{RJafroc-package}.
+#' @return A dataset with the structure specified in \code{\link{RJafroc-package}}.
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' fileName <- system.file("extdata", "includedRocData.xlsx", 
 #' package = "RJafroc", mustWork = TRUE)
 #' RocDataXlsx <- DfReadDataFile(fileName)

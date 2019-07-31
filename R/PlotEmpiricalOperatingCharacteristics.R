@@ -4,9 +4,6 @@
 #'    lines) for specified treatments and readers, or if desired, plots only 
 #'    (no operating points) averaged over specified treatments and / or readers
 #' 
-#' @usage PlotEmpiricalOperatingCharacteristics(dataset, trts = 1, 
-#'    rdrs = 1, opChType = "ROC")
-#' 
 #' @param dataset Dataset to be used for plotting
 #' @param trts List or vector: \strong{integer} indices of treatments to be plotted
 #' @param rdrs List or vector: \strong{integer} indices of readers to be plotted
@@ -436,38 +433,38 @@ RawOpPtsROC2ROC <- function (fp, tp) {
 # A failed attempt at combining bins; partially implemented is deletion of multiple starting zeroes
 # in fpf; the counts table are not combined; the more complicated code in BinTheRocData is likely needed
 ####################################################################################################################
-RawOpPtsROC2ROC1 <- function (fp, tp) {
-  zetas <- sort(unique(c(fp, tp)))
-  while (1) {  
-    nBins <- length(zetas)
-    fpCounts <- rep(NA, nBins)
-    tpCounts <- fpCounts
-    for (b in 1:nBins){
-      fpCounts[b] <- sum(fp == zetas[b])
-      tpCounts[b] <- sum(tp == zetas[b])
-    }
-    K1 <- length(fp)  # !sic!
-    K2 <- length(tp)
-    fpf <- cumsum(rev(fpCounts)) / K1
-    tpf <- cumsum(rev(tpCounts)) / K2
-    fpf <- fpf[-length(fpf)]
-    tpf <- tpf[-length(tpf)]
-    toDel <- length(which(fpf == 0))
-    lz <- length(zetas)
-    if (toDel > 1){
-      fpf <- fpf[-(seq(1:(toDel-1)))]
-      tpf <- tpf[-(seq(1:(toDel-1)))]
-      zetas <- zetas[-(seq(lz:(lz-toDel+2)))]
-    } else break
-  }
-  return(list(
-    fpCounts = fpCounts,
-    tpCounts = tpCounts,
-    fpf = fpf,
-    tpf = tpf,
-    zetas = zetas
-  ))
-}
+# RawOpPtsROC2ROC1 <- function (fp, tp) {
+#   zetas <- sort(unique(c(fp, tp)))
+#   while (1) {  
+#     nBins <- length(zetas)
+#     fpCounts <- rep(NA, nBins)
+#     tpCounts <- fpCounts
+#     for (b in 1:nBins){
+#       fpCounts[b] <- sum(fp == zetas[b])
+#       tpCounts[b] <- sum(tp == zetas[b])
+#     }
+#     K1 <- length(fp)  # !sic!
+#     K2 <- length(tp)
+#     fpf <- cumsum(rev(fpCounts)) / K1
+#     tpf <- cumsum(rev(tpCounts)) / K2
+#     fpf <- fpf[-length(fpf)]
+#     tpf <- tpf[-length(tpf)]
+#     toDel <- length(which(fpf == 0))
+#     lz <- length(zetas)
+#     if (toDel > 1){
+#       fpf <- fpf[-(seq(1:(toDel-1)))]
+#       tpf <- tpf[-(seq(1:(toDel-1)))]
+#       zetas <- zetas[-(seq(lz:(lz-toDel+2)))]
+#     } else break
+#   }
+#   return(list(
+#     fpCounts = fpCounts,
+#     tpCounts = tpCounts,
+#     fpf = fpf,
+#     tpf = tpf,
+#     zetas = zetas
+#   ))
+# }
 
 
 
@@ -546,7 +543,7 @@ AvgROCPoints <- function(NL, LL, modalityID, readerID, treatments2Plot, readers2
       fpf <- ret$fpf;tpf <- ret$tpf
       FPF <- c(0,fpf,1)
       TPF <- c(0,tpf,1)
-      temp <- (approx(FPF, TPF, xout = sampledFPF))$y
+      temp <- (approx(FPF, TPF, xout = sampledFPF, ties = min))$y
       avgTPF <- avgTPF + temp
     }
   }
@@ -682,7 +679,7 @@ AvgFROCPoints <- function(NL, LL, modalityID, readerID, lesionNum, treatments2Pl
   avgIndex <- 1
   for (i in 1:I) {
     for (j in 1:J) {
-      temp <- (approx(NLF[[j]], LLF[[j]], xout = avgNLF))$y
+      temp <- (approx(NLF[[j]], LLF[[j]], xout = avgNLF, ties = min))$y
       avgLLFArray[avgIndex, 1:length(temp)] <- temp
       avgIndex <- avgIndex + 1
     }
@@ -835,7 +832,7 @@ AvgAFROCPoints <- function(NL, LL, modalityID, readerID, lesionNum, treatments2P
       fpf <- ret$fpf;llf <- ret$llf
       FPF <- c(0,fpf,1)
       LLF <- c(0,llf,1)
-      temp <- (approx(FPF, LLF, xout = sampledFPF))$y
+      temp <- (approx(FPF, LLF, xout = sampledFPF, ties = min))$y
       avgLLFArray[avgIndex, 1:length(temp)] <- temp
       avgIndex <- avgIndex + 1
     }
@@ -981,7 +978,7 @@ AvgAFROC1Points <- function(NL, LL, modalityID, readerID, lesionNum, treatments2
       fpf <- ret$fpf;llf <- ret$llf
       FPF <- c(0,fpf,1)
       LLF <- c(0,llf,1)
-      temp <- (approx(FPF, LLF, xout = sampledFPF))$y
+      temp <- (approx(FPF, LLF, xout = sampledFPF, ties = min))$y
       avgLLFArray[avgIndex, 1:length(temp)] <- temp
       avgIndex <- avgIndex + 1
     }
@@ -1085,7 +1082,7 @@ AvgwAFROCPoints <- function(NL, LL, modalityID, readerID, lesionWeights, treatme
       ret <- FROC2wAFROC(fp, ll, weights, K1, K2)
       FPF <- ret$fpf;wLLF <- ret$wllf
       FPF <- c(0,FPF,1);wLLF <- c(0,wLLF,1)
-      temp <- (approx(FPF, wLLF, xout = sampledFPF))$y
+      temp <- (approx(FPF, wLLF, xout = sampledFPF, ties = min))$y
       avgwLLFArray[avgIndex, 1:length(temp)] <- temp
       avgIndex <- avgIndex + 1
     }
@@ -1187,7 +1184,7 @@ AvgwAFROC1Points <- function(NL, LL, modalityID, readerID, lesionWeights, treatm
       ret <- FROC2wAFROC1(fp, ll, weights, K1, K2)
       FPF <- ret$fpf;wLLF <- ret$wllf
       FPF <- c(0,FPF,1);wLLF <- c(0,wLLF,1)
-      temp <- (approx(FPF, wLLF, xout = sampledFPF))$y
+      temp <- (approx(FPF, wLLF, xout = sampledFPF, ties = min))$y
       avgwLLFArray[avgIndex, 1:length(temp)] <- temp
       avgIndex <- avgIndex + 1
     }

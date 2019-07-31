@@ -49,8 +49,8 @@ The return value is a list with the following elements:
 Fit an RSM-predicted ROC curve to a binned ROC dataset
 }
 \details{
-If dataset is FROC, first convert it to ROC, using \link{DfFroc2Roc}. MLE ROC algorithms 
-   require binned datasets. Use \link{DfBinDataset} to perform the binning prior to calling 
+If dataset is FROC, first convert it to ROC, using \code{\link{DfFroc2Roc}}. MLE ROC algorithms 
+   require binned datasets. Use \code{\link{DfBinDataset}} to perform the binning prior to calling 
    this function. 
    In the RSM: (1) The (random) number of latent NLs per case is Poisson distributed 
    with mean parameter lambdaP, and the corresponding ratings are sampled from 
@@ -63,6 +63,7 @@ If dataset is FROC, first convert it to ROC, using \link{DfFroc2Roc}. MLE ROC al
    requirement to have five counts, the chi-square statistic often cannot be calculated.
 }
 \examples{
+\donttest{
 ## Test with included ROC data (some bins have zero counts)
 lesDistr <- UtilLesionDistribution(dataset02)
 retFit <- FitRsmRoc(dataset02, lesDistr)
@@ -100,7 +101,7 @@ rocData <- DfFroc2Roc(dataset01)
 retFit <- FitRsmRoc(rocData, lesDistr, trt = 2, rdr = 3)
 print(retFit$fittedPlot)
 retFit$ChisqrFitStats
-
+}
 
 }
 \references{

@@ -1,9 +1,7 @@
 #' @title CBM AUC function
 #' 
 #' @description {Returns the CBM ROC-AUC
-#' See also \link{UtilAucsRSM}, \link{UtilAucPROPROC} and \link{UtilAucBinormal}}
-#' 
-#' @usage UtilAucCBM (mu, alpha)
+#' See also \code{\link{UtilAucsRSM}}, \code{\link{UtilAucPROPROC}} and \code{\link{UtilAucBinormal}}}
 #' 
 #' @param mu The \code{mu} parameter of CBM (separation of non-diseased 
 #'    and diseased pdfs)

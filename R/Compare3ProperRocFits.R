@@ -6,9 +6,6 @@
 #'    fits obtained using Windows software downloaded from the Univ. of 
 #'    Iowa ROC website ca. June 2017.
 #' 
-#' @usage Compare3ProperRocFits(startIndx = 1, endIndx = 14, 
-#'    showPlot = FALSE, saveProprocLrcFile = FALSE, reAnalyze = FALSE) 
-#' 
 #' @param startIndx An integer in the range 1 to 14.
 #' @param endIndx An integer in the range 1 to 14, greater than or equal 
 #'    to \code{startIndx}.
@@ -44,8 +41,8 @@
 #'    
 #' A specific member, e.g., \code{allDatasetsResults[[1]][[1]]}, has the following structure:   
 #' \itemize{
-#' \item{\code{retRsm}}{ The RSM parameters following the output structure of \link{FitRsmRoc}}
-#' \item{\code{retCbm}}{ The CBM parameters following the output structure of \link{FitCbmRoc}}
+#' \item{\code{retRsm}}{ The RSM parameters following the output structure of \code{\link{FitRsmRoc}}}
+#' \item{\code{retCbm}}{ The CBM parameters following the output structure of \code{\link{FitCbmRoc}}}
 #' \item{\code{lesDistr}}{ The lesion distribution matrix}
 #' \item{\code{c1}}{ The \code{c}-parameter of PROPROC}
 #' \item{\code{da}}{ The \code{d_sub_a} parameter of PROPROC}
@@ -67,20 +64,27 @@
 #' 
 #'  
 #' @examples
+#' ret <- Compare3ProperRocFits(1,1) # analyze first two datasets
+#' 
 #' \dontrun{
+#' ## takes longer than 5 sec on OSX
 #' ret <- Compare3ProperRocFits(1,2,reAnalyze = TRUE) # analyze first two datasets
 #' x <- ret$allDatasetsResults
 #' str(x[[1]][[1]]) # parameters for dataset 1 trt 1 and rdr 1
 #' str(x[[1]][[2]]) # parameters for dataset 1 trt 1 and rdr 2
 #' str(x[[1]][[10]])# parameters for dataset 1 trt 2 and rdr 5
-#' str(x[[1]][[11]])# error
 #' str(x[[2]][[1]]) # parameters for dataset 2 trt 1 and rdr 1
 #' str(x[[2]][[2]]) # parameters for dataset 2 trt 1 and rdr 2
 #' str(x[[2]][[10]])# parameters for dataset 2 trt 2 and rdr 5
-#' str(x[[3]][[1]]) # error
-#' 
 #' }
 #'
+#' \dontrun{ 
+#' ## these examples will cause errors; 
+#' ##these are intended to illustrate the structure of the functions return object
+#' str(x[[1]][[11]])# error
+#' str(x[[3]][[1]]) # error
+#' }
+#' 
 #' 
 #' @references 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
@@ -95,10 +99,10 @@
 #'  
 #' @export
 Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14, 
-                                         showPlot = FALSE, saveProprocLrcFile = FALSE, reAnalyze = FALSE)
+                                  showPlot = FALSE, saveProprocLrcFile = FALSE, reAnalyze = FALSE)
 {
   ####  DPC notes on updating the results 2/17/18
-  ####  First run PROPROC on all datasets
+  ####  First run PROPROC on all datasets (see book Chapter 20)
   ####  1. ret14 <- Compare3ProperRocFits(saveProprocLrcFile = TRUE) 
   ####     this generates 14 .lrc files in RJafroc
   ####  2. Move these files to VmWareShared folder
@@ -111,7 +115,13 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
   ####  8. ret14 <- Compare3ProperRocFits(reAnalyze = TRUE) 
   ####     this generates new results files in RJafroc/inst/ANALYZED/RSM6
   ####
-  options(warn = 2) # warnings as errors
+  # 
+  # Peter Philips showed me (06/21/19) that this line was causing testthat failures
+  # in function expect_known_output()
+  # 
+  options(warn = 2) # warnings AS errors
+  # NOTE added 6/25/19 - this is matched at exit with: 
+  # options(warn = 0) # warnings NOT as errors 
   fileNames <-  c("TONY", "VD", "FR", 
                   "FED", "JT", "MAG", 
                   "OPT", "PEN", "NICO",
@@ -153,7 +163,7 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
       binnedRocData <- rocData
     }
     
-    cat(fileName,	" i, j, mu, lambdaP,	nuP, c,	da,	alpha, muCbm,	AUC-RSM, AUC-PROPROC, AUC-CBM, chisq, p-value,  df\n")
+    #cat(fileName,	" i, j, mu, lambdaP,	nuP, c,	da,	alpha, muCbm,	AUC-RSM, AUC-PROPROC, AUC-CBM, chisq, p-value,  df\n")
     if (reAnalyze || !file.exists(sysAnalFileName)){
       allResults <- list()
       AllResIndx <- 0
@@ -182,24 +192,24 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
             print(compPlot)
           }
           # follows same format as RSM Vs. Others.xlsx
-          cat(fileName, i, j, x$retRsm$mu, x$retRsm$lambdaP, x$retRsm$nuP, 
-              c1[i,j], da[i,j], 
-              x$retCbm$alpha, x$retCbm$mu,
-              x$retRsm$AUC, x$aucProp, x$retCbm$AUC, 
-              x$retRsm$ChisqrFitStats[[1]], x$retRsm$ChisqrFitStats[[2]], 
-              x$retRsm$ChisqrFitStats[[3]],"\n")
+          # cat(fileName, i, j, x$retRsm$mu, x$retRsm$lambdaP, x$retRsm$nuP,
+          #     c1[i,j], da[i,j],
+          #     x$retCbm$alpha, x$retCbm$mu,
+          #     x$retRsm$AUC, x$aucProp, x$retCbm$AUC,
+          #     x$retRsm$ChisqrFitStats[[1]], x$retRsm$ChisqrFitStats[[2]],
+          #     x$retRsm$ChisqrFitStats[[3]],"\n")
           next
         }
       }
       allDatasetsResults[[f-startIndx + 1]] <- allResults
       allBinnedDatasets[[f-startIndx + 1]] <- binnedRocData
-      cat("\n")
+      # cat("\n")
       ### safety comments
       ### to update allResults, make sure correct path is defined below
-      ### in git version it is rjafroc-master; in CRAN version it is rjafroc
+      ### in git version it is rjafroc; in CRAN version it is rjafroc
       ### uncomment the following two statements and run ret <- Compare3ProperRocFits(reAnalyze = TRUE)
       ### the sytem files are updated on next build (the writes occur to savFileName, which are used to update system files) 
-      # savFileName <- paste0("/Users/Dev/rjafroc-master/inst/ANALYZED/RSM6/", retFileName) # git version
+      # savFileName <- paste0("/Users/Dev/rjafroc/inst/ANALYZED/RSM6/", retFileName) # git version
       # save(allResults, file = savFileName)
     } else {
       load(sysAnalFileName)
@@ -209,7 +219,7 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
         for (j in 1:J){
           AllResIndx <- AllResIndx + 1
           x <- allResults[[AllResIndx]]
-           if (showPlot) {
+          if (showPlot) {
             empOp <- UtilBinCountsOpPts(binnedRocData, trt = i, rdr = j)
             fpf <- empOp$fpf; tpf <- empOp$tpf
             compPlot <- gpfPlotRsmPropCbm(
@@ -220,20 +230,23 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
             print(compPlot)
           }
           # follows same format as RSM Vs. Others.xlsx
-          cat(fileName, i, j, x$retRsm$mu, x$retRsm$lambdaP, x$retRsm$nuP, 
-              c1[i,j], da[i,j], 
-              x$retCbm$alpha, x$retCbm$mu,
-              x$retRsm$AUC, x$aucProp, x$retCbm$AUC, 
-              x$retRsm$ChisqrFitStats[[1]], x$retRsm$ChisqrFitStats[[2]], 
-              x$retRsm$ChisqrFitStats[[3]],"\n")
+          # cat(fileName, i, j, x$retRsm$mu, x$retRsm$lambdaP, x$retRsm$nuP, 
+          #     c1[i,j], da[i,j], 
+          #     x$retCbm$alpha, x$retCbm$mu,
+          #     x$retRsm$AUC, x$aucProp, x$retCbm$AUC, 
+          #     x$retRsm$ChisqrFitStats[[1]], x$retRsm$ChisqrFitStats[[2]], 
+          #     x$retRsm$ChisqrFitStats[[3]],"\n")
           next
         }
       }
       allDatasetsResults[[f-startIndx + 1]] <- allResults
       allBinnedDatasets[[f-startIndx + 1]] <- binnedRocData
-      cat("\n\n\n")
+      # cat("\n\n\n")
     }
   }
+  
+  options(warn = 0) # warnings NOT as errors
+  
   return(list(
     allDatasetsResults = allDatasetsResults,
     allBinnedDatasets = allBinnedDatasets
@@ -261,7 +274,7 @@ gpfPlotRsmPropCbm <- function(fileName, mu, lambdaP, nuP, lesDistr, c1, da,
   plotCurve <- as.data.frame(plotCurve)
   plotOp <- data.frame(FPF = fpf, TPF = tpf)
   plotOp <- as.data.frame(plotOp)
-
+  
   ij <- paste0("D", fileName, ", i = ", i, ", j = ", j)
   Model <- NULL # to get around R CMD CHK throwing a Note
   FPF <- fpf

@@ -6,8 +6,6 @@
 #' in different treatments. If necessary
 #' The data is binned to 5 bins in each condition.
 #'
-#' @usage DfExtractCorCbmDataset(dataset, trts, rdrs)
-#'
 #'
 #' @param dataset The original dataset from which the pairing is to be extracted
 #' @param trts A vector, maximum length 2, contains the indices of the treatment
@@ -23,11 +21,13 @@
 #' is that implied by the first treatement
 #' and the second reader, which is one arm, and the other arm is that implied by the second
 #' treatment paired with the first
-#' reader. Using this method any allowed pairing can be extracted and analyzed by \link{FitCorCbm}.
+#' reader. Using this method any allowed pairing can be extracted and analyzed by \code{\link{FitCorCbm}}.
 #' The utility of this software is
 #' in designing a ratings simulator that is statistically matched to a real dataset.
 #'
 #' @examples
+#' 
+#' \donttest{
 #' ## Extract the paired data corresponding to the second and third readers in the first treatment
 #' ##from the include ROC dataset
 #' dataset11_23 <- DfExtractCorCbmDataset(dataset05, trts = 1, rdrs = c(2,3))
@@ -41,7 +41,7 @@
 #' ## (the indices are at different positions in the respective arrays)
 #' dataset12_13 <- DfExtractCorCbmDataset(dataset05,
 #' trts = c(1,2), rdrs = c(1,3))
-#'
+#' }
 #' @export
 
 DfExtractCorCbmDataset <- function(dataset, trts = 1, rdrs = 1){

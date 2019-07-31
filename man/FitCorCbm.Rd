@@ -33,7 +33,7 @@ Fit the Correlated Contaminated Binormal Model (CORCBM)
 The conditions (X, Y) can be two readers interpreting images in the same 
    treatment, the same reader interpreting images in different treatments, or 
    different readers interpreting images in 2 different treatments. Function 
-   \link{DfExtractCorCbmDataset} can be used to construct a dataset suitable for 
+   \code{\link{DfExtractCorCbmDataset}} can be used to construct a dataset suitable for 
    \code{FitCorCbm}. With reference to the returned values, and assuming R bins 
    in condition X and L bins in conditon Y, 
    \code{FPCounts} is the R x L matrix containing the counts for non-diseased cases, 
@@ -50,17 +50,18 @@ The conditions (X, Y) can be two readers interpreting images in the same
 }
 \examples{
 \dontrun{
+## this takes 85 sec to execute on OSX
 dataset <- DfExtractCorCbmDataset(dataset05, trts = 1, rdrs = c(4,7))
 ret <- FitCorCbm(dataset)
 print(ret$fitCorCbmRet)
 print(ret$stats)
 print(ret$fittedPlot)
 
-ret <- FitCorCbm(binnedData123)
+## this takes very long to execute
+ret <- FitCorCbm(datasetBinned123)
 print(ret$fitCorCbmRet)
 print(ret$stats)
 print(ret$fittedPlot)
-
 ## Also try two other datasets ending with 124 and 125
 }
 

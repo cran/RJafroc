@@ -4,7 +4,7 @@
 \alias{UtilAucPROPROC}
 \title{PROPROC AUC function}
 \usage{
-UtilAucPROPROC (c1, da)
+UtilAucPROPROC(c1, da)
 }
 \arguments{
 \item{c1}{The c-parameter of the PROPROC model, since \strong{c is a reserved 
@@ -17,8 +17,8 @@ PROPROC model-predicted ROC-AUC for the specified parameters
 }
 \description{
 {Returns the PROPROC ROC-AUC corresponding to specified 
-   parameters. See also \link{UtilAucsRSM}, \link{UtilAucBinormal} 
-   and \link{UtilAucCBM}.}
+   parameters. See also \code{\link{UtilAucsRSM}}, \code{\link{UtilAucBinormal}} 
+   and \code{\link{UtilAucCBM}}}
 }
 \examples{
 c1 <- .2;da <- 1.5

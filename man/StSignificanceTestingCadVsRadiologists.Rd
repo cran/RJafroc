@@ -4,8 +4,8 @@
 \alias{StSignificanceTestingCadVsRadiologists}
 \title{Significance testing, CAD vs. radiologists}
 \usage{
-StSignificanceTestingCadVsRadiologists (dataset, FOM = "Wilcoxon", 
-   option = "RRRC", method = "singleModality", FPFValue = 0.2)
+StSignificanceTestingCadVsRadiologists(dataset, FOM = "Wilcoxon",
+  option = "RRRC", method = "singleModality", FPFValue = 0.2)
 }
 \arguments{
 \item{dataset}{\strong{The dataset must be ROC or LROC.}}
@@ -139,6 +139,7 @@ ret1M <- StSignificanceTestingCadVsRadiologists (dataset09,
 FOM = "Wilcoxon", method = "singleModality")
 
 \dontrun{
+## takes longer than 5 sec on OSX
 ret2M <- StSignificanceTestingCadVsRadiologists (dataset09, 
 FOM = "Wilcoxon", method = "dualModality")
 

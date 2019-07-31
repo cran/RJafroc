@@ -4,14 +4,14 @@
 \alias{StSignificanceTestingSingleFixedFactor}
 \title{Perform significance testing for single fixed factor analysis}
 \usage{
-StSignificanceTestingSingleFixedFactor (dataset, 
-   FOM = "wAFROC", alpha = 0.05)
+StSignificanceTestingSingleFixedFactor(dataset, FOM = "wAFROC",
+  alpha = 0.05)
 }
 \arguments{
 \item{dataset}{A single-treatment or single-reader dataset.}
 
 \item{FOM}{The figure of merit, default  \code{"wAFROC"}, 
-see \link{UtilFigureOfMerit}.}
+see \code{\link{UtilFigureOfMerit}}.}
 
 \item{alpha}{The significance level (\code{alpha}, default 0.05) 
 of the test of the null hypothesis that FOMs of all levels of 

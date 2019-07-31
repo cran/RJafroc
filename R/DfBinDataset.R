@@ -4,10 +4,8 @@
 #' ratings in a dataset and returns the corresponding binned dataset in which the ratings are integers
 #' 1, 2,...., with higher values representing greater confidence in presence of disease
 #'
-#' @usage DfBinDataset(dataset, desiredNumBins = 7, opChType)
 #'
-#'
-#' @param dataset The dataset to be binned, with structure as in \link{RJafroc-package}.
+#' @param dataset The dataset to be binned, with structure as in \code{\link{RJafroc-package}}.
 #' @param desiredNumBins The desired number of bins. The default is 7.
 #' @param opChType The operating characteristic relevant to the binning operation: 
 #' \code{"ROC"}, \code{"FROC"}, \code{"AFROC"}, or \code{"wAFROC"}. 
@@ -30,6 +28,7 @@
 #' @import utils
 #'
 #' @examples
+#' \donttest{
 #' binned <- DfBinDataset(dataset05, opChType = "ROC")
 #' PlotEmpiricalOperatingCharacteristics(dataset05, 
 #' trts= c(1,2), rdrs = seq(1,9), opChType = "ROC")$Plot
@@ -41,8 +40,10 @@
 #' trts= c(1,2), rdrs = seq(1,9), opChType = "AFROC")$Plot
 #' PlotEmpiricalOperatingCharacteristics(binned, trts= c(1,2), 
 #' rdrs = seq(1,9), opChType = "AFROC")$Plot
-#' 
+#' }
+#'  
 #' \dontrun{
+#' ## takes longer than 5 sec on OSX
 #' library(ggplot2)
 #' dataset <- SimulateRocDataset(K1 = 5000, K2 = 7000, a = 1, b = 0.5, seed = 123)
 #' datasetB <- DfBinDataset(dataset, desiredNumBins = 7, opChType = "ROC")

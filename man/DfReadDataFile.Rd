@@ -4,8 +4,8 @@
 \alias{DfReadDataFile}
 \title{Read a data file}
 \usage{
-DfReadDataFile(fileName, format = "JAFROC", 
-   delimiter = ",", renumber = FALSE)
+DfReadDataFile(fileName, format = "JAFROC", delimiter = ",",
+  renumber = FALSE)
 }
 \arguments{
 \item{fileName}{A string specifying the name of the file. 
@@ -29,13 +29,13 @@ treatment and reader IDs. Otherwise, treatment
 and reader IDs in the original data file will be used.}
 }
 \value{
-A dataset with the structure specified in \link{RJafroc-package}.
+A dataset with the structure specified in \code{\link{RJafroc-package}}.
 }
 \description{
 Read a disk file and create a dataset object from it.
 }
 \examples{
-\dontrun{
+\donttest{
 fileName <- system.file("extdata", "includedRocData.xlsx", 
 package = "RJafroc", mustWork = TRUE)
 RocDataXlsx <- DfReadDataFile(fileName)

@@ -2,20 +2,23 @@
 #' 
 #' Calculates centered pseudovalues using the jackknife
 #' 
-#' @param dataset The dataset to be analyzed, see \link{RJafroc-package}.
+#' @param dataset The dataset to be analyzed, see \code{\link{RJafroc-package}}.
 #' @param FOM The figure of merit to be used in the calculation. 
-#'    The default is \code{"wJAFROC"}. See \link{UtilFigureOfMerit}.
+#'    The default is \code{"wJAFROC"}. See \code{\link{UtilFigureOfMerit}}.
 #' 
 #' @return An \code{c(I, J, K)} array containing the pseudovalues of the datasets.
 #' 
 #' @examples
 #' UtilPseudoValues(dataset02, FOM = "Wilcoxon")[1,1,1:10]
-#' 
-#' UtilPseudoValues(dataset05)[1,1,1:10] # default FOM is wAFROC for this FROC dataset
+#' UtilPseudoValues(dataset05, FOM = "wAFROC")[1,1,1:10] # default FOM is wAFROC for this FROC dataset
 #' 
 #' @export
 
-UtilPseudoValues <- function(dataset, FOM = "wJAFROC"){
+# UtilPseudoValues.R had errors insofar as it was dropping the 1 dimension in 
+# lesionID and lesionWeight; was affecting StSingleModality when used with 
+# wAFROC FOM. This part of the code needs further checking; 
+# no essential changes made in MyFOM.cpp and gpfMyFOM.R
+UtilPseudoValues <- function(dataset, FOM = "Wilcoxon"){
   NL <- dataset$NL
   LL <- dataset$LL
   lesionNum <- dataset$lesionNum
@@ -59,7 +62,11 @@ UtilPseudoValues <- function(dataset, FOM = "wJAFROC"){
           ll <- LL[i, j, -k, ]
           dim(nl) <- c(K - 1, maxNL)
           dim(ll) <- c(K2 - 1, max(lesionNum))
-          jkFOMArray[i, j, k] <- gpfMyFOM(nl, ll, lesionNum[-k], lesionID[-k, ], lesionWeight[-k, ], maxNL, maxLL, K1, K2 - 1, FOM)
+          lesID <- lesionID[-k, ]
+          dim(lesID) <- c(K2 - 1, max(lesionNum))
+          lesWght <- lesionWeight[-k, ]
+          dim(lesWght) <- c(K2 - 1, max(lesionNum))
+          jkFOMArray[i, j, k] <- gpfMyFOM(nl, ll, lesionNum[-k], lesID, lesWght, maxNL, maxLL, K1, K2 - 1, FOM)
           pseudoValues[i, j, k] <- fomArray[i, j] * K2 - jkFOMArray[i, j, k] * (K2 - 1)
         }
         pseudoValues[i, j, ] <- pseudoValues[i, j, ] + (fomArray[i, j] - mean(pseudoValues[i, j, ]))
@@ -82,7 +89,11 @@ UtilPseudoValues <- function(dataset, FOM = "wJAFROC"){
             ll <- LL[i, j, -(k - K1), ]
             dim(nl) <- c(K - 1, maxNL)
             dim(ll) <- c(K2 - 1, max(lesionNum))
-            jkFOMArray[i, j, k] <- gpfMyFOM(nl, ll, lesionNum[-(k - K1)], lesionID[-(k - K1), ], lesionWeight[-(k - K1), ], maxNL, maxLL, K1, K2 - 1, FOM)
+            lesWght <- lesionWeight[-(k - K1), ]
+            dim(lesWght) <- c(K2 - 1, max(lesionNum))
+            lesID <- lesionID[-(k - K1), ]
+            dim(lesID) <- c(K2 - 1, max(lesionNum))
+            jkFOMArray[i, j, k] <- gpfMyFOM(nl, ll, lesionNum[-(k - K1)], lesID, lesWght, maxNL, maxLL, K1, K2 - 1, FOM)
           }
           pseudoValues[i, j, k] <- fomArray[i, j] * K - jkFOMArray[i, j, k] * (K - 1)
         }

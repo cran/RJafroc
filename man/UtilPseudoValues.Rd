@@ -4,13 +4,13 @@
 \alias{UtilPseudoValues}
 \title{Calculate pseudovalues}
 \usage{
-UtilPseudoValues(dataset, FOM = "wJAFROC")
+UtilPseudoValues(dataset, FOM = "Wilcoxon")
 }
 \arguments{
-\item{dataset}{The dataset to be analyzed, see \link{RJafroc-package}.}
+\item{dataset}{The dataset to be analyzed, see \code{\link{RJafroc-package}}.}
 
 \item{FOM}{The figure of merit to be used in the calculation. 
-The default is \code{"wJAFROC"}. See \link{UtilFigureOfMerit}.}
+The default is \code{"wJAFROC"}. See \code{\link{UtilFigureOfMerit}}.}
 }
 \value{
 An \code{c(I, J, K)} array containing the pseudovalues of the datasets.
@@ -20,7 +20,6 @@ Calculates centered pseudovalues using the jackknife
 }
 \examples{
 UtilPseudoValues(dataset02, FOM = "Wilcoxon")[1,1,1:10]
-
-UtilPseudoValues(dataset05)[1,1,1:10] # default FOM is wAFROC for this FROC dataset
+UtilPseudoValues(dataset05, FOM = "wAFROC")[1,1,1:10] # default FOM is wAFROC for this FROC dataset
 
 }

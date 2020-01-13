@@ -24,24 +24,31 @@
 #'    the corresponding \emph{physical} parameter is \code{1 - exp(nu*mu)}, 
 #'    the success probability of the binomial distribution(s).
 #' 
-#' @param lesDistr Array, [1:maxLL,1:2]. The probability mass function of the 
+#' @param lesDistr Array [1:maxLL,1:2]. The probability mass function of the 
 #'    lesion distribution for diseased cases. The first column contains the 
-#'    actual numbers of lesions per case. 
-#'    The second column contains the fraction of diseased cases with the number 
-#'    of lesions specified in the first column. 
-#'    The second column must sum to unity.
+#'    actual numbers of lesions per case. The second column contains the fraction 
+#'    of diseased cases with the number of lesions specified in the first column. 
+#'    The second column must sum to unity. See \link{UtilLesionDistr}. 
 #' 
-#' @param lesionWeights Array, [1:maxLL,1:maxLL]. The weights (or clinical importances) 
-#'    of the lesions. The 1st row contains the weight of the lesion on cases
-#'    with one lesion only, necessarily 1; the remaining elements of the row are 
-#'    \code{-Inf}. The 2nd row contains the weights of the 2 lesions on cases with 
-#'    2 lesions only, the remaining elements of the row, if any, are \code{-Inf}. 
-#'    Excluding the \code{-Inf}, each row must sum to 1. 
-#'    The default is equal weighting, e.g., weights are 1/3, 1/3, 1/3 on row 3.
-#'    This parameter is not to be confused with the lesionWeights field in an FROC
-#'    dataset with enumerates the weights of lesions on individual cases. 
+#' @param lesWghtDistr The lesion weights distribution, an [1:maxLL,1:maxLL] array. 
+#'    The probability mass function of the 
+#'    lesion weights for diseased cases. \code{maxLL} is the maximum number of lesions in
+#'    the dataset. The 1st row contains the weight of the 
+#'    lesion on cases with one lesion only, necessarily 1, assuming the dataset 
+#'    has cases with only one lesion; the remaining elements 
+#'    of the row are \code{-Inf}. The 2nd row contains the weights of the 2 lesions 
+#'    on cases with 2 lesions only, the remaining elements of the row, if any, 
+#'    are \code{-Inf}, assuming the dataset 
+#'    has cases with two lesion. Excluding the \code{-Inf}, each row must sum to 1. 
+#'    The default is equal weighting, e.g., weights are 1/3, 1/3, 1/3 on row 3, 
+#'    assuming the dataset has cases with three lesions.
+#'    This parameter is not to be confused with the lesionWeight list member in an FROC
+#'    dataset which enumerates the weights of lesions on individual cases. See 
+#'    \link{UtilLesionWeightsDistr}.
 #' 
-#' @param type The type of operating characteristic desired: can be "\code{ROC}", 
+#'    \link{UtilLesionWeightsDistr}. 
+#' 
+#' @param  OpChType The type of operating characteristic desired: can be "\code{ROC}", 
 #'    "\code{AFROC}", "\code{wAFROC}", "\code{FROC}" or "\code{pdfs}" or "\code{ALL}". 
 #'    The default is "\code{ALL}".
 #' 
@@ -72,7 +79,7 @@
 #'    ROC at the end point; Online Appendix 17.H.3 
 #'
 #' 
-#' @return A list of 6 elements containing six \pkg{ggplot2} objects 
+#' @return A list of elements containing five \pkg{ggplot2} objects 
 #'    (ROCPlot, AFROCPlot wAFROCPlot, FROCPlot and PDFPlot) and two area measures 
 #'    (each of which can have up to two elements), the area under the search 
 #'    model predicted ROC curves in up to two treatments, the area under the search 
@@ -96,9 +103,9 @@
 #' @note For \code{lesDistr}, the sum over the second column must equal one. 
 #'    If all cases contain same number of lesions, simply supply this number instead of 
 #'    the matrix. If the argument is missing, the default value 
-#'    of one lesion per diseased case applies. 
+#'    of one lesion per diseased case is used. 
 #'   
-#' In \code{lesionWeights}, the sum over each row (excluding \code{-Inf}) must be one. 
+#' In \code{lesWghtDistr}, the sum over each row (excluding \code{-Inf}) must be one. 
 #'    The value \code{-Inf} should be assigned if the corresponding lesion 
 #'    does not exist. Equal lesion weighting is applied if this argument is missing.
 #' 
@@ -107,8 +114,9 @@
 #'    first column of \code{lesDistr} will be c(1,2,4). The second column might be
 #'    c(0.8, 0.15, 0.05), which sums to one, meaning 80\% of cases have only one 
 #'    lesion, 15\% have two lesions and 5\% have three lesions. The 
-#'    \code{lesionWeights} matrix will be 
-#'    \code{[1:3,1:3]}, where each row will sum to one (excluding negative infinities). 
+#'    \code{lesWghtDistr} matrix will be 
+#'    \code{[1:3,1:4]}, where each row will sum to one (excluding the first entry and 
+#'    excluding negative infinities). 
 #' 
 #' @import ggplot2
 #' 
@@ -136,12 +144,12 @@
 #' ## On cases with one lesion the weights are 1, on cases with 2 lesions the weights
 #' ## are 0.4 and 0.6, on cases with three lesions the weights are 0.2, 0.3 and 0.5, and
 #' ## on cases with 4 lesions the weights are 0.3, 0.4, 0.2 and 0.1: 
-#' lesionWeights <- rbind(c(1.0, -Inf, -Inf, -Inf), 
-#'                        c(0.4,  0.6, -Inf, -Inf), 
-#'                        c(0.2,  0.3,  0.5, -Inf), 
-#'                        c(0.3,  0.4, 0.2,  0.1))
+#' lesWghtDistr <- rbind(c(1, 1.0, -Inf, -Inf, -Inf), 
+#'                        c(2, 0.4,  0.6, -Inf, -Inf), 
+#'                        c(3, 0.2,  0.3,  0.5, -Inf), 
+#'                        c(4, 0.3,  0.4, 0.2,  0.1))
 #' ret <- PlotRsmOperatingCharacteristics(mu = c(2, 3), lambda = c(1, 1.5), nu = c(0.6, 0.8),
-#'    lesDistr = lesDistr, lesionWeights = lesionWeights, 
+#'    lesDistr = lesDistr, lesWghtDistr = lesWghtDistr, 
 #'    legendPosition = "bottom", nlfRange = c(0, 1), llfRange = c(0, 1))
 #'    print(ret$ROCPlot)
 #'    print(ret$AFROCPlot)
@@ -151,8 +159,8 @@
 #' 
 #' @export
 #' 
-PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeights, 
-                                            type = "ALL", 
+PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesWghtDistr, 
+                                             OpChType = "ALL", 
                                             legendPosition = c(1,0), 
                                             legendDirection = "horizontal", 
                                             legendJustification = c(0,1),
@@ -161,12 +169,12 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
   if (!all(c(length(mu) == length(lambda), length(mu) == length(nu))))
     stop("Parameters mu, lambda and nu have different lengths.")
   
-  if (missing(lesDistr) && missing(lesionWeights)){
+  if (missing(lesDistr) && missing(lesWghtDistr)){
     lesDistr <- c(1, 1)
     dim(lesDistr) <- c(1, 2)
-    lesionWeights <- 1
-    dim(lesionWeights) <- c(1, 1)
-  }else if (!missing(lesDistr) && missing(lesionWeights)){
+    lesWghtDistr <- 1
+    dim(lesWghtDistr) <- c(1, 1)
+  }else if (!missing(lesDistr) && missing(lesWghtDistr)){
     if (is.vector(lesDistr)){
       if ((length(lesDistr) == 1) && is.wholenumber(lesDistr)){
         lesDistr <- c(lesDistr, 1)
@@ -175,10 +183,12 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
       }
       dim(lesDistr) <- c(1, 2)
     }
-    lesionWeights <- array(-Inf, dim = c(nrow(lesDistr), max(lesDistr[ , 1])))
-    for (r in 1:nrow(lesDistr)){
-      lesionWeights[r, 1:lesDistr[r, 1]] <- 1 / lesDistr[r, 1]
-    }
+    lesWghtDistr <- array(-Inf, dim = c(nrow(lesDistr), max(lesDistr[ , 1])+1))
+    lesWghtDistr[,1] <- lesDistr[,1]
+    for (i in 1:length(lesDistr[,1])) lesWghtDistr[i,2:(lesDistr[i,1]+1)] <- 1/lesDistr[i,1]
+    # for (r in 1:nrow(lesDistr)){
+    #   lesWghtDistr[r, 1:lesDistr[r, 1]] <- 1 / lesDistr[r, 1]
+    # }
   }else{
     if (is.vector(lesDistr)){
       if ((length(lesDistr) == 1) && is.wholenumber(lesDistr)){
@@ -188,35 +198,31 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
       }
       dim(lesDistr) <- c(1, 2)
       
-      if (!is.vector(lesionWeights)){
-        stop("lesionWeights and lesDistr must have same number of rows.")
+      if (!is.vector(lesWghtDistr)){
+        stop("lesWghtDistr and lesDistr must have same number of rows.")
       }else{
-        dim(lesionWeights) <- c(1, length(lesionWeights))
+        dim(lesWghtDistr) <- c(1, length(lesWghtDistr))
       }
-    }else if (nrow(lesDistr) != nrow(lesionWeights)){
-      stop("lesionWeights and lesDistr must have same number of rows.")
+    }else if (nrow(lesDistr) != nrow(lesWghtDistr)){
+      stop("lesWghtDistr and lesDistr must have same number of rows.")
       if (length(lesDistr) != 2){
         stop("lesDistr must have two columns")
       }
     }
   }
   
-  for (r in 1:nrow(lesionWeights)){
-    rowWeight <- lesionWeights[r, ]
-    nWeight <- sum(rowWeight != -Inf)
+  for (r in 1:nrow(lesWghtDistr)){
+    maxLL <- max(lesDistr[,1])
+    rowWeight <- lesWghtDistr[r, 2:(maxLL+1)]
     if (abs(sum(rowWeight[rowWeight != -Inf]) - 1.0) > 1e-6){
     #if (sum(rowWeight[rowWeight != -Inf]) != 1){ # this generated Solaris error
         errMsg <- sprintf("Line %d of lesion weights matrix should be summed up to 1.", r)
       stop(errMsg)
     }
-    if (nWeight != lesDistr[r , 1]){
-      errMsg <- sprintf("The number of elements in the line %d of lesion weights matrix 
-                        is different the number of lesion in lesion distribution matrix.", r)
-      stop(errMsg)
-    }
   }
   
   plotStep <- 0.01
+  plotStep <- 0.1 # delete after debug
   zeta <- seq(from = myNegInf, to = max(mu)+5, by = plotStep) # dpc, to reduce computation time
   
   ROCPlot <- NA
@@ -228,21 +234,19 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
   ROCPoints <- data.frame(FPF = NULL, TPF = NULL, Treatment = NULL)
   ROCDashes <- data.frame(FPF = NULL, TPF = NULL, Treatment = NULL)
   FROCPoints <- data.frame(NLF = NULL, LLF = NULL, Treatment = NULL)
-  FROCDashes <- data.frame(NLF = NULL, LLF= NULL, Treatment = NULL)
   AFROCPoints <- data.frame(FPF = NULL, LLF= NULL, Treatment = NULL)
   AFROCDashes <- data.frame(FPF = NULL, LLF= NULL, Treatment = NULL)
   wAFROCPoints <- data.frame(FPF = NULL, wLLF= NULL, Treatment = NULL)
   wAFROCDashes <- data.frame(FPF = NULL, wLLF= NULL, Treatment = NULL)
   abnPDFPoints <- data.frame(pdf = NULL, highestZSample = NULL, Treatment = NULL)
   norPDFPoints <- data.frame(pdf = NULL, highestZSample = NULL, Treatment = NULL)
-  aucROC <- rep(NA, length(mu))
-  aucAFROC <- aucROC
-  aucwAFROC <- aucROC
-  aucFROC <- aucROC
-  lambdaP <- lambda
+  aucROC <- rep(NA, length(mu));aucAFROC <- aucROC;aucwAFROC <- aucROC;aucFROC <- aucROC;lambdaP <- lambda
   nuP <- nu
+  
   for (i in 1:length(mu)){
-    if (nu[i] < 0 ) stop("nu must be non-negative")
+    if (mu[i] <= 0 ) stop("mu must be greater than zero")
+    if (lambda[i] < 0 ) stop("lambda must be greater than zero")
+    if (nu[i] < 0 ) stop("nu must be greater than zero")
     
     lambdaP[i] <- lambda[i] / mu[i]
     if (abs(nu[i] * mu[i]) <= 1e-6 ) nuP[i] <- 1e-6 else nuP[i] <- (1-exp(-nu[i] * mu[i]))
@@ -252,7 +256,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
     LLF <- sapply(zeta, yFROC, mu = mu[i], nuP = nuP[i])
     
     maxFPF <- xROC(-20, lambdaP[i])
-    if(type == "ALL" || type == "ROC"){
+    if( OpChType == "ALL" ||  OpChType == "ROC"){
       ROCPoints <- rbind(ROCPoints, data.frame(FPF = FPF, TPF = TPF, Treatment = as.character(i)))
       ROCDashes <- rbind(ROCDashes, data.frame(FPF = c(FPF[1], 1), TPF = c(TPF[1], 1), Treatment = as.character(i)))
       maxTPF <- yROC(-20, mu[i], lambdaP[i], nuP[i], lesDistr)
@@ -260,7 +264,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
       aucROC[i] <- AUC + (1 + maxTPF) * (1 - maxFPF) / 2
     }
     
-    if(type == "ALL" || type == "FROC"){
+    if( OpChType == "ALL" ||  OpChType == "FROC"){
       FROCPoints <- rbind(FROCPoints, data.frame(NLF = NLF, LLF = LLF, Treatment = as.character(i)))
       if (is.null(nlfAlpha)){
         maxNLF <- max(NLF)
@@ -275,7 +279,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
       }
     }
     
-    if(type == "ALL" || type == "AFROC"){
+    if( OpChType == "ALL" ||  OpChType == "AFROC"){
       AFROCPoints <- rbind(AFROCPoints, data.frame(FPF = FPF, LLF = LLF, Treatment = as.character(i)))
       AFROCDashes <- rbind(AFROCDashes, data.frame(FPF = c(FPF[1], 1), LLF = c(LLF[1], 1), 
                                                    Treatment = as.character(i)))
@@ -284,19 +288,19 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
       aucAFROC[i] <- AUC + (1 + maxLLF) * (1 - maxFPF) / 2
     }
     
-    if(type == "ALL" || type == "wAFROC"){
-      wLLF <- sapply(zeta, ywAFROC, mu = mu[i], nuP = nuP[i], lesDistr = lesDistr, lesionWeights = lesionWeights)
+    if( OpChType == "ALL" ||  OpChType == "wAFROC"){
+      wLLF <- sapply(zeta, ywAFROC, mu[i], nuP[i], lesDistr, lesWghtDistr)
       wAFROCPoints <- rbind(wAFROCPoints, data.frame(FPF = FPF, wLLF = wLLF, 
                                                      Treatment = as.character(i)))
       wAFROCDashes <- rbind(wAFROCDashes, data.frame(FPF = c(FPF[1], 1), wLLF = c(wLLF[1], 1), Treatment = as.character(i)))
-      maxWLLF <- ywAFROC(-20, mu[i], nuP[i], lesDistr, lesionWeights)
-      AUC <- integrate(intwAFROC, 0, maxFPF, mu = mu[i], lambdaP = lambdaP[i], nuP = nuP[i], lesDistr, lesionWeights)$value
+      maxWLLF <- ywAFROC(-20, mu[i], nuP[i], lesDistr, lesWghtDistr) 
+      AUC <- integrate(intwAFROC, 0, maxFPF, mu = mu[i], lambdaP = lambdaP[i], nuP = nuP[i], lesDistr, lesWghtDistr)$value
       aucwAFROC[i] <- AUC + (1 + maxWLLF) * (1 - maxFPF) / 2
     }
     
-    if(type == "ALL" || type == "pdfs"){
+    if( OpChType == "ALL" ||  OpChType == "pdfs"){
       deltaFPF <- FPF[1:(length(FPF) - 1)] - FPF[2:length(FPF)]  
-      if(type == "ALL" || type == "pdfs"){     
+      if( OpChType == "ALL" ||  OpChType == "pdfs"){     
         pdfNor <- deltaFPF / plotStep
         norPDFPoints <- rbind(norPDFPoints, 
                               data.frame(pdf = pdfNor[pdfNor > 1e-6], highestZSample = zeta[-1][pdfNor > 1e-6], 
@@ -310,7 +314,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
     }
   }
   
-  if(type == "ALL" || type == "ROC") {
+  if( OpChType == "ALL" ||  OpChType == "ROC") {
     ROCPlot <- with(ROCPoints, {
       ggplot(data = ROCPoints) + 
         geom_line(aes(x = FPF, y = TPF, color = Treatment))  +       
@@ -319,7 +323,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
     })
   }
   
-  if(type == "ALL" || type == "FROC"){
+  if( OpChType == "ALL" ||  OpChType == "FROC"){
     FROCPlot <- with(FROCPoints, {
       ggplot(data = FROCPoints) + 
         geom_line(aes(x = NLF, y = LLF, color = Treatment))  +       
@@ -329,7 +333,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
     })
   }
   
-  if(type == "ALL" || type == "AFROC"){
+  if( OpChType == "ALL" ||  OpChType == "AFROC"){
     AFROCPlot <- with(AFROCPoints, {
       ggplot(data = AFROCPoints) + 
         geom_line(aes(x = FPF, y = LLF , color = Treatment)) + 
@@ -339,7 +343,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
     )
   }
   
-  if(type == "ALL" || type == "wAFROC"){
+  if( OpChType == "ALL" ||  OpChType == "wAFROC"){
     wAFROCPlot <- with(wAFROCPoints, {
       ggplot(data = wAFROCPoints) + 
         geom_line(aes(x = FPF, y = wLLF , color = Treatment)) + 
@@ -348,7 +352,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
     })
   }
   
-  if(type == "ALL" || type == "pdfs"){
+  if( OpChType == "ALL" ||  OpChType == "pdfs"){
     if (legendPosition == "top" || legendPosition == "bottom"){
       legendDirection = "horizontal"
     }else{
@@ -377,7 +381,7 @@ PlotRsmOperatingCharacteristics <- function(mu, lambda, nu, lesDistr, lesionWeig
 }
 
 
-
+# for future work
 myPlot <- function(dataPoints, dashedPoints, x, y, 
                    legendPosition, legendDirection, legendJustification) {
   ret <- with(dataPoints, {
@@ -398,11 +402,15 @@ xFROC <- function(zeta, lambdaP){
   return(NLF)
 }
 
+
+
 yFROC <- function(zeta, mu, nuP){
   # returns LLF, the ordinate of FROC, AFROC curve
   LLF <- nuP * (1 - pnorm(zeta - mu))
   return(LLF)
 }
+
+
 
 intFROC <- function(NLF, mu, lambdaP, nuP){
   zeta <- qnorm(1 - NLF / lambdaP)
@@ -410,9 +418,11 @@ intFROC <- function(NLF, mu, lambdaP, nuP){
   return(LLF)
 }
 
+
+
 intAFROC <- function(FPF, mu, lambdaP, nuP){
   # returns LLF, the ordinate of AFROC curve; takes FPF as the variable. 
-  # AUC is calculated by integrating this function in terms of FPF
+  # AUC is calculated by integrating this function wrt FPF
   tmp <- 1 / lambdaP * log(1 - FPF) + 1
   tmp[tmp < 0] <- pnorm(-20)
   zeta <- qnorm(tmp)
@@ -420,48 +430,64 @@ intAFROC <- function(FPF, mu, lambdaP, nuP){
   return(LLF)
 }
 
-ywAFROC <- function(zeta, mu, nuP, lesDistr, lesionWeights){
-  # returns wLLFL, the ordinate of wAFROC curve
-  fl <- lesDistr[, 2] / sum(lesDistr[, 2])
+
+
+# returns wLLF, the ordinate of wAFROC curve
+# this has working cpp version with name ywAFROC
+ywAFROC_R <- function(zeta, mu, nuP, lesDistr, lesWghtDistr){
+  # zeta <- 0
+  # fl is the fraction of cases with # lesions as in first column of lesDistr
+  # the second column contains the fraction
+  fl <- lesDistr[, 2] / sum(lesDistr[, 2]) # redundant normalization does not hurt
   wLLF <- 0
-  for (L in 1:nrow(lesDistr)){
-    nLesion <- lesDistr[L, 1] 
-    # nLesion is the first element in the row L of lesDistr, 
-    # which is the number of lesions for this lesion weights distributions condition
+  for (row in 1:nrow(lesDistr)){
+    # outer looop sums over different numbers of lesions per case
+    nLesPerCase <- lesDistr[row, 1] 
+    # nLesPerCase is the first element in the row row of lesDistr, 
+    # which is the number of lesions for this lesion distributions condition
     wLLFTmp <- 0
-    for (l in 1:nLesion){
-      # l is the number of sucesses with number of lesions nLesion
-      wLLFTmp <- wLLFTmp + sum(lesionWeights[L, 1:l]) * dbinom(l, nLesion, nuP) * (1 - pnorm(zeta - mu))
-      
+    for (col in 1:nLesPerCase){
+      # inner loop sums over different numbers of col events
+      # col is the number of sucesses with trial size nLesPerCase
+      # the following works, but only for equal weights
+      # wLLFTmp <- wLLFTmp + sum(lesWghtDistr[row, 2:(col+1)]) * dbinom(col, nLesPerCase, nuP) * (1 - pnorm(zeta - mu))
+      # the next two lines should work for general case
+      wLLFTmp <- wLLFTmp +
+        lesWghtDistr[row, col+1] * col * dbinom(col, nLesPerCase, nuP) * (1 - pnorm(zeta - mu))
     }
-    wLLF <- wLLF + fl[L] * wLLFTmp
+    wLLF <- wLLF +  fl[row] * wLLFTmp
   }
   return(wLLF)
 }
 
-intwAFROC <- function(FPF, mu, lambdaP, nuP, lesDistr, lesionWeights){
+
+
+intwAFROC <- function(FPF, mu, lambdaP, nuP, lesDistr, lesWghtDistr){
   # returns wLLF, the ordinate of AFROC curve; takes FPF as the variable. 
-  # AUC is calculated by integrating this function in terms of FPF
+  # AUC is calculated by integrating this function wrt FPF
   tmp <- 1 / lambdaP * log(1 - FPF) + 1
   tmp[tmp < 0] <- pnorm(-20)
   zeta <- qnorm(tmp)
-  wLLF <- sapply(zeta, ywAFROC, mu = mu, nuP = nuP, lesDistr, lesionWeights)
+  wLLF <- sapply(zeta, ywAFROC, mu = mu, nuP = nuP, lesDistr, lesWghtDistr)
   return(wLLF)
 }
 
 is.wholenumber <- function(x)  round(x) == x
 
-
-xROC <- function (zeta, lambdaP){
-  return (1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2))))
-}
-
-xROCVect <- function(zeta, lambdaP) {
-    FPF = 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2.0)))
-  return (FPF);
-}
-
+# 
+# xROC <- function (zeta, lambdaP){
+#   return (1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2))))
+# }
+# 
+# 
+# xROCVect <- function(zeta, lambdaP) {
+#     FPF = 1 - exp( (-lambdaP / 2) + 0.5 * lambdaP * erfcpp(zeta / sqrt(2.0)))
+#   return (FPF);
+# }
+# 
+# 
 # R-only implementation of erf function
-erf_R <- function(x){
- return (2 * pnorm(sqrt(2) * x) - 1)
-}
+# erf_R <- function(x){
+#  return (2 * pnorm(sqrt(2) * x) - 1)
+# }
+# 

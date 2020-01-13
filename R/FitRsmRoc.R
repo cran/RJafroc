@@ -1,11 +1,15 @@
-#' Fit the radiological search model (RSM) to ROC data
+#' Fit the radiological search model (RSM) to an ROC dataset
 #' 
-#' @description Fit an RSM-predicted ROC curve to a binned ROC dataset
+#' @description Fit an RSM-predicted ROC curve to a \strong{binned single-modality single-treatment ROC dataset}
 #' 
 #' @param binnedRocData The \strong{binned ROC} dataset containing the data
-#' @param lesDistr The lesion distribution matrix
-#' @param trt The desired treatment, default is 1
-#' @param rdr The desired reader, default is 1
+#' @param lesDistr Array [1:maxLL,1:2]. The probability mass function of the 
+#'    lesion distribution for diseased cases. The first column contains the 
+#'    actual numbers of lesions per case. The second column contains the fraction 
+#'    of diseased cases with the number of lesions specified in the first column. 
+#'    The second column must sum to unity. 
+#' @param trt The selected treatment, default is 1
+#' @param rdr The selected reader, default is 1
 #' 
 #' 
 #' @return The return value is a list with the following elements:
@@ -45,26 +49,26 @@
 #' @examples
 #' \donttest{
 #' ## Test with included ROC data (some bins have zero counts)
-#' lesDistr <- UtilLesionDistribution(dataset02)
+#' lesDistr <- UtilLesionDistr(dataset02)
 #' retFit <- FitRsmRoc(dataset02, lesDistr)
 #' print(retFit$fittedPlot)
 #' 
 #' ## Test with included degenerate ROC data
-#' lesDistr <- UtilLesionDistribution(datasetDegenerate)
+#' lesDistr <- UtilLesionDistr(datasetDegenerate)
 #' retFit <- FitRsmRoc(datasetDegenerate, lesDistr);print(retFit$fittedPlot)
 #' 
 #' ## Test with single interior point data
 #' fp <- c(rep(1,7), rep(2, 3))
 #' tp <- c(rep(1,5), rep(2, 5))
 #' binnedRocData <- Df2RJafrocDataset(fp, tp)
-#' lesDistr <- UtilLesionDistribution(binnedRocData)
+#' lesDistr <- UtilLesionDistr(binnedRocData)
 #' retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
 #' 
 #' ## Test with two interior data points
 #' fp <- c(rep(1,7), rep(2, 5), rep(3, 3))
 #' tp <- c(rep(1,3), rep(2, 5), rep(3, 7))
 #' binnedRocData <- Df2RJafrocDataset(fp, tp)
-#' lesDistr <- UtilLesionDistribution(binnedRocData)
+#' lesDistr <- UtilLesionDistr(binnedRocData)
 #' retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
 #' 
 #' 
@@ -72,11 +76,11 @@
 #' fp <- c(rep(1,12), rep(2, 5), rep(3, 3), rep(4, 5)) #25
 #' tp <- c(rep(1,3), rep(2, 5), rep(3, 7), rep(4, 10)) #25
 #' binnedRocData <- Df2RJafrocDataset(fp, tp)
-#' lesDistr <- UtilLesionDistribution(binnedRocData)
+#' lesDistr <- UtilLesionDistr(binnedRocData)
 #' retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
 #' 
 #' ## test for TONY data, i = 2 and j = 3; only case permitting chisqure calculation
-#' lesDistr <- UtilLesionDistribution(dataset01)
+#' lesDistr <- UtilLesionDistr(dataset01)
 #' rocData <- DfFroc2Roc(dataset01)
 #' retFit <- FitRsmRoc(rocData, lesDistr, trt = 2, rdr = 3)
 #' print(retFit$fittedPlot)
@@ -120,8 +124,8 @@ FitRsmRoc <- function(binnedRocData, lesDistr, trt = 1, rdr = 1){
   #minZeta <- RJafrocEnv$minZeta
   #maxZeta <- RJafrocEnv$maxZeta
   
-  modalityID <- binnedRocData$modalityID[trt]
-  readerID <- binnedRocData$readerID[rdr]
+  # modalityID <- binnedRocData$modalityID[trt]
+  # readerID <- binnedRocData$readerID[rdr]
   class(lesDistr) <- "numeric"
   
   fp <- binnedRocData$NL[trt,rdr,,1];fp <- fp[fp != -Inf]
@@ -131,7 +135,7 @@ FitRsmRoc <- function(binnedRocData, lesDistr, trt = 1, rdr = 1){
   
   ret1 <- UtilBinCountsOpPts(binnedRocData, trt, rdr) 
   fpf <- ret1$fpf;tpf <- ret1$tpf;fpCounts <- ret1$fpCounts;tpCounts <- ret1$tpCounts
-  K1 <- sum(fpCounts);K2 <- sum(tpCounts)
+  # K1 <- sum(fpCounts);K2 <- sum(tpCounts)
   if (isDataDegenerate (fpf, tpf)) {
     if (max(tpf) > max(fpf)) { 
       mu <- maxMu # technically infinity; but then vertical line does not plot

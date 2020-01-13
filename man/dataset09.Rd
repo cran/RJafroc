@@ -8,7 +8,7 @@
 \itemize{
 \item{\code{NL}}{ Ratings array [1, 1:10, 1:200, 1], of false positives, FPs}
 \item{\code{LL}}{ Ratings array [1, 1:10, 1:80, 1], of true positives, TPs}
-\item{\code{lesionNum}}{ array [1:80], number of lesions per diseased case, all set to 1}
+\item{\code{lesionVector}}{ array [1:80], number of lesions per diseased case, all set to 1}
 \item{\code{lesionID}}{ array [1:80, 1], labels of lesions on diseased cases, all set to 1}
 \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importance) of lesions, all set to 1}
 \item{\code{dataType}}{ "ROC", the data type}
@@ -29,7 +29,7 @@ data requires methods described in the book, specifically, the function
 }
 \examples{
 str(dataset09)
-PlotEmpiricalOperatingCharacteristics(dataset = dataset09, rdrs = 1:10)$Plot
+PlotEmpiricalOperatingCharacteristics(dataset = dataset09, rdrs = 1:10, opChType = "ROC")$Plot
 
 
 }

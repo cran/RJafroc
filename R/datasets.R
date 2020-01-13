@@ -12,7 +12,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:5, 1:185, 1:3], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:5, 1:89, 1:2], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:89], number of lesions per diseased case}
+#' \item{\code{lesionVector}}{ array [1:89], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:89, 1:2], labels of lesions on diseased cases}
 #' \item{\code{lesionWeight}}{ array [1:89, 1:2], weights (or clinical importance) of lesions}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -48,7 +48,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:5, 1:114, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:5, 1:45, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:45], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:45], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:45, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:45, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -63,7 +63,7 @@
 #' 
 #' @examples
 #' str(dataset02)
-#' PlotEmpiricalOperatingCharacteristics(dataset = dataset02)$Plot
+#' PlotEmpiricalOperatingCharacteristics(dataset = dataset02, opChType = "ROC")$Plot
 #'
 #'
 #'
@@ -73,7 +73,7 @@
 #' Franken ROC dataset
 #'
 #' This is referred to in the book as the "FR" dataset. It consists of 100 cases, 
-#' 69 of which are diseased, interpreted in two treatments,
+#' 67 of which are diseased, interpreted in two treatments,
 #' "0" = conventional film radiographs, "1" = digitized  images viewed on monitors, by four 
 #' radiologists using the ROC paradigm. Often referred to in the ROC literature as the 
 #' Franken-dataset, which, along the the Van Dyke dataset, has been widely used to illustrate
@@ -83,12 +83,12 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:4, 1:100, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:67, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:67], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:67], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:67, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:67, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
-#' \item{\code{modalityID}}{ [1:2] "0" "1", treatment labels}
-#' \item{\code{readerID}}{ [1:4] "0" "1" "2" ..., reader labels}
+#' \item{\code{modalityID}}{ [1:2] "TREAT1" "TREAT2", the treatment labels}
+#' \item{\code{readerID}}{ [1:4] "READER_1" "READER_2" "READER_3" "READER_4", the reader labels}
 #' }
 #'
 #' @keywords datasets
@@ -99,7 +99,7 @@
 #' 
 #' @examples
 #' str(dataset03)
-#' PlotEmpiricalOperatingCharacteristics(dataset = dataset03)$Plot
+#' PlotEmpiricalOperatingCharacteristics(dataset = dataset03, opChType = "ROC")$Plot
 #'
 #'
 "dataset03"
@@ -110,14 +110,15 @@
 #' This is referred to in the book as the "FED" dataset. It consists of 200 mammograms, 
 #' 100 of which contained one to 3 simulated microcalcifications,
 #' interpreted in five treatments (basically different image processing algorithms), by four 
-#' radiologists using the FROC paradigm. The maximum number of NLs per case, over the entire 
-#' dataset was 7 and the dataset contained at least one diseased mammogram with 3 lesions.
+#' radiologists using the FROC paradigm and a 5-point rating scale. The maximum number of NLs 
+#' per case, over the entire dataset was 7 and the dataset contained at least one diseased 
+#' mammogram with 3 lesions.
 #' 
 #' @format A list with 8 elements:
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:5, 1:4, 1:200, 1:7], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:5, 1:4, 1:100, 1:3], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:100], number of lesions per diseased case}
+#' \item{\code{lesionVector}}{ array [1:100], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:100, 1:3], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:100, 1:3] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -151,7 +152,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:9, 1:92, 1:7], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:9, 1:47, 1:3, of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:47], number of lesions per diseased case}
+#' \item{\code{lesionVector}}{ array [1:47], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:47, 1:3], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:67, 1] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -184,7 +185,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:4, 1:89, 1:17], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:42, 1:15], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:42], number of lesions per diseased case}
+#' \item{\code{lesionVector}}{ array [1:42], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:42, 1:15], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:42, 1:15] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -216,7 +217,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:5, 1:7, 1:162, 1:4], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:5, 1:7, 1:81, 1:3], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:81], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:81], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:81, 1:3], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:81, 1:3] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -250,7 +251,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:5, 1:5, 1:112, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:5, 1:5, 1:64, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:64], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:64], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:64, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:64, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -267,7 +268,7 @@
 #' 
 #' @examples
 #' str(dataset08)
-#' PlotEmpiricalOperatingCharacteristics(dataset = dataset08)$Plot
+#' PlotEmpiricalOperatingCharacteristics(dataset = dataset08, opChType = "ROC")$Plot
 #'
 #'
 "dataset08"
@@ -287,7 +288,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1, 1:10, 1:200, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1, 1:10, 1:80, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:80], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:80], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:80, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -302,7 +303,7 @@
 #' 
 #' @examples
 #' str(dataset09)
-#' PlotEmpiricalOperatingCharacteristics(dataset = dataset09, rdrs = 1:10)$Plot
+#' PlotEmpiricalOperatingCharacteristics(dataset = dataset09, rdrs = 1:10, opChType = "ROC")$Plot
 #'
 #'
 "dataset09"
@@ -321,7 +322,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:3, 1:8, 1:90, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:3, 1:8, 1:40, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:40], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:40], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:40, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:40, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -338,7 +339,7 @@
 #' 
 #' @examples
 #' str(dataset10)
-#' PlotEmpiricalOperatingCharacteristics(dataset = dataset10)$Plot
+#' PlotEmpiricalOperatingCharacteristics(dataset = dataset10, opChType = "ROC")$Plot
 #'
 #'
 "dataset10"
@@ -363,7 +364,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:4, 1:5, 1:158, 1:4], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:115, 1:20], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:115], number of lesions per diseased case}
+#' \item{\code{lesionVector}}{ array [1:115], number of lesions per diseased case}
 #' \item{\code{lesionID}}{ array [1:115, 20], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:115, 20] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -394,7 +395,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:4, 1:5, 1:152, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:88, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:88], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:88], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:88, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:88, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -424,7 +425,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:4, 1:5, 1:158, 1:4], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:4, 1:5, 1:106, 1:15], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:106], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:106], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:106, 15], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:106, 15] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -457,7 +458,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:4, 1:200, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:100, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:100], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:100], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:100, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:100, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -493,7 +494,7 @@
 #' \item{\code{NL}}{ Ratings array [1, 1:10, 1:200, 1], of false positives, FPs}
 #' \item{\code{LLCl}}{ Ratings array [1, 1:10, 1:80, 1], of true positives with correct localization, TPCls}
 #' \item{\code{LLIl}}{ Ratings array [1, 1:10, 1:80, 1], of true positives with incorrect localization, TPIls}
-#' \item{\code{lesionNum}}{ array [1:80], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:80], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:80, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "LROC", the data type}
@@ -525,7 +526,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:4, 1:11, 1:68, 1:5], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:4, 1:11, 1:34, 1:3], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:34], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:34], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:34, 3], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:34, 3] weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "FROC", the data type}
@@ -558,7 +559,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1:2, 1:5, 1:90, 1:4], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1:2, 1:5, 1:40, 1:4], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:40], number of lesions per diseased case, varies between 1 and 4}
+#' \item{\code{lesionVector}}{ array [1:40], number of lesions per diseased case, varies between 1 and 4}
 #' \item{\code{lesionID}}{ array [1:40, 1:4], labels of lesions on diseased cases}
 #' \item{\code{lesionWeight}}{ array [1:40, 1:4] weights (or clinical importance) of lesions, set to 1 divided by number of lesions in the case}
 #' \item{\code{dataType}}{ "ROI", the data type}
@@ -587,7 +588,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1, 1, 1:15, 1], of false positives, FPs}
 #' \item{\code{LL}}{ Ratings array [1, 1, 1:10, 1], of true positives, TPs}
-#' \item{\code{lesionNum}}{ array [1:10], number of lesions per diseased case, all set to 1}
+#' \item{\code{lesionVector}}{ array [1:10], number of lesions per diseased case, all set to 1}
 #' \item{\code{lesionID}}{ array [1:10, 1], labels of lesions on diseased cases, all set to 1}
 #' \item{\code{lesionWeight}}{ array [1:10, 1], weights (or clinical importance) of lesions, all set to 1}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -620,7 +621,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1, 1:2, 1:10000, 1], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1, 1:2, 1:5000, 1], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:5000], number of lesions per diseased case, all set to one}
+#' \item{\code{lesionVector}}{ array [1:5000], number of lesions per diseased case, all set to one}
 #' \item{\code{lesionID}}{ array [1:5000, 1], lesions labels on diseased cases, all set to one}
 #' \item{\code{lesionWeight}}{ array [1:5000, 1], weights, all set to one}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -650,7 +651,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1, 1:2, 1:10000, 1], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1, 1:2, 1:5000, 1], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:5000], number of lesions per diseased case, all set to one}
+#' \item{\code{lesionVector}}{ array [1:5000], number of lesions per diseased case, all set to one}
 #' \item{\code{lesionID}}{ array [1:5000, 1], lesions labels on diseased cases, all set to one}
 #' \item{\code{lesionWeight}}{ array [1:5000, 1], weights, all set to one}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -680,7 +681,7 @@
 #' \itemize{
 #' \item{\code{NL}}{ Ratings array [1, 1:2, 1:10000, 1], of non-lesion localizations, NLs}
 #' \item{\code{LL}}{ Ratings array [1, 1:2, 1:5000, 1], of lesion localizations, LLs}
-#' \item{\code{lesionNum}}{ array [1:5000], number of lesions per diseased case, all set to one}
+#' \item{\code{lesionVector}}{ array [1:5000], number of lesions per diseased case, all set to one}
 #' \item{\code{lesionID}}{ array [1:5000, 1], lesions labels on diseased cases, all set to one}
 #' \item{\code{lesionWeight}}{ array [1:5000, 1], weights, all set to one}
 #' \item{\code{dataType}}{ "ROC", the data type}
@@ -698,6 +699,33 @@
 #' str(datasetBinned125)
 #'
 "datasetBinned125"
+#'
+#'
+#' 
+#' Simulated FROC CAD vs. RAD dataset
+#'
+#' Simulated FROC CAD vs. RAD dataset suitable for checking code. It was generated 
+#'    from datasetCadLroc using SimulateFrocFromLrocData.R. 
+#'    
+#' 
+#' @format A list with 8 elements:
+#' \itemize{
+#' \item{\code{NL}}{ Ratings array [1, 1:10, 1:200, 1], of non-lesion localizations, NLs}
+#' \item{\code{LL}}{ Ratings array [1, 1:10, 1:80, 1], of lesion localizations, LLs}
+#' \item{\code{lesionVector}}{ array [1:80], number of lesions per diseased case, all set to one}
+#' \item{\code{lesionID}}{ array [1:80, 1], lesions labels on diseased cases, all set to one}
+#' \item{\code{lesionWeight}}{ array [1:80, 1], weights, all set to one}
+#' \item{\code{dataType}}{ "FROC", the data type}
+#' \item{\code{modalityID}}{ "1", treatment label}
+#' \item{\code{readerID}}{ [1:10] "1" "2",  reader labels}
+#' }
+#'
+#' @keywords datasets
+#'
+#' @examples
+#' str(datasetCadSimuFroc)
+#'
+"datasetCadSimuFroc"
 #'
 #'
 

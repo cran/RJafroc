@@ -2,26 +2,47 @@
 % Please edit documentation in R/SsPowerGivenJK.R
 \name{SsPowerGivenJK}
 \alias{SsPowerGivenJK}
-\title{Statistical power for specified numbers of readers and cases in an ROC study}
+\title{Statistical power for specified numbers of readers and cases}
 \usage{
-SsPowerGivenJK(dataset, J, K, method = "DBMH", option = "ALL",
-  alpha = 0.05, ...)
+SsPowerGivenJK(
+  dataset,
+  ...,
+  FOM,
+  FPFValue = 0.2,
+  J,
+  K,
+  effectSize = NULL,
+  method = "DBMH",
+  option = "ALL",
+  alpha = 0.05
+)
 }
 \arguments{
-\item{dataset}{The \bold{pilot} ROC dataset to be used to extrapolate to the \bold{pivotal} study. If 
-missing, then variance components and effectSize must be passed as additional parameters.}
+\item{dataset}{The \bold{pilot} dataset. If set to NULL 
+then variance components must be supplied.}
+
+\item{...}{Optional variance components, varYTR, varYTC and varYEps. These are
+needed if dataset is not supplied.}
+
+\item{FOM}{The figure of merit}
+
+\item{FPFValue}{Only needed for \code{LROC} data \strong{and} FOM = "PCL" or "ALROC";
+where to evaluate a partial curve based figure of merit. The default is 0.2.}
 
 \item{J}{The number of readers in the pivotal study.}
 
 \item{K}{The number of cases in the pivotal study.}
 
-\item{method}{"DBMH" or "ORH".}
+\item{effectSize}{The effect size to be used in the \strong{pivotal} study.
+Default is NULL, which uses the observed effect size in the pilot dataset. 
+Must be supplied if dataset is set to NULL and variance 
+components are supplied.}
+
+\item{method}{"DBMH" (the default) or "ORH".}
 
 \item{option}{Desired generalization, "RRRC", "FRRC", "RRFC" or "ALL" (the default).}
 
 \item{alpha}{The significance level, default is 0.05.}
-
-\item{...}{Other parameters, OR or DBM variance components, passed internally, see details}
 }
 \value{
 The expected statistical power.
@@ -31,14 +52,24 @@ Calculate the statistical power for specified numbers of readers J,
    cases K, analysis method and DBM or OR variances components
 }
 \details{
-Other parameters \code{...} are reserved for internal use.
+The default \code{effectSize} uses the observed effect size in the pilot 
+   study. A numeric value over-rides the default value. This argument must be supplied 
+   if dataset = NULL and variance compenents (the ... arguments) are supplied.
 }
 \examples{
-## An example of sample size calculation with DBM variance componements
-SsPowerGivenJK(dataset02, 6, 251, method = "DBMH")
+## the following two should give identical results
+SsPowerGivenJK(dataset02, FOM = "Wilcoxon", effectSize = 0.05, J = 6, K = 251, method = "DBMH")
+a <- UtilVarComponentsDBM(dataset02, FOM = "Wilcoxon")$varComp
+SsPowerGivenJK(dataset = NULL, J = 6, K = 251, effectSize = 0.05, method = "DBMH", 
+                    list(varYTR = a$varTR, varYTC = a$varTC, varYEps = a$varErr))
                      
-## An example of sample size calculation with OR variance componements.
-SsPowerGivenJK(dataset02, 6, 251, method = "ORH")
+## the following two should give identical results
+SsPowerGivenJK(dataset02, FOM = "Wilcoxon", effectSize = 0.05, J = 6, K = 251, method = "ORH")
+a <- UtilVarComponentsOR(dataset02, FOM = "Wilcoxon")$varComp
+KStar <- length(dataset02$NL[1,1,,1])
+SsPowerGivenJK(dataset = NULL, effectSize = 0.05, J = 6, K = 251, method = "ORH", 
+   list(KStar = KStar, varTR = a$varTR, cov1 = a$cov1, cov2 = a$cov2, 
+   cov3 = a$cov3, varEps = a$var))
 
 }
 \references{

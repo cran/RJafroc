@@ -21,6 +21,8 @@ double comp_phi( double a, double b )
   
   return ret ;
 }
+
+
 // [[Rcpp::export]]
 double TrapezoidalArea(NumericVector noise, int n_noise, NumericVector signal, int n_signal )
 {
@@ -286,7 +288,7 @@ double SongA2( int ncases_nor, int ncases_abn, int max_nl, int max_ll, NumericVe
 }
 
 // [[Rcpp::export]]
-double JAFROC1( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll )
+double FOM_AFROC1( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll )
 {
   int nles_total = 0 ;
   for( int k = 0 ; k < max_cases[ 1 ] ; k++ ) {
@@ -312,7 +314,7 @@ double JAFROC1( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_
 }
 
 // [[Rcpp::export]]
-double JAFROC( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll )
+double FOM_AFROC( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll )
 {
   int nles_total = 0 ;
   for( int k = 0 ; k < max_cases[ 1 ] ; k++ ) {
@@ -338,7 +340,7 @@ double JAFROC( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_i
 }
 
 // [[Rcpp::export]]
-double wJAFROC1( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll, NumericMatrix weights )
+double FOM_wAFROC1( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll, NumericMatrix weights )
 {
   double ret = 0.0 ;
   
@@ -358,7 +360,7 @@ double wJAFROC1( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per
 }
 
 // [[Rcpp::export]]
-double wJAFROC( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll, NumericMatrix weights )
+double FOM_wAFROC( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll, NumericMatrix weights )
 {
   double  ret = 0.0 ;
 

@@ -1,8 +1,8 @@
 Package: RJafroc
 Type: Package
 Title: Analyzing Diagnostic Observer Performance Studies
-Version: 1.3.1
-Date: 2020-01-31
+Version: 1.3.2
+Date: 2020-03-06
 Authors@R: c(person("Dev", "Chakraborty", role = c("cre","aut","cph"), email = "dpc10ster@gmail.com"),
              person("Peter", "Philips", role = c("aut"), email = "peter.phillips@cumbria.ac.uk"),
              person("Xuetong", "Zhai", role = c("aut"), email = "xuetong.zhai@gmail.com"),
@@ -51,7 +51,7 @@ URL: https://dpc10ster.github.io/RJafroc/
 RoxygenNote: 7.0.2
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2020-01-13 20:54:28 UTC; Dev
+Packaged: 2020-03-06 18:10:59 UTC; Dev
 Author: Dev Chakraborty [cre, aut, cph],
   Peter Philips [aut],
   Xuetong Zhai [aut],
@@ -59,4 +59,4 @@ Author: Dev Chakraborty [cre, aut, cph],
   Alejandro RodriguezRuiz [ctb]
 Maintainer: Dev Chakraborty <dpc10ster@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-01-13 23:10:13 UTC
+Date/Publication: 2020-03-06 18:40:02 UTC

@@ -1,25 +1,25 @@
 # Old Code from 0.0.1 (the first version on CRAN)
 # The error in p-value (noted by Lucy A) has been corrected below
 # Otherwise the code is identical to XZ code
-DBMHAnalysis <- function(dataset, FOM, alpha, option) 
+DBMHAnalysis <- function(dataset, FOM, alpha, analysisOption) 
 {
-  NL <- dataset$NL
-  LL <- dataset$LL
-  lesionVector <- dataset$lesionVector
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  lesionVector <- dataset$lesions$perCase
   lesionID <- dataset$lesionID
-  lesionWeight <- dataset$lesionWeight
+  lesionWeight <- dataset$lesions$weights
   maxNL <- dim(NL)[4]
-  dataType <- dataset$dataType
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  dataType <- dataset$descriptions$type
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]
   K2 <- dim(LL)[3]
   K1 <- K - K2
   
-  if (!option %in% c("RRRC", "FRRC", "RRFC", "ALL")){
-    errMsg <- sprintf("%s is not an available option.", option)
+  if (!analysisOption %in% c("RRRC", "FRRC", "RRFC", "ALL")){
+    errMsg <- sprintf("%s is not an available analysisOption.", analysisOption)
     stop(errMsg)
   }    
   
@@ -209,7 +209,7 @@ DBMHAnalysis <- function(dataset, FOM, alpha, option)
   
   msNum <- msT
   
-  if (option %in% c("RRRC", "ALL")) {
+  if (analysisOption %in% c("RRRC", "ALL")) {
     # ************ RRRC ****************
     if (J > 1) {
       msDenRRRC <- msTR + max(msTC - msTRC, 0)
@@ -248,12 +248,12 @@ DBMHAnalysis <- function(dataset, FOM, alpha, option)
       ciDiffTrtRRRC <- NA
       ciAvgRdrEachTrtRRRC <- NA
     }
-    if (option == "RRRC")
+    if (analysisOption == "RRRC")
       return(list(fomArray = fomArray, anovaY = anovaY, anovaYi = msSingleTable, varComp = varComp, 
                   fRRRC = fRRRC, ddfRRRC = ddfRRRC, pRRRC = pRRRC, ciDiffTrtRRRC = ciDiffTrtRRRC, ciAvgRdrEachTrtRRRC = ciAvgRdrEachTrtRRRC))
   }
   
-  if (option %in% c("FRRC", "ALL")) {
+  if (analysisOption %in% c("FRRC", "ALL")) {
     # ************ FRRC ****************
     msDenFRRC <- msTC
     fFRRC <- msNum/msDenFRRC
@@ -347,13 +347,13 @@ DBMHAnalysis <- function(dataset, FOM, alpha, option)
     }
     ciDiffTrtEachRdr <- data.frame(Reader = readerNames, Treatment = trNames, Estimate = diffTRMeansFRRC, StdErr = stdErrFRRC, DF = dfReaderFRRC, t = tStat, p = tPr, CI = CIReaderFRRC)
     colnames(ciDiffTrtEachRdr) <- c("Reader", "Treatment", "Estimate", "StdErr", "DF", "t", "Pr > t", "CI Lower", "CI Upper")
-    if (option == "FRRC")
+    if (analysisOption == "FRRC")
       return(list(fomArray = fomArray, anovaY = anovaY, anovaYi = msSingleTable, varComp = varComp, 
                   fFRRC = fFRRC, ddfFRRC = ddfFRRC, pFRRC = pFRRC, ciDiffTrtFRRC = ciDiffTrtFRRC, ciAvgRdrEachTrtFRRC = ciAvgRdrEachTrtFRRC, 
                   ssAnovaEachRdr = ssTableFRRC, msAnovaEachRdr = msTableFRRC, ciDiffTrtEachRdr = ciDiffTrtEachRdr))
   }
   
-  if (option %in% c("RRFC", "ALL")) {
+  if (analysisOption %in% c("RRFC", "ALL")) {
     # ************ RRFC ****************
     if (J > 1) {
       msDenRRFC <- msTR
@@ -391,7 +391,7 @@ DBMHAnalysis <- function(dataset, FOM, alpha, option)
       ciDiffTrtRRFC <- NA
       ciAvgRdrEachTrtRRFC <- NA
     }
-    if (option == "RRFC")
+    if (analysisOption == "RRFC")
       return(list(fomArray = fomArray, anovaY = anovaY, anovaYi = msSingleTable, varComp = varComp, 
                   fRRFC = fRRFC, ddfRRFC = ddfRRFC, pRRFC = pRRFC, ciDiffTrtRRFC = ciDiffTrtRRFC, ciAvgRdrEachTrtRRFC = ciAvgRdrEachTrtRRFC))
   }
@@ -407,16 +407,16 @@ DBMHAnalysis <- function(dataset, FOM, alpha, option)
 # Old Code from 0.0.1 (the first version on CRAN)
 # The error in p-value (noted by Lucy A) has been corrected below
 # Otherwise the code is identical to XZ code
-ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option) 
+ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, analysisOption) 
 {
-  NL <- dataset$NL
-  LL <- dataset$LL
-  lesionVector <- dataset$lesionVector
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  lesionVector <- dataset$lesions$perCase
   lesionID <- dataset$lesionID
   lesionWeight <- dataset$lesionWeight
   maxNL <- dim(NL)[4]
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]
@@ -425,8 +425,8 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
   dim(NL) <- c(I, J, K, maxNL)
   dim(LL) <- c(I, J, K2, max(lesionVector))
   
-  if (!option %in% c("RRRC", "FRRC", "RRFC", "ALL")){
-    errMsg <- sprintf("%s is not an available option.", option)
+  if (!analysisOption %in% c("RRRC", "FRRC", "RRFC", "ALL")){
+    errMsg <- sprintf("%s is not an available analysisOption.", analysisOption)
     stop(errMsg)
   }    
   
@@ -434,12 +434,12 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
     stop("The analysis requires at least 2 modalities")
   }
   
-  if (!covEstMethod %in% c("Jackknife", "Bootstrap", "DeLong")) {
+  if (!covEstMethod %in% c("jackknife", "bootstrap", "DeLong")) {
     errMsg <- paste0(covEstMethod, " is not an allowed covariance estimation method.")
     stop(errMsg)
   }
   
-  fomArray <- UtilFigureOfMerit(dataset, FOM)
+  fomArray <- as.matrix(UtilFigureOfMerit(dataset, FOM))
   trMeans <- rowMeans(fomArray)
   fomMean <- mean(fomArray)
   
@@ -528,7 +528,7 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
   msNum <- msT
   
   # ************ RRRC ****************
-  if (option %in% c("RRRC", "ALL")) {
+  if (analysisOption %in% c("RRRC", "ALL")) {
     if (J > 1) {
       msDenRRRC <- msTR + max(J * (cov2 - cov3), 0)
       fRRRC <- msNum/msDenRRRC
@@ -566,14 +566,14 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
       ciDiffTrtRRRC <- NA
       ciAvgRdrEachTrtRRRC <- NA
     }
-    if (option == "RRRC"){
+    if (analysisOption == "RRRC"){
       return(list(fomArray = fomArray, msT = msT, msTR = msTR, varComp = varComp, 
                   fRRRC = fRRRC, ddfRRRC = ddfRRRC, pRRRC = pRRRC, ciDiffTrtRRRC = ciDiffTrtRRRC, ciAvgRdrEachTrtRRRC = ciAvgRdrEachTrtRRRC))
     }
   }
   
   # ************ FRRC ****************
-  if (option %in% c("FRRC", "ALL")) {
+  if (analysisOption %in% c("FRRC", "ALL")) {
     if (J > 1) {
       msDenFRRC <- var - cov1 + (J - 1) * (cov2 - cov3)
     } else {
@@ -643,7 +643,7 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
     
     varCovEachRdr <- data.frame(readerID, varEchRder, cov1EchRder)
     colnames(varCovEachRdr) <- c("Reader", "Var", "Cov1")
-    if (option == "FRRC"){
+    if (analysisOption == "FRRC"){
       return(list(fomArray = fomArray, msT = msT, msTR = msTR, varComp = varComp, 
                   fFRRC = fFRRC, ddfFRRC = ddfFRRC, pFRRC = pFRRC, ciDiffTrtFRRC = ciDiffTrtFRRC, ciAvgRdrEachTrtFRRC = ciAvgRdrEachTrtFRRC, ciDiffTrtEachRdr = ciDiffTrtEachRdr, varCovEachRdr = varCovEachRdr
       ))
@@ -651,7 +651,7 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
   }
   
   # ************ RRFC ****************
-  if (option %in% c("RRFC", "ALL")) {
+  if (analysisOption %in% c("RRFC", "ALL")) {
     if (J > 1) {
       msDenRRFC <- msTR
       fRRFC <- msNum/msDenRRFC
@@ -688,7 +688,7 @@ ORHAnalysis <- function(dataset, FOM, alpha, covEstMethod, nBoots, option)
       ciDiffTrtRRFC <- NA
       ciAvgRdrEachTrtRRFC <- NA
     }
-    if (option == "RRFC"){
+    if (analysisOption == "RRFC"){
       return(list(fomArray = fomArray, msT = msT, msTR = msTR, varComp = varComp, 
                   fRRFC = fRRFC, ddfRRFC = ddfRRFC, pRRFC = pRRFC, ciDiffTrtRRFC = ciDiffTrtRRFC, ciAvgRdrEachTrtRRFC = ciAvgRdrEachTrtRRFC))
     }
@@ -711,7 +711,7 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionVector, lesionID, lesionWeigh
   K2 <- dim(LL)[3]
   
   K1 <- K - K2
-  if (covEstMethod == "Jackknife") {
+  if (covEstMethod == "jackknife") {
     if (fom %in% c("MaxNLF", "ExpTrnsfmSp", "HrSp")) {
       jkFOMArray <- array(dim = c(I, J, K1))
       for (i in 1:I) {
@@ -760,15 +760,14 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionVector, lesionID, lesionWeigh
         }
       }
     }
-    K <- length(jkFOMArray[1, 1, ])
-    Cov <- ResamplingEstimateVarCovs(jkFOMArray)
-    var <- Cov$var * (K - 1)^2/K  # see paper by Efron and Stein
-    cov1 <- Cov$cov1 * (K - 1)^2/K
-    cov2 <- Cov$cov2 * (K - 1)^2/K
-    cov3 <- Cov$cov3 * (K - 1)^2/K
+    Cov <- FOMijk2VarCov(jkFOMArray, varInflFactor = TRUE)
+    var <- Cov$Var
+    cov1 <- Cov$Cov1
+    cov2 <- Cov$Cov2
+    cov3 <- Cov$Cov3
   }
   
-  if (covEstMethod == "Bootstrap") {
+  if (covEstMethod == "bootstrap") {
     if (fom %in% c("MaxNLF", "ExpTrnsfmSp", "HrSp")) {
       fomBsArray <- array(dim = c(I, J, nBoots))
       for (b in 1:nBoots) {
@@ -813,7 +812,7 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionVector, lesionID, lesionWeigh
         }
       }
     }
-    Cov <- ResamplingEstimateVarCovs(fomBsArray)
+    Cov <- FOMijk2VarCov(fomBsArray, varInflFactor = FALSE)
     var <- Cov$var
     cov1 <- Cov$cov1
     cov2 <- Cov$cov2
@@ -921,14 +920,20 @@ EstimateVarCov <- function(fomArray, NL, LL, lesionVector, lesionID, lesionWeigh
       }
       S <- s10/K2 + s01/K1
     }
-    Cov <- ResamplingEstimateVarCovs(S)
+    
+    Cov <- FOMijk2VarCov(S, varInflFactor = FALSE)
     var <- Cov$var
     cov1 <- Cov$cov1
     cov2 <- Cov$cov2
     cov3 <- Cov$cov3
   }
   
-  return(list(var = var, cov1 = cov1, cov2 = cov2, cov3 = cov3))
+  return(list(
+    var = var, 
+    cov1 = cov1, 
+    cov2 = cov2, 
+    cov3 = cov3
+  ))
 } 
 
 
@@ -943,7 +948,7 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
   if (fom == "Wilcoxon") {
     truth <- c(rep(0, K1), rep(1, K2))
     ratings <- c(nl[1:K1], ll)
-    FOM <- CalculateTrapezoidalArea(ratings, truth)
+    FOM <- TrapezoidalArea1(ratings, truth)
   } else if (fom == "HrAuc") {
     truth <- c(rep(0, K1), rep(1, K2))
     ratings <- array(dim = c(K1 + K2))
@@ -957,7 +962,7 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
       ratings[k] <- max(c(nl[k, ], ll[k - K1, ]))
     }
     
-    FOM <- CalculateTrapezoidalArea(ratings, truth)
+    FOM <- TrapezoidalArea1(ratings, truth)
   } else if (fom == "HrSe") {
     tpCount <- 0
     for (k in 1:K2) {
@@ -1029,7 +1034,7 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
       }
     }
     FOM <- tw/(K1 * K2) + px0/K1 * (1 - 0.5 * py0/K2)
-  } else if (fom == "FOM_AFROC1") {
+  } else if (fom == "AFROC1") {
     numLesTotal <- sum(lesionNum)
     les <- as.vector(ll[lesionID != UNINITIALIZED])
     fp <- array(dim = c(K))
@@ -1038,7 +1043,7 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
     }
     ratings <- c(fp, les)
     truth <- c(rep(0, K), rep(1, numLesTotal))
-    FOM <- CalculateTrapezoidalArea(ratings, truth)
+    FOM <- TrapezoidalArea1(ratings, truth)
   } else if (fom == "JAFROC") {
     numLesTotal <- sum(lesionNum)
     les <- as.vector(ll[lesionID != UNINITIALIZED])
@@ -1048,8 +1053,8 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
     }
     ratings <- c(fp, les)
     truth <- c(rep(0, K1), rep(1, length(les)))
-    FOM <- CalculateTrapezoidalArea(ratings, truth)
-  } else if (fom == "FOM_wAFROC1") {
+    FOM <- TrapezoidalArea1(ratings, truth)
+  } else if (fom == "wAFROC1") {
     numLesTotal <- sum(lesionNum)
     les <- as.vector(ll[lesionID != UNINITIALIZED])
     fp <- array(dim = c(K))
@@ -1059,8 +1064,8 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
     ratings <- c(fp, les)
     truth <- c(rep(0, K), rep(1, numLesTotal))
     weights <- lesionWeight[lesionWeight != UNINITIALIZED]
-    FOM <- CalculateTrapezoidalAreaWeighted(ratings, truth, weights, K2)
-  } else if (fom == "FOM_wAFROC") {
+    FOM <- TrapezoidalAreaWeighted(ratings, truth, weights, K2)
+  } else if (fom == "wAFROC") {
     numLesTotal <- sum(lesionNum)
     les <- as.vector(ll[lesionID != UNINITIALIZED])
     fp <- array(dim = c(K1))
@@ -1070,7 +1075,7 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
     ratings <- c(fp, les)
     truth <- c(rep(0, K1), rep(1, numLesTotal))
     weights <- lesionWeight[lesionWeight != UNINITIALIZED]
-    FOM <- CalculateTrapezoidalAreaWeighted(ratings, truth, weights, K2)
+    FOM <- TrapezoidalAreaWeighted(ratings, truth, weights, K2)
   } else if (fom == "MaxLLF") {
     numMarksTotal <- sum(ll != UNINITIALIZED)
     numLesTotal <- sum(lesionNum)
@@ -1107,7 +1112,7 @@ MyFOMOldCode <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, fom) 
 
 
 
-CalculateTrapezoidalArea <- function(rocRatings, truth) {
+TrapezoidalArea1 <- function(rocRatings, truth) {
   K2 <- sum(truth)
   K1 <- length(truth) - K2
   
@@ -1127,7 +1132,7 @@ CalculateTrapezoidalArea <- function(rocRatings, truth) {
 
 
 
-CalculateTrapezoidalAreaWeighted <- function(rocRatings, truth, weights, numAbn) {
+TrapezoidalAreaWeighted <- function(rocRatings, truth, weights, numAbn) {
   K2 <- sum(truth)
   K1 <- length(truth) - K2
   

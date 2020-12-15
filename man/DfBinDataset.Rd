@@ -34,39 +34,26 @@ unique choice of ctffs which gives the reader the maximum deserved credit).
 }
 \examples{
 \donttest{
-binned <- DfBinDataset(dataset05, opChType = "ROC")
-PlotEmpiricalOperatingCharacteristics(dataset05, 
-trts= c(1,2), rdrs = seq(1,9), opChType = "ROC")$Plot
-PlotEmpiricalOperatingCharacteristics(binned, trts= c(1,2), 
-rdrs = seq(1,9), opChType = "ROC")$Plot
-
-binned <- DfBinDataset(dataset05, opChType = "AFROC")
-PlotEmpiricalOperatingCharacteristics(dataset05, 
-trts= c(1,2), rdrs = seq(1,9), opChType = "AFROC")$Plot
-PlotEmpiricalOperatingCharacteristics(binned, trts= c(1,2), 
-rdrs = seq(1,9), opChType = "AFROC")$Plot
+binned <- DfBinDataset(dataset02, desiredNumBins = 3, opChType = "ROC")
+binned <- DfBinDataset(dataset05, desiredNumBins = 4, opChType = "ROC")
+binned <- DfBinDataset(dataset05, desiredNumBins = 4, opChType = "AFROC")
+binned <- DfBinDataset(dataset05, desiredNumBins = 4, opChType = "wAFROC")
+binned <- DfBinDataset(dataset05, opChType = "wAFROC", desiredNumBins = 1)
+binned <- DfBinDataset(dataset05, opChType = "wAFROC", desiredNumBins = 2)
+binned <- DfBinDataset(dataset05, opChType = "wAFROC", desiredNumBins = 3)
+## etc.
 }
  
-\dontrun{
+\donttest{
 ## takes longer than 5 sec on OSX
-library(ggplot2)
-dataset <- SimulateRocDataset(K1 = 5000, K2 = 7000, a = 1, b = 0.5, seed = 123)
+dataset <- SimulateRocDataset(I = 2, J = 5, K1 = 50, K2 = 70, a = 1, b = 0.5, seed = 123)
 datasetB <- DfBinDataset(dataset, desiredNumBins = 7, opChType = "ROC")
-fomOrg <- as.matrix(UtilFigureOfMerit(dataset, FOM = "Wilcoxon"), nrow = 2, ncol = 9)
+fomOrg <- as.matrix(UtilFigureOfMerit(dataset, FOM = "Wilcoxon"))
 print(fomOrg)
-fomBinned <- as.matrix(UtilFigureOfMerit(datasetB, FOM = "Wilcoxon"), nrow = 2, ncol = 9)
-print(fomOrg)
-cat("fomOrg = ", mean(fomOrg), "\n")
-cat("fomBinned = ", mean(fomBinned), "\n")
-x <- PlotEmpiricalOperatingCharacteristics(dataset, opChType = "ROC")$Plot
-y <- PlotEmpiricalOperatingCharacteristics(datasetB, opChType = "ROC")$Points
-fpf <- y$genAbscissa[-1];fpf <- fpf[-length(fpf)]
-tpf <- y$genOrdinate[-1];tpf <- tpf[-length(tpf)]
-plotOpPnts <- rbind(data.frame(fpf = fpf, tpf = tpf))
-x <- x + geom_point(data = plotOpPnts, aes(x = fpf, y = tpf), size = 4)
-print(x)
-xx <- PlotEmpiricalOperatingCharacteristics(datasetB, opChType = "ROC")
-print(xx$Points)
+fomBinned <- as.matrix(UtilFigureOfMerit(datasetB, FOM = "Wilcoxon"))
+print(fomBinned)
+cat("mean, sd = ", mean(fomOrg), sd(fomOrg), "\n")
+cat("mean, sd = ", mean(fomBinned), sd(fomBinned), "\n")
 }
 
 
@@ -76,6 +63,5 @@ Miller GA (1956) The Magical Number Seven, Plus or Minus Two:
 Some limits on our capacity for processing information, The Psychological Review 63, 81-97
 
 Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
-Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-\url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
+Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL.
 }

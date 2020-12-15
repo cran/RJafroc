@@ -15,7 +15,7 @@ UtilFigureOfMerit(dataset, FOM = "wAFROC", FPFValue = 0.2)
 where to evaluate a partial curve based figure of merit. The default is 0.2.}
 }
 \value{
-An \code{c(I, J)} array, where the row names are \code{modalityID}'s of the 
+An \code{c(I, J)} dataframe, where the row names are \code{modalityID}'s of the 
    treatments and column names are the \code{readerID}'s of the readers.
 }
 \description{
@@ -25,24 +25,25 @@ Calculate the specified empirical figure of merit
 }
 \details{
 The allowed FOMs depend on the \code{dataType} field of the 
-   \code{dataset} object.
+   \code{dataset} object.  
 
-   For a \strong{\code{dataType = "ROC" dataset} only \code{FOM = "Wilcoxon"} is allowed}.
-   
-   For a \strong{\code{dataType = "FROC"}} dataset the following FOMs are allowed:
+   \strong{For \code{dataset$descriptions$design = "SPLIT-PLOT-C"}, end-point based 
+   FOMs (e.g., "MaxLLF") are not allowed}.
+   \strong{For \code{dataset$descriptions$type = "ROC"} only \code{FOM = "Wilcoxon"} is allowed}.
+   \strong{For \code{dataset$descriptions$type = "FROC"} the following FOMs are allowed}:
    \itemize{ 
-   \item \code{FOM = "AFROC1"} 
+   \item \code{FOM = "AFROC1"} (use only if zero normal cases)
    \item \code{FOM = "AFROC"} 
-   \item \code{FOM = "wAFROC1"} 
+   \item \code{FOM = "wAFROC1"} (use only if zero normal cases)
    \item \code{FOM = "wAFROC"} (the default) 
    \item \code{FOM = "HrAuc"} 
    \item \code{FOM = "SongA1"} 
    \item \code{FOM = "SongA2"}  
-   \item \code{FOM = "HrSe"} 
-   \item \code{FOM = "HrSp"} 
-   \item \code{FOM = "MaxLLF"} 
-   \item \code{FOM = "MaxNLF"} 
-   \item \code{FOM = "MaxNLFAllCases"} 
+   \item \code{FOM = "HrSe"} (an example of an end-point based FOM)
+   \item \code{FOM = "HrSp"} (another example)
+   \item \code{FOM = "MaxLLF"} (do:)
+   \item \code{FOM = "MaxNLF"} (do:)
+   \item \code{FOM = "MaxNLFAllCases"} (do:) 
    \item \code{FOM = "ExpTrnsfmSp"}  
    } 
    \code{"MaxLLF"}, \code{"MaxNLF"} and \code{"MaxNLFAllCases"}
@@ -50,11 +51,12 @@ The allowed FOMs depend on the \code{dataType} field of the
    on the FROC operating characteristic obtained by counting all the marks. 
    The \code{"ExpTrnsfmSp"} FOM is described in the paper by Popescu. 
    Given the large number of FOMs possible with FROC data, it is appropriate 
-   to make a recommendation: \strong{it is recommended that one use the wAFROC FOM.}
+   to make a recommendation: \strong{it is recommended that one use the wAFROC FOM
+   whenever possible.}
    
-   For a \strong{\code{dataType = "ROI"} dataset only \code{FOM = "ROI"} is allowed}.
+   For \strong{\code{dataType = "ROI"} dataset only \code{FOM = "ROI"} is allowed}.
    
-   For a \strong{\code{dataType = "LROC"}} dataset the following FOMs are allowed:
+   For \strong{\code{dataType = "LROC"}} dataset the following FOMs are allowed:
    \itemize{
    \item \code{FOM = "Wilcoxon"} for ROC data inferred from LROC data 
    \item \code{FOM = "PCL"} the probability of correct localization at specified \code{FPFValue}
@@ -71,16 +73,15 @@ UtilFigureOfMerit(datasetCadLroc, FOM = "Wilcoxon") #LROC data
 UtilFigureOfMerit(datasetCadLroc, FOM = "PCL") #LROC data
 UtilFigureOfMerit(datasetCadLroc, FOM = "ALROC") #LROC data
 UtilFigureOfMerit(datasetROI, FOM = "ROI") #ROI data
-\dontrun{ # these are meant to illustrate conditions which will throw an error
-UtilFigureOfMerit(dataset02, FOM = "wAFROC") #error
-UtilFigureOfMerit(dataset01, FOM = "Wilcoxon") #error
+\donttest{ # these are meant to illustrate conditions which will throw an error
+## UtilFigureOfMerit(dataset02, FOM = "wAFROC") #error
+## UtilFigureOfMerit(dataset01, FOM = "Wilcoxon") #error
 }
 
 }
 \references{
 Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-\url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 
 Chakraborty DP, Berbaum KS (2004) Observer studies involving detection and localization: modeling, analysis, and validation, 
 Medical Physics, 31(8), 1--18.

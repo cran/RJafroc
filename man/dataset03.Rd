@@ -4,17 +4,28 @@
 \name{dataset03}
 \alias{dataset03}
 \title{Franken ROC dataset}
-\format{A list with 8 elements:
+\format{
+A list with 3 elements: \code{$ratings}, \code{$lesions} and \code{$descriptions}; \code{$ratings}
+   contain 3 elements, \code{$NL}, \code{$LL} and \code{$LL_IL} as sub-lists; \code{$lesions}
+   contain 3 elements, \code{$perCase}, \code{$IDs} and \code{$weights} as sub-lists; \code{$descriptions}
+   contain 7 elements, \code{$fileName}, \code{$type}, \code{$name},
+   \code{$truthTableStr}, \code{$design}, \code{$modalityID} and \code{$readerID} as sub-lists;
 \itemize{
-\item{\code{NL}}{ Ratings array [1:2, 1:4, 1:100, 1], of false positives, FPs}
-\item{\code{LL}}{ Ratings array [1:2, 1:4, 1:67, 1], of true positives, TPs}
-\item{\code{lesionVector}}{ array [1:67], number of lesions per diseased case, all set to 1}
-\item{\code{lesionID}}{ array [1:67, 1], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:67, 1], weights (or clinical importance) of lesions, all set to 1}
-\item{\code{dataType}}{ "ROC", the data type}
-\item{\code{modalityID}}{ [1:2] "TREAT1" "TREAT2", the treatment labels}
-\item{\code{readerID}}{ [1:4] "READER_1" "READER_2" "READER_3" "READER_4", the reader labels}
-}}
+\item{\code{rating$NL}}{, num [1:2, 1:4, 1:100, 1], ratings of non-lesion localizations, NLs}
+\item{\code{rating$LL}}{, num [1:2, 1:4, 1:67, 1], ratings of lesion localizations, LLs}
+\item{\code{rating$LL_IL}}{NA, this placeholder is used only for LROC data}
+\item{\code{lesions$perCase}}{, int [1:67], number of lesions per diseased case}
+\item{\code{lesions$IDs}}{, num [1:67, 1], numeric labels of lesions on diseased cases}
+\item{\code{lesions$weights}}{, num [1:67, 1], weights (or clinical importances) of lesions}
+\item{\code{descriptions$fileName}}{, chr, "dataset03", base name of dataset in `data` folder}
+\item{\code{descriptions$type}}{, chr "ROC", the data type}
+\item{\code{descriptions$name}}{, chr "FRANKEN", the name of the dataset}
+\item{\code{descriptions$truthTableStr}}{, num [1:2, 1:4, 1:100, 1:2], truth table structure}
+\item{\code{descriptions$design}}{, chr "FCTRL", study design, factorial dataset}
+\item{\code{descriptions$modalityID}}{, chr [1:2] "TREAT1" "TREAT2", treatment labels}
+\item{\code{descriptions$readerID}}{, chr chr [1:4] "READER_1" "READER_2" "READER_3" "READER_4", reader labels}
+}
+}
 \usage{
 dataset03
 }

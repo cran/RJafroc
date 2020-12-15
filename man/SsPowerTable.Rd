@@ -2,7 +2,7 @@
 % Please edit documentation in R/SsPowerTable.R
 \name{SsPowerTable}
 \alias{SsPowerTable}
-\title{Generate a power table}
+\title{Generate a power table using the OR method}
 \usage{
 SsPowerTable(
   dataset,
@@ -10,8 +10,7 @@ SsPowerTable(
   effectSize = NULL,
   alpha = 0.05,
   desiredPower = 0.8,
-  method = "DBMH",
-  option = "ALL"
+  analysisOption = "RRRC"
 )
 }
 \arguments{
@@ -27,12 +26,11 @@ default value is \code{NULL}. See Details.}
 
 \item{desiredPower}{The desired statistical power, default is 0.8.}
 
-\item{method}{Analysis method, "DBMH" or "ORH", the default is "DBMH".}
-
-\item{option}{Desired generalization, "RRRC", "FRRC", "RRFC" or "ALL" (the default).}
+\item{analysisOption}{Desired generalization, "RRRC"  (the default), "FRRC", 
+"RRFC" or "ALL".}
 }
 \value{
-A list containing up to 3 (depending on \code{options}) dataframes. 
+A list containing up to 3 (depending on \code{analysisOption}) dataframes. 
     Each dataframe contains 3 arrays:
 
 \item{numReaders}{The numbers of readers in the pivotal study.}
@@ -42,15 +40,16 @@ A list containing up to 3 (depending on \code{options}) dataframes.
 \item{power}{The estimated statistical powers.}
 }
 \description{
-Generate combinations of numbers of readers J and numbers of cases K
-   for desired power and specified generalization(s)
+Generate combinations of numbers of readers J and numbers of 
+   cases K for desired power and specified generalization(s)
 }
 \details{
 The default \code{effectSize} uses the observed effect size in the 
-   pilot study. A numeric value over-rides the default value.
+   pilot study. A supplied numeric value over-rides the default value.
 }
 \note{
-The procedure is valid for ROC studies only; for FROC studies see Online Appendix Chapter 19.
+The procedure is valid for ROC studies only; for FROC studies see 
+  Vignettes 19.
 }
 \examples{
 \donttest{
@@ -58,11 +57,8 @@ The procedure is valid for ROC studies only; for FROC studies see Online Appendi
 ##              user    system elapsed
 ## SsPowerTable 20.033  0.037  20.077    
 
-## Example of sample size calculation with DBM method
-SsPowerTable(dataset02, FOM = "Wilcoxon", method = "DBMH")
-
 ## Example of sample size calculation with OR method
-SsPowerTable(dataset02, FOM = "Wilcoxon", method = "ORH")
+## SsPowerTable(dataset02, FOM = "Wilcoxon", method = "OR")
 }
  
 }

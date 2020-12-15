@@ -34,7 +34,6 @@
 #' @references 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-#' \url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #' @importFrom stats rpois rnorm rbinom
 #' 
@@ -89,7 +88,8 @@ SimulateLrocDataset <- function(mu, lambda, nu, zeta1, I, J, K1, K2, lesionVecto
     lesionWeight = lesWght,
     dataType = "FROC",
     modalityID = modalityID,
-    readerID = readerID
+    readerID = readerID,
+    datasetName = "Ignore"
   )
   
   lrocDataSet <- DfFroc2Lroc(FrocDataset) # convert to LROC dataset

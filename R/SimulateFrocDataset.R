@@ -3,7 +3,7 @@
 #' @description  Simulates an uncorrelated MRMC FROC dataset for specified numbers of
 #'    readers and treatments 
 #' 
-#' @param mu     The intrinsic mu parameter of the RSM
+#' @param mu     The mu parameter of the RSM
 #' @param lambda The intrinsic lambda parameter of the RSM (not the physical parameter)
 #' @param nu     The intrinsic nu parameter of the RSM (not the physical parameter)
 #' @param zeta1  The lowest reporting threshold
@@ -11,7 +11,9 @@
 #' @param J      The number of readers
 #' @param K1     The number of non-diseased cases
 #' @param K2     The number of diseased cases
-#' @param lesionVector    A K2 length array containing the numbers of lesions per diseased case
+#' @param perCase    A K2 length array containing the numbers of lesions per diseased case
+#' @param seed  The initial seed for the random number generator, the default 
+#'     is \code{NULL}, as if no seed has been specified. 
 #' 
 #' @return The return value is an FROC dataset.
 #' 
@@ -21,28 +23,30 @@
 #' @examples
 #' set.seed(1) 
 #' K1 <- 5;K2 <- 7;
-#' maxLL <- 2;lesionVector <- floor(runif(K2, 1, maxLL + 1))
+#' maxLL <- 2;perCase <- floor(runif(K2, 1, maxLL + 1))
 #' mu <- 1;lambda <- 1;nu <- 1 ;zeta1 <- -1
 #' I <- 2; J <- 5
 #' 
 #' frocDataRaw <- SimulateFrocDataset(
 #'   mu = mu, lambda = lambda, nu = nu, zeta1 = zeta1,
-#'   I = I, J = J, K1 = K1, K2 = K2, lesionVector = lesionVector )
+#'   I = I, J = J, K1 = K1, K2 = K2, perCase = perCase )
 #'   
 #' ## plot the data
 #' ret <- PlotEmpiricalOperatingCharacteristics(frocDataRaw, opChType = "FROC")
-#' print(ret$Plot)
+#' ## print(ret$Plot)
 #' 
 #' @references 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-#' \url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #' @importFrom stats rpois rnorm rbinom
 #' 
 #' @export
 
-SimulateFrocDataset <- function(mu, lambda, nu, zeta1, I, J, K1, K2, lesionVector){
+SimulateFrocDataset <- function(mu, lambda, nu, zeta1, I, J, K1, K2, perCase, seed = NULL){
+  
+  if (length(perCase) != K2) stop("SimulateFrocDataset: error in specification of number of lesions perCase vector.")
+  if (!is.null(seed)) set.seed(seed)
   lambdaP <- lambda/mu
   nuP <- 1-exp(-nu*mu)
   nNL <- rpois(I * J * (K1 + K2), lambdaP)
@@ -60,38 +64,38 @@ SimulateFrocDataset <- function(mu, lambda, nu, zeta1, I, J, K1, K2, lesionVecto
     }
   }
   
-  maxLL <- max(lesionVector)
+  maxLL <- max(perCase)
   LL <- array(-Inf, dim = c(I,J,K2, maxLL))
   
   for (i in 1:I) {
     for (j in 1:J) {  
       for (k in 1:K2){
-        nLL <- rbinom(1, lesionVector[k], nuP)
+        nLL <- rbinom(1, perCase[k], nuP)
         ll <- rnorm(nLL, mu)
         ll <- ll[order(ll, decreasing = TRUE)]
         ll[ll < zeta1] <- -Inf
         LL[i,j,k, ] <- c(ll, rep(-Inf, maxLL - nLL))
       }
       
-      lesID <- array(dim = c(K2, maxLL))
-      lesWght <- array(dim = c(K2, maxLL))
+      IDs <- array(dim = c(K2, maxLL))
+      weights <- array(dim = c(K2, maxLL))
       for (k in 1:K2){
-        lesID[k, ] <- c(1:lesionVector[k], rep(-Inf, maxLL - lesionVector[k]))
-        lesWght[k, ] <- c(rep(1 / lesionVector[k], lesionVector[k]), rep(-Inf, maxLL - lesionVector[k]))
+        IDs[k, ] <- c(1:perCase[k], rep(-Inf, maxLL - perCase[k]))
+        weights[k, ] <- c(rep(1 / perCase[k], perCase[k]), rep(-Inf, maxLL - perCase[k]))
       }
     }
   }  
   modalityID <- as.character(seq(1:I))
   readerID <- as.character(seq(1:J))
-  dataset <- list(
-    NL = NL, 
-    LL = LL,
-    lesionVector = lesionVector,
-    lesionID = lesID,
-    lesionWeight = lesWght,
-    dataType = "FROC",
-    modalityID = modalityID,
-    readerID = readerID
-  )
-  return(dataset)
+  fileName <- "NA"
+  name <- NA
+  design <- "FCTRL"
+  truthTableStr <- NA
+  type <- "FROC"
+  return(convert2dataset(NL, LL, LL_IL = NA, 
+                         perCase, IDs, weights,
+                         fileName, type, name, truthTableStr, design,
+                         modalityID, readerID))
 }
+
+

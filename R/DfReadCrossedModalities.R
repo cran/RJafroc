@@ -11,23 +11,13 @@
 #'    original data file will be used. The default is \code{FALSE}. 
 #' 
 #' @details The data format is  similar to the JAFROC format (see \code{\link{RJafroc-package}}). 
-#'    The notable difference is that there are two treatment factors. A sample crossed 
-#'    treatment file "CrossedModalitiesData.xlsx" is in the \code{inst\\extdata} 
-#'    subdirectory of \code{RJafroc}.
+#'    The notable difference is that there are two treatment factors. 
 #' 
 #' @return A dataset with the specified structure, similar to a standard 
-#'    \pkg{RJafroc}(see \code{\link{RJafroc-package}}). Because of the extra treatment factor, 
+#'    \pkg{RJafroc} dataset (see \code{\link{RJafroc-package}}). Because of the extra treatment factor, 
 #'    \code{NL} and \code{LL} are each five dimensional arrays. There are also two 
 #'    treatment IDS: \code{modalityID1} and \code{modalityID2}.
 #' 
-#' @examples
-#' 
-#' \donttest{
-#' crossedFileName <- system.file("extdata", 
-#'    "CrossedModalitiesData.xlsx", package = "RJafroc", mustWork = TRUE)
-#' crossedData <- DfReadCrossedModalities(crossedFileName)
-#' str(crossedData)
-#' }
 #' 
 #' @references 
 #' Thompson JD, Chakraborty DP, Szczepura K, et al. (2016) Effect of reconstruction 
@@ -37,20 +27,22 @@
 #' 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-#' \url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #' 
-#' @import openxlsx
+#' @import readxl
 #' @export
 DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
-  wb <- loadWorkbook(fileName)
-  sheetNames <- toupper(names(wb))
+  #wb <- loadWorkbook(fileName) # openxlsx
+  wb <- excel_sheets(fileName)
+  sheetNames <- toupper(wb)
   
+  # DfReadCrossedModalities FCTRL-X-MOD in truth worksheet
+  # 
   truthFileIndex <- which(!is.na(match(sheetNames, "TRUTH")))
   if (truthFileIndex == 0) 
     stop("TRUTH table cannot be found in the dataset.")
-  truthTable <- read.xlsx(fileName, truthFileIndex, cols = 1:3)
+  truthTable <- data.frame(read_xlsx(fileName, truthFileIndex, range = cell_cols(1:3) ) )
   
   for (i in 1:3){
     truthTable[grep("^\\s*$", truthTable[ , i]), i] <- NA
@@ -98,7 +90,7 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
   if (nlFileIndex == 0) 
     stop("FP/NL table cannot be found in the dataset.")
 
-  NLTable <- read.xlsx(fileName, nlFileIndex, cols = 1:5)
+  NLTable <- data.frame( read_xlsx(fileName, nlFileIndex, range = cell_cols(1:5) ) )
   
   for (i in 1:5){
     NLTable[grep("^\\s*$", NLTable[ , i]), i] <- NA
@@ -135,7 +127,7 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
   llFileIndex <- which(!is.na(match(sheetNames, c("TP", "LL"))))
   if (llFileIndex == 0) 
     stop("TP/LL table cannot be found in the dataset.")
-  LLTable <- read.xlsx(fileName, llFileIndex, cols = 1:6)
+  LLTable <- data.frame(read_xlsx(fileName, llFileIndex, range = cell_cols(1:6) ) )
   
   for (i in 1:6){
     LLTable[grep("^\\s*$", LLTable[ , i]), i] <- NA
@@ -181,19 +173,19 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
     stop(errorMsg)
   }
   
-  lesionVector <- as.vector(table(caseID[caseID %in% abnormalCases]))
-  # for (k2 in 1:length(abnormalCases)) { lesionVector[k2] <- sum(caseID == abnormalCases[k2]) }
+  perCase <- as.vector(table(caseID[caseID %in% abnormalCases]))
+  # for (k2 in 1:length(abnormalCases)) { perCase[k2] <- sum(caseID == abnormalCases[k2]) }
   
-  lesionWeight <- array(dim = c(length(abnormalCases), max(lesionVector)))
-  lesionIDTable <- array(dim = c(length(abnormalCases), max(lesionVector)))
+  lesionWeight <- array(dim = c(length(abnormalCases), max(perCase)))
+  lesionIDTable <- array(dim = c(length(abnormalCases), max(perCase)))
   
   for (k2 in 1:length(abnormalCases)) {
     k <- which(caseID == abnormalCases[k2])
-    lesionIDTable[k2, ] <- c(sort(lesionID[k]), rep(UNINITIALIZED, max(lesionVector) - length(k)))
+    lesionIDTable[k2, ] <- c(sort(lesionID[k]), rep(UNINITIALIZED, max(perCase) - length(k)))
     if (all(weights[k] == 0)) {
-      lesionWeight[k2, 1:length(k)] <- 1/lesionVector[k2]
+      lesionWeight[k2, 1:length(k)] <- 1/perCase[k2]
     } else {
-      lesionWeight[k2, ] <- c(weights[k][order(lesionID[k])], rep(UNINITIALIZED, max(lesionVector) - length(k)))
+      lesionWeight[k2, ] <- c(weights[k][order(lesionID[k])], rep(UNINITIALIZED, max(perCase) - length(k)))
       sumWeight <- sum(lesionWeight[k2, lesionWeight[k2, ] != UNINITIALIZED])
       if (sumWeight != 1){
         if (sumWeight <= 1.01 && sumWeight >= 0.99){
@@ -245,7 +237,7 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
     }
   }
   
-  LL <- array(dim = c(I1, I2, J, K2, max(lesionVector)))
+  LL <- array(dim = c(I1, I2, J, K2, max(perCase)))
   for (i1 in 1:I1) {
     for (i2 in 1:I2) {
       for (j in 1:J) {
@@ -277,14 +269,14 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
           break
         }
         temp <- LL[i1, i2, j, , ] != UNINITIALIZED
-        dim(temp) <- c(K2, max(lesionVector))
-        if (!all(lesionVector == rowSums(temp))) {
+        dim(temp) <- c(K2, max(perCase))
+        if (!all(perCase == rowSums(temp))) {
           isROI <- FALSE
           break
         }
         temp <- NL[i1, i2, j, (K1 + 1):K, ] == UNINITIALIZED
         dim(temp) <- c(K2, maxNL)
-        if (!all(lesionVector == rowSums(temp))) {
+        if (!all(perCase == rowSums(temp))) {
           isROI <- FALSE
           break
         }
@@ -293,12 +285,12 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
   }
   
   if ((max(table(caseID)) == 1) && (maxNL == 1) && (all((NL[, , , (K1 + 1):K, ] == UNINITIALIZED))) && (all((NL[, , , 1:K1, ] != UNINITIALIZED)))) {
-    fileType <- "ROC"
+    type <- "ROC"
   } else {
     if (isROI) {
-      fileType <- "ROI"
+      type <- "ROI"
     } else {
-      fileType <- "FROC"
+      type <- "FROC"
     }
   }
   
@@ -316,5 +308,14 @@ DfReadCrossedModalities <- function(fileName, sequentialNames = FALSE) {
   names(modalityID2) <- modality2Names
   names(readerID) <- readerNames
   
-  return(list(NL = NL, LL = LL, lesionVector = lesionVector, lesionID = lesionIDTable, lesionWeight = lesionWeight, dataType = fileType, modalityID1 = modalityID1, modalityID2 = modalityID2, readerID = readerID))
+  fileName <- paste0("DfReadCrossedModalities(", tools::file_path_sans_ext(basename(fileName)), ")")
+  name <- "THOMPSON-X-MOD"
+  design <- "FCTRL-X-MOD"
+  truthTableStr <- NA
+  IDs <- lesionIDTable
+  weights <- lesionWeight
+  return(convert2Xdataset(NL, LL, LL_IL = NA, 
+                         perCase, IDs, weights,
+                         fileName, type, name, truthTableStr, design,
+                         modalityID1, modalityID2, readerID))
 } 

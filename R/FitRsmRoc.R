@@ -3,11 +3,7 @@
 #' @description Fit an RSM-predicted ROC curve to a \strong{binned single-modality single-treatment ROC dataset}
 #' 
 #' @param binnedRocData The \strong{binned ROC} dataset containing the data
-#' @param lesDistr Array [1:maxLL,1:2]. The probability mass function of the 
-#'    lesion distribution for diseased cases. The first column contains the 
-#'    actual numbers of lesions per case. The second column contains the fraction 
-#'    of diseased cases with the number of lesions specified in the first column. 
-#'    The second column must sum to unity. 
+#' @param lesDistr The lesion distribution 1D array. 
 #' @param trt The selected treatment, default is 1
 #' @param rdr The selected reader, default is 1
 #' 
@@ -50,26 +46,26 @@
 #' \donttest{
 #' ## Test with included ROC data (some bins have zero counts)
 #' lesDistr <- UtilLesionDistr(dataset02)
-#' retFit <- FitRsmRoc(dataset02, lesDistr)
-#' print(retFit$fittedPlot)
+#' retFit <- FitRsmRoc(dataset02, lesDistr[,2])
+#' ## print(retFit$fittedPlot)
 #' 
 #' ## Test with included degenerate ROC data
 #' lesDistr <- UtilLesionDistr(datasetDegenerate)
-#' retFit <- FitRsmRoc(datasetDegenerate, lesDistr);print(retFit$fittedPlot)
+#' retFit <- FitRsmRoc(datasetDegenerate, lesDistr[,2])
 #' 
 #' ## Test with single interior point data
 #' fp <- c(rep(1,7), rep(2, 3))
 #' tp <- c(rep(1,5), rep(2, 5))
 #' binnedRocData <- Df2RJafrocDataset(fp, tp)
 #' lesDistr <- UtilLesionDistr(binnedRocData)
-#' retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
+#' retFit <- FitRsmRoc(binnedRocData, lesDistr[,2])
 #' 
 #' ## Test with two interior data points
 #' fp <- c(rep(1,7), rep(2, 5), rep(3, 3))
 #' tp <- c(rep(1,3), rep(2, 5), rep(3, 7))
 #' binnedRocData <- Df2RJafrocDataset(fp, tp)
 #' lesDistr <- UtilLesionDistr(binnedRocData)
-#' retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
+#' retFit <- FitRsmRoc(binnedRocData, lesDistr[,2])
 #' 
 #' 
 #' ## Test with three interior data points
@@ -77,13 +73,14 @@
 #' tp <- c(rep(1,3), rep(2, 5), rep(3, 7), rep(4, 10)) #25
 #' binnedRocData <- Df2RJafrocDataset(fp, tp)
 #' lesDistr <- UtilLesionDistr(binnedRocData)
-#' retFit <- FitRsmRoc(binnedRocData, lesDistr);print(retFit$fittedPlot)
+#' retFit <- FitRsmRoc(binnedRocData, lesDistr[,2])
 #' 
-#' ## test for TONY data, i = 2 and j = 3; only case permitting chisqure calculation
+#' ## test for TONY data, i = 2 and j = 3 
+#' ## only case permitting chisqure calculation
 #' lesDistr <- UtilLesionDistr(dataset01)
 #' rocData <- DfFroc2Roc(dataset01)
-#' retFit <- FitRsmRoc(rocData, lesDistr, trt = 2, rdr = 3)
-#' print(retFit$fittedPlot)
+#' retFit <- FitRsmRoc(rocData, lesDistr[,2], trt = 2, rdr = 3)
+#' ## print(retFit$fittedPlot)
 #' retFit$ChisqrFitStats
 #' }
 #' 
@@ -95,7 +92,6 @@
 #'
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-#' \url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #'  
 #' @importFrom bbmle mle2
@@ -115,21 +111,19 @@ FitRsmRoc <- function(binnedRocData, lesDistr, trt = 1, rdr = 1){
   # lesDist has to be supplied externally
   
   if (missing(lesDistr)) stop("FitRsmRoc needs the lesDistr argument")
+ 
   maxLambdaP <- RJafrocEnv$maxLambdaP
   minLambdaP <- RJafrocEnv$minLambdaP
   maxNuP <- RJafrocEnv$maxNuP
   minNuP <- RJafrocEnv$minNuP
   maxMu <- RJafrocEnv$maxRsmMu
   minMu <- RJafrocEnv$minMu
-  #minZeta <- RJafrocEnv$minZeta
-  #maxZeta <- RJafrocEnv$maxZeta
-  
-  # modalityID <- binnedRocData$modalityID[trt]
-  # readerID <- binnedRocData$readerID[rdr]
   class(lesDistr) <- "numeric"
   
-  fp <- binnedRocData$NL[trt,rdr,,1];fp <- fp[fp != -Inf]
-  tp <- binnedRocData$LL[trt,rdr,,1]
+  lesDistr <- UtilLesionDistr(lesDistr) # convert to internal 2D form
+  
+  fp <- binnedRocData$ratings$NL[trt,rdr,,1];fp <- fp[fp != -Inf]
+  tp <- binnedRocData$ratings$LL[trt,rdr,,1]
   plotStep <- 0.01
   plotZeta <- seq(from = -3, to = 10, by = plotStep)
   
@@ -222,9 +216,14 @@ FitRsmRoc <- function(binnedRocData, lesDistr, trt = 1, rdr = 1){
   nuP <- InverseValue(ret@coef[3], minNuP, maxNuP)
   zetas <- InverseZetas(ret@coef[4:length(ret@coef)])
   
+  # 11/30/20
+  retx <- UtilPhysical2IntrinsicRSM(mu, lambdaP, nuP)
+  lambda <- retx$lambda
+  nu <- retx$nu
+  
   NLLFin <- ret@min
   
-  AUC <- UtilAucsRSM(mu, lambdaP, nuP, lesDistr)$aucROC
+  AUC <- UtilAnalyticalAucsRSM(mu, lambda, nu, zeta1 <- -Inf, lesDistr[,2])$aucROC # 11/30/20
   ## following checks out
   ##temp <- tempAucRSM (c(ret@coef[1], ret@coef[2], ret@coef[3]), lesDistr)  
   
@@ -357,7 +356,7 @@ tempAucRSM <- function (forwardParms, lesDistr = lesDistr){
   
   maxFPF <- xROC(-20, lambdaP)
   maxTPF <- yROC(-20, mu, lambdaP, nuP, lesDistr)
-  AUC <- integrate(intROC, 0, maxFPF, mu = mu, lambdaP = lambdaP, nuP = nuP, 
+  AUC <- integrate(y_ROC_FPF, 0, maxFPF, mu = mu, lambdaP = lambdaP, nuP = nuP, 
                    lesDistr = lesDistr)$value
   
   AUC <- AUC + (1 + maxTPF) * (1 - maxFPF) / 2

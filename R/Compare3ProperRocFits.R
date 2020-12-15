@@ -66,30 +66,29 @@
 #' @examples
 #' ret <- Compare3ProperRocFits(1,1) # analyze first two datasets
 #' 
-#' \dontrun{
+#' \donttest{
 #' ## takes longer than 5 sec on OSX
-#' ret <- Compare3ProperRocFits(1,2,reAnalyze = TRUE) # analyze first two datasets
-#' x <- ret$allDatasetsResults
-#' str(x[[1]][[1]]) # parameters for dataset 1 trt 1 and rdr 1
-#' str(x[[1]][[2]]) # parameters for dataset 1 trt 1 and rdr 2
-#' str(x[[1]][[10]])# parameters for dataset 1 trt 2 and rdr 5
-#' str(x[[2]][[1]]) # parameters for dataset 2 trt 1 and rdr 1
-#' str(x[[2]][[2]]) # parameters for dataset 2 trt 1 and rdr 2
-#' str(x[[2]][[10]])# parameters for dataset 2 trt 2 and rdr 5
+#' ## ret <- Compare3ProperRocFits(1,2,reAnalyze = TRUE) # analyze first two datasets
+#' ## x <- ret$allDatasetsResults
+#' ## str(x[[1]][[1]]) # parameters for dataset 1 trt 1 and rdr 1
+#' ## str(x[[1]][[2]]) # parameters for dataset 1 trt 1 and rdr 2
+#' ## str(x[[1]][[10]])# parameters for dataset 1 trt 2 and rdr 5
+#' ## str(x[[2]][[1]]) # parameters for dataset 2 trt 1 and rdr 1
+#' ## str(x[[2]][[2]]) # parameters for dataset 2 trt 1 and rdr 2
+#' ## str(x[[2]][[10]])# parameters for dataset 2 trt 2 and rdr 5
 #' }
 #'
-#' \dontrun{ 
+#' \donttest{ 
 #' ## these examples will cause errors; 
 #' ##these are intended to illustrate the structure of the functions return object
-#' str(x[[1]][[11]])# error
-#' str(x[[3]][[1]]) # error
+#' ## str(x[[1]][[11]])# error
+#' ## str(x[[3]][[1]]) # error
 #' }
 #' 
 #' 
 #' @references 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-#' \url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #' Metz CE, Pan X 1999 Proper Binormal ROC Curves: Theory and Maximum-Likelihood Estimation. 
 #' J Math Psychol. \bold{43},(1):1--33.
@@ -119,6 +118,7 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
   # Peter Philips showed me (06/21/19) that this line was causing testthat failures
   # in function expect_known_output()
   # 
+  
   options(warn = 2) # warnings AS errors
   # NOTE added 6/25/19 - this is matched at exit with: 
   # options(warn = 0) # warnings NOT as errors 
@@ -136,14 +136,14 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
     lesDistr <- UtilLesionDistr(theData) # RSM ROC fitting needs to know lesDistr
     
     # convert to HR ROC data; and remove negative infinities
-    rocData <- DfFroc2Roc(theData)
+    if (theData$descriptions$type == "FROC") rocData <- DfFroc2Roc(theData) else rocData <- theData  
     
     if (saveProprocLrcFile) {
       DfSaveDataFile(rocData, 
                      fileName = paste0(fileName,".lrc"), format = "MRMC")
     }
-    I <- length(rocData$modalityID);J <- length(rocData$readerID)
-    K <- dim(rocData$NL)[3];K2 <- dim(rocData$LL)[3];K1 <- K - K2
+    I <- length(rocData$descriptions$modalityID);J <- length(rocData$descriptions$readerID)
+    K <- dim(rocData$ratings$NL)[3];K2 <- dim(rocData$ratings$LL)[3];K1 <- K - K2
     
     ## retrieve PROPROC parameters
     csvFileName <- paste0(fileName, "proprocareapooled.csv") # runs on July 29, 2017
@@ -157,7 +157,7 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
     
     retFileName <- paste0("allResults", fileName) 
     sysAnalFileName <- system.file("ANALYZED/RSM6", retFileName, package = "RJafroc", mustWork = TRUE)
-    if (fileName %in% c("JT", "NICO", "DOB1", "DOB3")){
+    if (!all(isBinnedDataset(rocData))){
       binnedRocData <- DfBinDataset(rocData, desiredNumBins = 5, opChType = "ROC") # new function
     }else{
       binnedRocData <- rocData
@@ -172,7 +172,7 @@ Compare3ProperRocFits <- function(startIndx = 1, endIndx = 14,
           #if (!(f == 2 && i == 2 && j == 2)) next ## investigating warnings
           AllResIndx <- AllResIndx + 1
           retCbm <- FitCbmRoc(binnedRocData, trt = i, rdr = j)
-          retRsm <- FitRsmRoc(binnedRocData, trt = i, rdr = j, lesDistr = lesDistr) # fit to RSM, need lesDistr matrix
+          retRsm <- FitRsmRoc(binnedRocData, trt = i, rdr = j, lesDistr = lesDistr[,2]) # fit to RSM, need lesDistr matrix
           retCbm1 <- retCbm[-10] # deleting plots as they generate Notes in R CMD CHK -> file size too large
           retRsm1 <- retRsm[-11] #   do:
           aucProproc <- UtilAucPROPROC(c1[i,j], da[i,j])

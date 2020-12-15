@@ -4,17 +4,28 @@
 \name{dataset12}
 \alias{dataset12}
 \title{Dobbins 2 ROC dataset}
-\format{A list with 8 elements:
+\format{
+A list with 3 elements: \code{$ratings}, \code{$lesions} and \code{$descriptions}; \code{$ratings}
+   contain 3 elements, \code{$NL}, \code{$LL} and \code{$LL_IL} as sub-lists; \code{$lesions}
+   contain 3 elements, \code{$perCase}, \code{$IDs} and \code{$weights} as sub-lists; \code{$descriptions}
+   contain 7 elements, \code{$fileName}, \code{$type}, \code{$name},
+   \code{$truthTableStr}, \code{$design}, \code{$modalityID} and \code{$readerID} as sub-lists;
 \itemize{
-\item{\code{NL}}{ Ratings array [1:4, 1:5, 1:152, 1], of false positives, FPs}
-\item{\code{LL}}{ Ratings array [1:4, 1:5, 1:88, 1], of true positives, TPs}
-\item{\code{lesionVector}}{ array [1:88], number of lesions per diseased case, all set to 1}
-\item{\code{lesionID}}{ array [1:88, 1], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:88, 1], weights (or clinical importance) of lesions, all set to 1}
-\item{\code{dataType}}{ "ROC", the data type}
-\item{\code{modalityID}}{ [1:2] "0" "1", treatment labels}
-\item{\code{readerID}}{ [1:4] "0" "1" "2" ..., reader labels}
-}}
+\item{\code{rating$NL}}{, num [1:4, 1:5, 1:152, 1], ratings of non-lesion localizations, NLs}
+\item{\code{rating$LL}}{, num [1:4, 1:5, 1:88, 1], ratings of lesion localizations, LLs}
+\item{\code{rating$LL_IL}}{NA, this placeholder is used only for LROC data}
+\item{\code{lesions$perCase}}{, int [1:88], number of lesions per diseased case}
+\item{\code{lesions$IDs}}{, num [1:88, 1], numeric labels of lesions on diseased cases}
+\item{\code{lesions$weights}}{, num [1:88, 1], weights (or clinical importances) of lesions}
+\item{\code{descriptions$fileName}}{, chr, "dataset12", base name of dataset in `data` folder}
+\item{\code{descriptions$type}}{, chr "ROC", the data type}
+\item{\code{descriptions$name}}{, chr "DOBBINS-2", the name of the dataset}
+\item{\code{descriptions$truthTableStr}}{, num [1:4, 1:5, 1:152, 1:2] , truth table structure}
+\item{\code{descriptions$design}}{, chr "FCTRL", study design, factorial dataset}
+\item{\code{descriptions$modalityID}}{, chr [1:4] "1" "2" "3" "4", treatment label(s)}
+\item{\code{descriptions$readerID}}{, chr [1:5] "1" "2" "3" "4" ..., reader labels}
+}
+}
 \usage{
 dataset12
 }
@@ -24,7 +35,7 @@ ratings, i.e., do you recommend further follow up on the patient, one a 1 (defin
 to 5 (definitely yes), effectively an ROC dataset using a 5-point rating scale.
 }
 \examples{
-str(dataset11)
+str(dataset12)
 
 
 }

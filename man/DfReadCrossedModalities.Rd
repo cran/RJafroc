@@ -17,7 +17,7 @@ original data file will be used. The default is \code{FALSE}.}
 }
 \value{
 A dataset with the specified structure, similar to a standard 
-   \pkg{RJafroc}(see \code{\link{RJafroc-package}}). Because of the extra treatment factor, 
+   \pkg{RJafroc} dataset (see \code{\link{RJafroc-package}}). Because of the extra treatment factor, 
    \code{NL} and \code{LL} are each five dimensional arrays. There are also two 
    treatment IDS: \code{modalityID1} and \code{modalityID2}.
 }
@@ -27,19 +27,7 @@ two treatment factors are crossed
 }
 \details{
 The data format is  similar to the JAFROC format (see \code{\link{RJafroc-package}}). 
-   The notable difference is that there are two treatment factors. A sample crossed 
-   treatment file "CrossedModalitiesData.xlsx" is in the \code{inst\\extdata} 
-   subdirectory of \code{RJafroc}.
-}
-\examples{
-
-\donttest{
-crossedFileName <- system.file("extdata", 
-   "CrossedModalitiesData.xlsx", package = "RJafroc", mustWork = TRUE)
-crossedData <- DfReadCrossedModalities(crossedFileName)
-str(crossedData)
-}
-
+   The notable difference is that there are two treatment factors.
 }
 \references{
 Thompson JD, Chakraborty DP, Szczepura K, et al. (2016) Effect of reconstruction 
@@ -48,6 +36,5 @@ anthropomorphic thorax phantom: a crossed-treatment JAFROC observer study.
 Medical Physics. 43(3):1265-1274.
 
 Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
-Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
-\url{https://www.crcpress.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
+Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL.
 }

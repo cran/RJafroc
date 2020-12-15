@@ -29,11 +29,11 @@
 
 DfLroc2Froc <- function(dataset)  #  !!!in tests!!!
 {
-  if (dataset$dataType != "LROC") 
+  if (dataset$descriptions$type != "LROC") 
     stop("This function requires an LROC dataset")
   
-  NL <- dataset$NL
-  LL <- dataset$LLCl
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
   
   I <- length(NL[,1,1,1])
   J <- length(NL[1,,1,1])
@@ -47,7 +47,7 @@ DfLroc2Froc <- function(dataset)  #  !!!in tests!!!
   for (i in 1:I) {
     for (j in 1:J) {
       for (k in 1:K1) {
-        NL[i,j,k,1] <- dataset$NL[i,j,k,1]
+        NL[i,j,k,1] <- dataset$ratings$NL[i,j,k,1]
       }
     }
   }
@@ -55,7 +55,7 @@ DfLroc2Froc <- function(dataset)  #  !!!in tests!!!
   for (i in 1:I) {
     for (j in 1:J) {
       for (k in 1:K2) {
-        NL[i,j,k+K1,1] <- dataset$LLIl[i,j,k,1]
+        NL[i,j,k+K1,1] <- dataset$ratings$LL_IL[i,j,k,1]
       }
     }
   }
@@ -63,7 +63,7 @@ DfLroc2Froc <- function(dataset)  #  !!!in tests!!!
   for (i in 1:I) {
     for (j in 1:J) {
       for (k in 1:K2) {
-        LL[i,j,k,1] <- dataset$LLCl[i,j,k,1]
+        LL[i,j,k,1] <- dataset$ratings$LL[i,j,k,1]
       }
     }
   }
@@ -71,22 +71,24 @@ DfLroc2Froc <- function(dataset)  #  !!!in tests!!!
   NL[NL == 0] <- -Inf
   LL[LL == 0] <- -Inf
   
-  lesWghts <- dataset$lesionWeight
-  lesWghts[,1] <- 1
+  weights <- dataset$lesions$weights
+  weights[,1] <- 1
   
-  datasetFroc <- list(
-    NL = NL,
-    LL = LL,
-    lesionVector = dataset$lesionVector,
-    lesionID = dataset$lesionID,
-    lesionWeight = lesWghts,
-    dataType = "FROC",
-    modalityID = dataset$modalityID,
-    readerID = dataset$readerID
-  )
+  fileName <- paste0("DfLroc2Froc(", dataset$descriptions$fileName, ")")
+  name <- dataset$descriptions$name
+  design <- dataset$descriptions$design
+  truthTableStr <- dataset$descriptions$truthTableStr
+  IDs <- dataset$lesions$IDs
+  # weights <- dataset$lesions$weights
+  type <- "FROC"
+  perCase <- dataset$lesions$perCase
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
+  return(convert2dataset(NL, LL, LL_IL = NA, 
+                         perCase, IDs, weights,
+                         fileName, type, name, truthTableStr, design,
+                         modalityID, readerID))
   
-  return (datasetFroc)
-
 }
 
 

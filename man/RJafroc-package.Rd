@@ -2,24 +2,62 @@
 \alias{RJafroc-package}
 \docType{package}
 \title{
-  RJafroc: Analyzing Diagnostic Observer Performance Studies
+  Artificial Intelligence Systems and Observer Performance
 }
 \description{
-RJafroc implements software for assessing medical imaging systems, radiologists or computer aided detection algorithms. Models of observer performance are implemented, including the binormal model (BM), the contaminated binormal model (CBM), the correlated contaminated binormal model (CORCBM), and the radiological search model (RSM). The software and applications are described in a book - \strong{Chakraborty DP: Observer Performance Methods for Diagnostic Imaging - Foundations, Modeling, and Applications with R-Based Examples. Taylor-Francis LLC; 2017} and its vignettes \url{https://dpc10ster.github.io/RJafroc/}. Observer performance data collection paradigms are the receiver operating characteristic (ROC) and its location specific extensions, primarily free-response ROC (FROC) and the location ROC (LROC). ROC data consists of single ratings per images. A rating is the perceived confidence level that the image is that of a diseased patient. FROC data consists of a variable number (including zero) of mark-rating pairs per image, where a mark is the location of a clinically reportable suspicious region and the rating is the corresponding confidence level that it is a real lesion. LROC data consists of a rating and a forced localization of the most suspicious region on every image. RJafroc supersedes the Windows version of \strong{JAFROC} software V4.2.1, \url{http://www.devchakraborty.com}. Package functions are organized as follows. Data file related function names are preceded by \emph{Df}, curve fitting functions by \emph{Fit}, included data sets by \emph{dataset}, plotting functions by \emph{Plot}, significance testing functions by \emph{St}, sample size related functions by \emph{Ss}, data simulation functions by \emph{Simulate} and utility functions by \emph{Util}. Implemented are figures of merit (FOMs) for quantifying performance, functions for visualizing empirical operating characteristics: e.g., ROC, FROC, alternative FROC (AFROC) and weighted AFROC (wAFROC) curves. Four maximum likelihood curve-fitting algorithms are implemented: the binormal model (BM), the contaminated binormal model (CBM), the correlated contaminated binormal model (CORCBM) and the radiological search model (RSM). Unlike the binormal model, CBM, CORCBM and RSM predict "proper" ROC curves that do not cross the chance diagonal. RSM fitting additionally yields measures of search and lesion-classification performances. Search performance is \emph{the ability to find lesions while avoiding finding non-lesions}. Lesion-classification performance is the ability to correctly classify found lesions from found non-lesions. For fully crossed study designs significance testing of reader-averaged FOM differences between modalities is implemented via both Dorfman-Berbaum-Metz and the Obuchowski-Rockette methods, including Hillis' extensions. Also implemented are single treatment analyses, which allow comparison of performance of a group of radiologists to a specified value, or comparison to CAD to a group of radiologists interpreting the same cases. Crossed-modality analysis is implemented wherein there are two crossed treatment factors and the desire is to determined performance in each treatment factor averaged over all levels of the other factor. Sample size estimation tools are provided for ROC and FROC studies; these use estimates of the relevant variances from a pilot study to predict required numbers of readers and cases in a pivotal study to achieve a desired power. Utility and data file manipulation functions allow data to be read in any of the currently used input formats, including Excel, and the results of the analysis can be viewed in text or Excel output files. The methods are illustrated with several included datasets from the author's international collaborations. This version corrects a few bugs noticed by users (listed in NEWS.md) and extends the Excel file input format for greater flexibility going forward in handling non-crossed datasets.
+\code{RJafroc} implements software for analyzing the performance of artificial intelligence (AI) systems characterized by a
+    \emph{search-and-report} strategy. While historical examples deal with measuring radiologists' performance in search
+    tasks – i.e., searching for lesions in medical images and reporting them - the software applies equally to any task
+    involving searching for and reporting arbitrary targets in images. The package can be used to analyze the performance
+    of AI systems, compare AI performance to a group of human readers or optimize the reporting threshold of an AI system.
+    In addition to performing conventional receiver operating characteristic (ROC) analysis (localization
+    information ignored), the software also performs free-response receiver operating characteristic (FROC) analysis,
+    where lesion localization information is integral to the analyzed data. A book using the software is \strong{Chakraborty DP:
+    Observer Performance Methods for Diagnostic Imaging - Foundations, Modeling, and Applications with R-Based Examples,
+    Taylor-Francis LLC; 2017}. An online update of this book is at \url{https://dpc10ster.github.io/RJafrocBook/}. Illustrations
+    of the software (vignettes) are at \url{https://dpc10ster.github.io/RJafroc/}. Supported data collection paradigms are the
+    ROC, FROC and the location ROC (LROC). ROC data consists of single ratings per images, where a rating is the perceived
+    confidence level that the image is that of a diseased patient. An ROC curve is a plot of true positive fraction vs.
+    false positive fraction. FROC data consists of a variable number (zero or more) of mark-rating pairs per image, where
+    a mark is the location of a reported suspicious region and the rating is the confidence level that it is a real lesion. 
+    LROC data consists of a rating and a location of the most suspicious region, for every image. Four models of observer 
+    performance, and curve-fitting software, are implemented: the binormal model (BM), the contaminated binormal model 
+    (CBM), the correlated contaminated binormal model (CORCBM), and the radiological search model (RSM). Unlike the binormal 
+    model, CBM, CORCBM and RSM predict "proper" ROC curves that do not inappropriately cross the chance diagonal. Additionally, 
+    RSM parameters are related to search performance (not measured in conventional ROC analysis) and classification performance. 
+    Search performance refers to finding lesions, i.e., true positives, while simultaneously not finding false positive 
+    locations. Classification performance measures the ability to distinguish between true and false positive locations. 
+    Knowing these separate performances allows principled optimization of reader or AI system performance. RJafroc supersedes 
+    Windows \strong{JAFROC} (jackknife alternative FROC) software V4.2.1, \url{https://github.com/dpc10ster/WindowsJafroc}. Package functions 
+    are organized as follows. Data file related function names are preceded by \emph{Df}, curve fitting functions by \emph{Fit}, included 
+    data sets by \emph{dataset}, plotting functions by \emph{Plot}, significance testing functions by \emph{St}, sample size related functions 
+    by \emph{Ss}, data simulation functions by \emph{Simulate} and utility functions by \emph{Util}. Implemented are figures of merit (FOMs) 
+    for quantifying performance, functions for visualizing empirical operating characteristics: e.g., ROC, FROC, alternative FROC 
+    (AFROC) and weighted AFROC (wAFROC) curves. For fully crossed study designs significance testing of reader-averaged FOM 
+    differences between modalities is implemented via both Dorfman-Berbaum-Metz and the Obuchowski-Rockette methods. Also 
+    implemented are single treatment analyses, which allow comparison of performance of a group of radiologists to a specified 
+    value, or comparison of AI to a group of radiologists interpreting the same cases. Crossed-modality analysis is implemented 
+    wherein there are two crossed treatment factors and the aim is to determined performance in each treatment factor averaged 
+    over all levels of the second factor. Sample size estimation tools are provided for ROC and FROC studies; these use estimates 
+    of the relevant variances from a pilot study to predict required numbers of readers and cases in a pivotal study to achieve the
+    desired power. Utility and data file manipulation functions allow data to be read in any of the currently used input
+    formats, including Excel, and the results of the analysis can be viewed in text or Excel output files. The methods are
+    illustrated with several included datasets from the author's collaborations. This version corrects bugs, simplifies
+    usage of the software and updates the \emph{dataset} structure. All changes are noted in NEWS.md.
 }
 \details{
   \tabular{ll}{
     Package: \tab RJafroc\cr
     Type: \tab Package\cr
-    Version: \tab 1.3.2\cr
-    Date: \tab 2020-01-13\cr
+    Version: \tab 2.0.1\cr
+    Date: \tab 2020-12-15\cr
     License: \tab GPL-3\cr
     URL: \tab \url{https://dpc10ster.github.io/RJafroc/}\cr
   }
 }
 
 
-\section{Abbreviations and definitions}{
+\section{Definitions and abbreviations}{
   \itemize{
     \item \emph{a}: The separation or "a" parameter of the binormal model
     \item AFROC curve: plot of LLF (ordinate) vs. FPF, where FPF is inferred using 
@@ -71,21 +109,15 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
     \item J: number of readers, indexed by \code{j}
     \item JAFROC file format: A .xlsx format file, applicable to ROC, ROI, FROC and 
        LROC paradigms
-    \item JAFROC AUC: trapezoidal area under AFROC curve; deprecated, 
-       use AFROC AUC instead
     \item JAFROC: jackknife AFROC: Windows software for analyzing observer performance 
        data: no longer updated, replaced by current package; the name is a misnomer 
        as the jackknife is used only for significance testing; alternatively, 
        the bootstrap could be used; what distinguishes FROC from ROC analysis is the 
        use of the AFROC-AUC as the FOM. With this change, the DBM or the OR method 
        can be used for significance testing
-    \item FOM_AFROC FOM: trapezoidal area under AFROC curve; this term is obsolete; 
-       use AFROC-AUC instead
-    \item FOM_AFROC1 FOM: trapezoidal area under AFROC1 curve; this term is obsolete; 
-       use AFROC1-AUC instead
-    \item K: total number of cases, K = K1 + K2, indexed by \eqn{k}
-    \item K1: total number of non-diseased cases, indexed by \eqn{k1}
-    \item K2: total number of diseased cases, indexed by \eqn{k2}
+    \item \code{K}: total number of cases, \code{K} = \code{K1} + \code{K2}, indexed by \eqn{k}
+    \item \code{K1}: total number of non-diseased cases, indexed by \eqn{k1}
+    \item \code{K2}: total number of diseased cases, indexed by \eqn{k2}
     \item LL: lesion localization i.e., a mark that correctly locates an existing 
        localized lesion; TP is a special case, when the proximity criterion is 
       lax  (i.e., "acceptance radius" is large) 
@@ -171,228 +203,143 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
        inferred using highest rating of NL marks on \strong{non-diseased cases ONLY}
     \item wAFROC1 curve: plot of weighted LLF (ordinate) vs. FPF1, where FPF1 is 
        inferred using highest rating of NL marks on \strong{ALL cases}
-    \item FOM_wAFROC FOM: weighted trapezoidal area under AFROC curve: this term is 
-       obsolete; use wAFROC-AUC instead;\strong{this is the recommended FOM}
-    \item FOM_wAFROC1 FOM: weighted trapezoidal area under AFROC1 curve: only use 
+    \item wAFROC1 FOM: weighted trapezoidal area under AFROC1 curve: only use 
        if there are zero non-diseased cases is always number of treatments minus one
     } 
 }
 
 \section{Dataset}{
-  An R object either created by the user or read from an external text or 
-     Excel file. It is a \code{list} generally containing 8 members (9 members 
-     for crossed-modality or LROC datasets): \strong{Note: \code{-Inf} is used to 
-     indicate the ratings of unmarked lesions and/or to indicate missing array 
-     items. An example of the latter would be if the maximum number of NLs in a 
-     dataset was 4, but some images had fewer than 4 NLs, in which case the corresponding 
-     "empty" positions would be filled with \code{-Inf}s. Do not use \code{NA} to 
-     denote a rating.}
-  
-  \strong{Note}: \bold{"dataset" in this package always represents an 
-     \code{R} object with one of the following structures:}
-  \subsection{General data structure, example \code{dataset02} and \code{dataset05}}{
-    \itemize{
-          \item \code{NL}: a floating-point array with dimension  
-             \code{c(I, J, K, maxNL)} containing the ratings of NL marks. The first 
-             K1 locations of the third index corresponds to NL marks on non-diseased 
-             cases and the remaining locations correspond to NL marks on diseased 
-             cases. The 4th dimension allows for the possibility of multiple NL marks 
-             on a case. For \bold{FROC} datasets unavailable or missing NL ratings are assigned 
-             \code{-Inf}. For \bold{ROC} datasets FP ratings are assigned to the first 
-             \code{K1} elements of \code{NL[,,1:K1,1]} and the remaining \code{K2} 
-             elements of \code{NL[,,(K1+1):K,1]} are set to \code{-Inf}. When 
-             converting from FROC to ROC data the software assigns \code{-Inf} 
-             to cases with no marks.
-          \item \code{LL}: a floating-point array with dimension  
-             \code{c(I, J, K2, maxLL)} that contains the ratings of all LL marks. 
-             For ROC datasets \code{TP} ratings are assigned to \code{LL[,,1:K2,1]}.
-          \item \code{lesionVector}: a integer vector with length \code{K2}, whose 
-             elements indicate the number of lesions in each diseased case. 
-          \item \code{lesionID}: an integer array with dimension [K2, maxLL]. 
-             Its contents label lesions on diseased cases. For example,  
-             \code{dataset05$lesionID[40,]} is \code{c(1,2,-Inf)}, meaning the 
-             40th diseased case in this dataset has two lesions, labeled 1 and 2. 
-             The \code{lesionID} of an LL in the \samp{TP} or \samp{LL} worksheet 
-             must correspond to the \code{lesionID} for that case in the 
-             \samp{Truth} worksheet. For example, if the \code{lesionID} for the 
-             40th diseased case in the \samp{TP} or \samp{LL} worksheet is 2, 
-             then the associated rating must correspond to the lesion labeled 2 
-             in the \samp{Truth} worksheet, etc. 
-          \item \code{lesionWeight}: a floating point array with dimension 
-             \code{c(K2, maxLL)}, representing the relative importance of detecting 
-             each lesion. For each case, the weights sum to unity. If zero is assigned 
-             to the \code{Weight} field in the \samp{Truth} worksheet,  the 
-             software automatically assigns equal weighting, e.g., 
-             \code{dataset05$lesionWeight[40,]} is \code{c(0.5,0.5)}, corresponding to 
-             equal weights (1/2) to each lesion on an image with two lesions.
-          \item \code{dataType}: a \code{character} variable: "\code{ROC}", "\code{LROC}", "\code{ROI}" or "\code{FROC}".
-          \item \code{modalityID}: a \code{character} vector of length \eqn{I}, which labels the 
-             modalities in the dataset.
-          \item \code{readerID}: a \code{character} vector of length \eqn{J}, which labels the 
-             readers. For example, \code{NL[1, 2, , ]} indicates the NL-rating of the 
-             reader identified with the second label in \code{readerID} using the 
-             modality identified with the first label in \code{modalityID}.
-    }
-  }
-  
-  \subsection{ROI data structure, example \code{TBA}}{
-    \itemize{
-          \item \code{NL}: a floating-point array with dimension \code{c(I, J, K, Q)} 
-             that contains the ratings of Q quadrants for each non-diseased case (k <= K1). 
-             For k > K1,  
-             elements contain valid ratings while the rest are filled with \code{-Inf}s.
-          \item \code{LL}: a floating-point array with dimension  
-             \code{c(I, J, K2, 1)} that contains the ratings of all \emph{correct} 
-             localization (CL) marks. A \code{-Inf} indicates a case with no CL mark. 
-          \item \code{LLIl}: a floating-point array with dimension  
-             \code{c(I, J, K2, 1)} that contains the ratings of all \emph{incorrect} 
-             localization (IL) marks. A \code{-Inf} indicates a case with no IL mark.
-          \item \code{lesionVector}: same as general case. 
-          \item \code{lesionID}: lesionID: an integer vector with length K2 
-             containing ones.
-          \item \code{lesionWeight}: a floating point array with dimension 
-             \code{c(K2, 1)} containing ones.
-          \item \code{dataType}: a \code{character} variable: "\code{ROI}".
-          \item \code{modalityID}: same as general case.
-          \item \code{readerID}: same as general case.
-    }
-  }
-  
-  \subsection{LROC data structure, example \code{datasetCadLroc}}{
-    \itemize{
-          \item \code{NL}: a floating-point array with dimension  \code{c(I, J, K, 1)} 
-             that contains the ratings of FP marks. For the third index, the first K1 
-             elements contain valid ratings while the rest are filled with \code{-Inf}s.
-          \item \code{LLCl}: a floating-point array with dimension  
-             \code{c(I, J, K2, 1)} that contains the ratings of all \emph{correct} 
-             localization (CL) marks. A \code{-Inf} indicates a case with no CL mark. 
-          \item \code{LLIl}: a floating-point array with dimension  
-             \code{c(I, J, K2, 1)} that contains the ratings of all \emph{incorrect} 
-             localization (IL) marks. A \code{-Inf} indicates a case with no IL mark.
-          \item \code{lesionVector}: same as general case. 
-          \item \code{lesionID}: lesionID: an integer vector with length K2 
-             containing ones.
-          \item \code{lesionWeight}: a floating point array with dimension 
-             \code{c(K2, 1)} containing ones.
-          \item \code{dataType}: a \code{character} variable: "\code{LROC}".
-          \item \code{modalityID}: same as general case.
-          \item \code{readerID}: same as general case.
-    }
-  }
-  
-  \subsection{Crossed modality data structure, example \code{datasetCrossedModality}}{
-    \itemize{
-          \item \code{NL}: a floating-point array with dimension  
-             \code{c(I1, I2, J, K, maxNL)} that contains the ratings of NL marks. Note 
-                the existence of two modality indices.
-          \item \code{LL}: a floating-point array with dimension  
-             \code{c(I1, I2, J, K2, maxLL)}that contains the ratings of all LL marks. 
-             Note the existence of two modality indices.
-          \item \code{lesionVector}: same as general case. 
-          \item \code{lesionID}: same as general case.
-          \item \code{lesionWeight}: same as general case.
-          \item \code{dataType}: a \code{character} variable: "\code{ROC}" or "\code{FROC}".
-          \item \code{modalityID1}: same as general case, corresponding to first 
-             modality factor.
-          \item \code{modalityID2}: same as general case, corresponding to second 
-             modality factor.
-          \item \code{readerID}: same as general case.
-    }
-  }
-  
-  \subsection{Data file format}{
-    The package reads JAFROC, MRMC (ROC data only) and iMRMC (ROC data only) 
-       data files. The data can be imported by using the function 
-       \link{DfReadDataFile}.
-    \itemize{
-    \item{\strong{JAFROC data file format}}{
-      The JAFROC data file is an Excel file containing three worksheets (*.xls and 
-         *.xlsx are supported): (1) the \samp{Truth} worksheet, (2) the \samp{TP} 
-         or \samp{LL} worksheet and (3) the \samp{FP} or \samp{NL} worksheet. 
-         Except for the \samp{Truth} worksheet, where each case must occur at least 
-         once, the number of rows in the other worksheets is variable.
-      \enumerate{
-            \item \samp{Truth} worksheet consists of
-          \itemize{
-                \item \samp{CaseID}, an integer field uniquely labeling the cases 
-                   (images). It must occur at least once for each case, and since a 
-                   case may have multiple lesions, it can occur multiple times, 
-                   once for each lesion.
-                \item \samp{LesionID}, an integer field uniquely labeling the lesions 
-                   in each case. This field is zero for non-diseased cases.
-                \item \samp{Weight}, a floating-point field, which is the relative 
-                   importance of detecting each lesion. This field is zero for 
-                   non-diseased cases and for equally weighted lesions; otherwise 
-                   the weights must sum to unity for each case. Unless a weighted 
-                   figure of merit is selected, this field is irrelevant.
-          }
-            \item \samp{TP} worksheet consists of
-          \itemize{
-                  \item \samp{ReaderID}, a \code{character} field uniquely labeling the readers 
-                     (radiologists).
-                  \item \samp{ModalityID}, a \code{character} field uniquely labeling the 
-                     modalities.
-                  \item \samp{CaseID}, see \samp{Truth} worksheet. A non-diseased 
-                     case in this field will generate an error.
-                  \item \samp{LesionID}, see \samp{Truth} worksheet. An entry in this 
-                     field that does not appear in the \samp{Truth} worksheet will 
-                     generate an error. It is the user's responsibility to ensure 
-                     that the entries in the \samp{Truth} and \samp{TP} worksheets 
-                     correspond to the same physical lesions.
-                  \item \samp{TP_Rating}, a positive floating-point field denoting the 
-                     rating assigned to a particular lesion-localization mark, with 
-                     higher numbers represent greater confidence that the location 
-                     is actually a lesion.
-            }
-            \item \samp{FP} worksheet consists of
-          \itemize{
-                  \item \samp{ReaderID}, see \samp{TP} worksheet.
-                  \item \samp{ModalityID}, see \samp{TP} worksheet.
-                  \item \samp{CaseID}, see \samp{TP} worksheet.
-                  \item \samp{FP_Rating}, a positive floating-point field denoting the 
-                     rating assigned to a particular non-lesion-localization mark, 
-                     with higher numbers represent greater confidence that the location 
-                     is actually a lesion.
-            }        
-         }
-      }
-    \item{\strong{MRMC data file format / LABMRMC format}}{
-    \itemize{
-          \item \emph{Input format for MRMC.} This format is described in the Medical 
-             Image Perception Laboratory website, currently 
-             \url{http://perception.radiology.uiowa.edu/}.
-          \item \emph{LABMRMC data format.} The data file includes following parts. 
-             The file must be saved as plain text file with *.lrc extension. All items 
-             in the file are separated by one or more blank spaces.
-        \enumerate{
-              \item The first line is a free text description of the file.
-              \item The second line is the name or ID of the first reader.
-              \item The third line has the names or IDs of all the modalities. Each 
-                 name or ID must be enclosed by double quotes(" ").
-              \item The fourth line must have the letter (l or s) or word (large or 
-                 small) for each modality. The letter or word indicates that smaller 
-                 or larger ratings represent stronger confidence of presence of disease.
-              \item The following lines contain the ratings in all modalities, 
-                 separated by spaces or tabs, of the non-diseased cases, one case per 
-                 line. The cases must appear in the same order for all readers. 
-                 Missing value is not allowed. 
-              \item After the last non-diseased case insert a line containing the 
-                 asterisk (*) symbol. 
-              \item Repeat steps 5 and 6 for the diseased cases. 
-              \item Repeat steps 2, 5, 6 and 7 for the remaining readers. 
-              \item The last line of the data file must be a pound symbol (#). 
-        }
+  The \code{dataset} object has 3 \code{list} elements: \code{$ratings}, \code{$lesions} 
+     and \code{$descriptions}, where:
+     
+     \itemize{
+     \item \code{dataset$ratings}: contains 3 elements as sub-lists: \code{$NL}, 
+        \code{$LL} and \code{$LL_IL}; these describe the structure of the ratings;
+        
+     \item \code{dataset$lesions}: contains 3 elements as sub-lists: \code{$perCase}, 
+        \code{$IDs} and \code{$weights}; these describe the structure of the lesions;
+        
+     \item \code{dataset$descriptions}: contains 7 elements as sub-lists: \code{$fileName}, 
+        \code{$type}, \code{$name}, \code{$truthTableStr}, \code{$design}, \code{$modalityID} 
+        and \code{$readerID}; these describe other characterisitcs of the dataset as 
+        detailed next. 
     }
     
-    \item{\strong{iMRMC data format}}{
-      This  is described in the iMRMC website, currently 
-         \url{https://code.google.com/p/imrmc/}.
-    }
+    \strong{Note: \code{-Inf} is used to indicate the ratings of unmarked lesions 
+        and/or missing values.} As an example of the latter, if the maximum 
+        number of NLs in a dataset is 4, but some images have fewer than 4 NL marks, 
+        the corresponding "empty" positions would be filled with 
+        \code{-Inf}s. \strong{Do not use \code{NA} to denote a missing rating.}
+     
+    \strong{Note}: \bold{"dataset" in this package always represents
+    \code{R} object(s) with the following structure(s):}
+    
+    \subsection{General data structure, e.g., \code{dataset02}, an ROC dataset, and 
+        \code{dataset05}, an FROC dataset.}{
+    \itemize{
+    \item \code{ratings$NL}: a float array with dimensions
+        \code{c(I, J, K, maxNL)}, containing the ratings of NL marks. The first 
+        \code{K1} locations of the third index corresponds to NL marks on non-diseased 
+        cases and the remaining locations correspond to NL marks on diseased 
+        cases. The 4th dimension allows for multiple NL marks 
+        on a case: the first index holds the first NL rating on the image, 
+        the second holds the second NL rating on the image, etc. The value of 
+        \code{maxNL} is determined by the case with the maximum number of lesions 
+        per case in the dataset. For \bold{FROC} datasets missing NL ratings are assigned the 
+        \code{-Inf} rating. For \bold{ROC} datasets, FP ratings are assigned 
+        to the first \code{K1} elements of \code{NL[,,1:K1,1]} and the remaining 
+        \code{K2} elements of \code{NL[,,(K1+1):K,1]} are set to \code{-Inf}. 
+             
+    \item \code{ratings$LL}: for non-LROC datasets a float array with dimensions   
+        \code{c(I, J, K2, maxLL)} containing the ratings of LL marks. The value of 
+        \code{maxLL} is determined by the maximum number of lesions per case in the 
+        dataset. Unmarked lesions are assigned the \code{-Inf} rating.
+        For ROC datasets \code{TP} ratings are assigned to \code{LL[,,1:K2,1]}.
+        For \bold{LROC} datasets it is a float array with dimensions  
+        \code{c(I, J, K2, 1)} containing the ratings of correct localizations, 
+        otherwise the rating is recorded in the incorrect localization array
+        described next. 
+
+    \item \code{ratings$LL_IL}: for LROC datasets the ratings
+        of incorrect localization marks on abnormal cases. It is a float array 
+        with dimensions \code{c(I, J, K2, 1)}. For non-LROC datasets this array 
+        is filled with NAs.
+             
+    \item \code{lesions$perCase}: an integer array with length \code{K2}, 
+        the number of lesions on each diseased case. The 
+        maximum value of this array equals \code{maxLL}. For example,  
+        \code{dataset05$lesions$perCase[4} is 2, meaning the 
+        4th diseased case has two lesions.
+             
+    \item \code{lesions$IDs}: an integer array with dimensions [\code{K2}, \code{maxLL}], 
+        labeling (or naming) the lesions on the diseased cases. For example,  
+        \code{dataset05$lesions$IDs[4,]} is \code{c(1,2,-Inf)}, meaning the 
+        4th diseased case has two lesions, labeled 1 and 2. 
+
+    \item \code{lesions$weights}: a floating point array with dimensions 
+        \code{c(K2, maxLL)}, representing the relative importance of detecting 
+        each lesion. The weights for an abnormal case must sum to unity. 
+        For example, \code{dataset05$lesions$weights[4,]} is \code{c(0.5,0.5, -Inf)}, 
+        corresponding to equal weights (0.5) assigned to of the two lesions in the
+        case.
+             
+    \item \code{descriptions$fileName}: a \code{character} variable containing the file
+        name of the source data for this dataset. This is generated automatically
+        by the \link{DfReadDataFile} function used to read the file. For a simulalated
+        dataset it is set to "NA" (i.e., a character vector, not the variable \code{NA}). 
+    
+    \item \code{descriptions$type}: a \code{character} variable describing the data type: 
+        "\code{ROC}", "\code{LROC}", "\code{ROI}" or "\code{FROC}".
+    
+    \item \code{descriptions$name}: a \code{character} variable containing the name of 
+        the dataset: e.g., "dataset02" or "dataset05". This is generated automatically
+        by the \link{DfReadDataFile} function used to read the file.
+    
+    \item \code{descriptions$truthTableStr}: a \code{c(I, J, L, maxLL+1)} object. For
+        normal cases elements \code{c(I, J, L, 1)} are filled with 1s if the corresponding 
+        interpretations occurred or NAs otherwise. For abnormal cases elements
+        \code{c(I, J, L, 2:(maxLL+1))} are filled with 1s if the corresponding 
+        interpretations occurred or NAs otherwise. This object is necessary for analyzing
+        more complex designs, e.g., split-plot, as described next.
+
+    \item \code{descriptions$design}: a \code{character} variable: "\code{FCTRL}", 
+        "\code{SPLIT-PLOT-A}" or "\code{SPLIT-PLOT-A}", corresponding to factorial,
+        split-plot-A or split-plot-C designs. The A and C refer to subparts of Table VII
+        in a Hillis 2014 publication.
+    
+    \item \code{descriptions$modalityID}: a \code{character} vector of length \eqn{I}, 
+        which labels/names the modalities in the dataset.
+             
+    \item \code{descriptions$readerID}: a \code{character} vector of length \eqn{J}, 
+        which labels/names the readers in the dataset.     
     }
   }
-}
-}
+  
+  \subsection{ROI data structure, example \code{datasetROI}}{
+  Only changes from the previously described structure are described below:
+    \itemize{
+    \item \code{ratings$NL}: a float array with dimensions \code{c(I, J, K, Q)} 
+        containing the ratings of each of Q quadrants for each non-diseased case. 
+    \item \code{ratings$LL}: a float array with dimensions  
+        \code{c(I, J, K2, Q)} containing the ratings of quadrants for each 
+        diseased case.  
+    \item \code{lesions$perCase}: this contains the locations, on abnormal cases,
+    containing at least one lesion.  
+    }
+  }
 
+  \subsection{Crossed modality data structure, example \code{datasetCrossedModality}}{
+  Only changes from the previously described structure are described below:
+    \itemize{
+    \item \code{ratings$NL}: a float array with dimension \code{c(I1, I2, J, K, maxNL)} 
+        containing the ratings of NL marks. Note the existence of two modality indices.
+    \item \code{LL}: a float array with dimension \code{c(I1, I2, J, K2, maxLL)}
+        containing the ratings of all LL marks. Note the existence of two modality indices.
+    \item \code{modalityID1}: corresponding to first modality factor.
+    \item \code{modalityID2}: corresponding to second modality factor.
+    }
+  }
+}  
 
 \section{Df: Datafile Related Functions}{
   \itemize{    
@@ -400,11 +347,9 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
            dataset object.
         \item \code{\link{DfBinDataset}}: Return a binned dataset.
         \item \code{\link{DfCreateCorCbmDataset}}:Create paired dataset for 
-           testing \link{FitCorCbmRoc}.
+           testing \link{FitCorCbm}.
         \item \code{\link{DfExtractDataset}}: Extract a subset of modalities 
            and readers from a dataset.
-        \item \code{\link{DfFroc2Afroc}}: Convert an FROC dataset to an AFROC 
-           dataset.
         \item \code{\link{DfFroc2Roc}}: Convert an FROC dataset to a highest 
            rating inferred ROC dataset.
         \item \code{\link{DfLroc2Roc}}: Convert an LROC dataset to a highest 
@@ -416,10 +361,9 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
         \item \code{\link{DfReadCrossedModalities}}: Read a crossed-modalities 
            data file.
         \item \code{\link{DfReadDataFile}}: Read a general data file.
-        \item \code{\link{DfReadLrocDataFile}}: Read a LROC data file.
         \item \code{\link{DfSaveDataFile}}: Save ROC data file in a different format.
         \item \code{\link{DfExtractCorCbmDataset}}: Extract two arms of a pairing 
-           from an MRMC ROC dataset suitable for using \link{FitCorCbmRoc}.
+           from an MRMC ROC dataset suitable for using \link{FitCorCbm}.
   }
 }
 
@@ -432,7 +376,7 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
            to ROC data.
         \item \code{\link{FitRsmRoc}}: Fit the radiological search model (RSM) 
            to ROC data.
-        \item \code{\link{FitCorCbmRoc}}: Fit the correlated contaminated binormal model 
+        \item \code{\link{FitCorCbm}}: Fit the correlated contaminated binormal model 
              (CORCBM) to paired ROC data.
         \item \code{\link{FitRsmRoc}}: Fit the radiological search model (RSM) 
            to ROC data.
@@ -464,9 +408,9 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
 \section{Sample size Functions}{
   \itemize{    
         \item \code{\link{SsPowerGivenJK}}: Calculate statistical power given 
-           numbers of readers J and cases K.
+           numbers of readers J and cases \code{K}.
         \item \code{\link{SsPowerTable}}: Generate a power table.
-        \item \code{\link{SsSampleSizeKGivenJ}}: Calculate number of cases K, for 
+        \item \code{\link{SsSampleSizeKGivenJ}}: Calculate number of cases \code{K}, for 
            specified number of readers J, to achieve desired power for an ROC study.
   }
 }
@@ -475,12 +419,10 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
   \itemize{    
         \item \code{\link{StSignificanceTesting}}: Perform significance testing, 
            DBM or OR.
-        \item \code{\link{StSignificanceTestingCadVsRadiologists}}: Perform 
+        \item \code{\link{StSignificanceTestingCadVsRad}}: Perform 
            significance testing, CAD vs. radiologists.
         \item \code{\link{StSignificanceTestingCrossedModalities}}: Perform 
            significance testing using crossed modalities analysis.
-        \item \code{\link{StSignificanceTestingSingleFixedFactor}}: Perform 
-           significance testing for single fixed factor analysis.
   }
 }
 
@@ -491,7 +433,7 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
         \item \code{\link{UtilAucBinormal}}: Binormal model AUC function.
         \item \code{\link{UtilAucCBM}}: CBM AUC function.
         \item \code{\link{UtilAucPROPROC}}: PROPROC AUC function.
-        \item \code{\link{UtilAucsRSM}}: RSM ROC/AFROC AUC calculator.
+        \item \code{\link{UtilAnalyticalAucsRSM}}: RSM ROC/AFROC AUC calculator.
         \item \code{\link{UtilFigureOfMerit}}: Calculate empirical figures of merit 
            (FOMs) for specified dataset.
         \item \code{\link{UtilIntrinsic2PhysicalRSM}}: Convert from intrinsic to 
@@ -507,7 +449,7 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
         \item \code{\link{UtilPseudoValues}}: Return jackknife pseudovalues.  
         \item \code{\link{UtilVarComponentsDBM}}: Utility for Dorfman-Berbaum-Metz 
            variance components.  
-        \item \code{\link{UtilVarComponentsOR}}: Utility for Obuchowski-Rockette 
+        \item \code{\link{UtilORVarComponentsFactorial}}: Utility for Obuchowski-Rockette 
            variance components.  
   }
 }
@@ -588,7 +530,7 @@ RJafroc implements software for assessing medical imaging systems, radiologists 
      by models for diagnostic tasks involving lesion localization. Medical 
      Physics, 35(2), 435. 
 
-  Thompson JD, Chakraborty DP, Szczepura K, et al. (2016) Effect of reconstruction methods 
+  Thompson JD, Chakraborty DP, Szczepura \code{K}, et al. (2016) Effect of reconstruction methods 
      and x-ray tube current-time product  on nodule detection in an anthropomorphic 
      thorax phantom: a crossed-modality JAFROC observer study. Medical Physics. 
      43(3):1265-1274.

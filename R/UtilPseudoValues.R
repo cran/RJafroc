@@ -1,125 +1,221 @@
-#' Calculate pseudovalues
+#' Pseudovalues for given dataset and FOM
 #' 
-#' Calculates \strong{centered} jackknife pseudovalues AND jackknife FOM values
+#' Returns \strong{centered} jackknife pseudovalues AND jackknife FOM values, 
+#'    for factorial OR split-plot-a OR split-plot-c study designs
 #' 
-#' @param dataset The dataset to be analyzed, see \code{\link{RJafroc-package}}.
+#' @param dataset The dataset to be analyzed, see \code{\link{RJafroc-package}};
+#'    must be factorial, or split-plot-a or split-plot-c.
 #' @param FOM The figure of merit to be used in the calculation. 
 #'    The default is \code{"FOM_wAFROC"}. See \code{\link{UtilFigureOfMerit}}.
 #' @param FPFValue Only needed for \code{LROC} data \strong{and} FOM = "PCL" or "ALROC";
 #'     where to evaluate a partial curve based figure of merit. The default is 0.2.
 #' 
-#' @return A list containing two \code{c(I, J, K)} arrays containing the pseudovalues
-#'    and the jackknife FOM values of the datasets.
+#' @return A list containing two arrays containing the pseudovalues
+#'    and the jackknife FOM values of the datasets (a third returned value 
+#'    is for internal use). 
+#' 
+#' @note Each returned array has dimension \code{c(I,J,K)}, where \code{K} depends on the
+#'    FOM: \code{K1} for FOMs that are based on normal cases only, \code{K2} for FOMs that are 
+#'    based on abnormal cases only, and \code{K} for FOMs that are based on normal and 
+#'    abnormal cases.
+#' 
 #' 
 #' @examples
-#' UtilPseudoValues(dataset02, FOM = "Wilcoxon")$jkPseudoValues[1,1,1:10]
-#' UtilPseudoValues(dataset02, FOM = "Wilcoxon")$jkFomValues[1,1,1:10]
-#' UtilPseudoValues(dataset05, FOM = "wAFROC")$jkPseudoValues[1,1,1:10]
 #' UtilPseudoValues(dataset05, FOM = "wAFROC")$jkFomValues[1,1,1:10]
 #' 
 #' @export
 
-# UtilPseudoValues.R had errors insofar as it was dropping the 1 dimension in 
-# lesionID and lesionWeight; was affecting StSingleModality when used with 
-# wAFROC FOM. This part of the code needs further checking; 
-# no essential changes made in MyFOM.cpp and gpfMyFOM.R.
-# 
-UtilPseudoValues <- function(dataset, FOM, FPFValue = 0.2){
-  dataType <- dataset$dataType
+UtilPseudoValues <- function(dataset, FOM, FPFValue = 0.2) {
+  dataType <- dataset$descriptions$type
   if (dataType != "LROC") {
-    NL <- dataset$NL
-    LL <- dataset$LL
+    NL <- dataset$ratings$NL
+    LL <- dataset$ratings$LL
   } else {
     if (FOM == "Wilcoxon"){
       datasetRoc <- DfLroc2Roc(dataset)
-      NL <- datasetRoc$NL
-      LL <- datasetRoc$LL
+      NL <- datasetRoc$ratings$NL
+      LL <- datasetRoc$ratings$LL
     } else if (FOM %in% c("PCL", "ALROC")){
-      NL <- dataset$NL
-      LL <- dataset$LLCl
+      NL <- dataset$ratings$NL
+      LL <- dataset$ratings$LL
     } else stop("incorrect FOM for LROC data")
   }
-  lesionVector <- dataset$lesionVector
-  lesionID <- dataset$lesionID
-  lesionWeight <- dataset$lesionWeight
   maxNL <- dim(NL)[4]
   maxLL <- dim(LL)[4]
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
-  I <- length(modalityID)
-  J <- length(readerID)
+  I <- dim(NL)[1]
+  J <- dim(NL)[2]
   K <- dim(NL)[3]
   K2 <- dim(LL)[3]
   K1 <- K - K2
-  
-  fomArray <- UtilFigureOfMerit(dataset, FOM, FPFValue)
+
+  # account for 15+ FOMs  
   if (FOM %in% c("MaxNLF", "ExpTrnsfmSp", "HrSp")) {
+    # FOMs defined over NORMAL cases
     jkFomValues <- array(dim = c(I, J, K1))
     jkPseudoValues <- array(dim = c(I, J, K1))
-    for (i in 1:I) {
-      for (j in 1:J) {
-        for (k in 1:K1) {
-          nl <- NL[i, j, -k, ]
-          ll <- LL[i, j, , ]
-          dim(nl) <- c(K - 1, maxNL)
-          dim(ll) <- c(K2, max(lesionVector))
-          jkFomValues[i, j, k] <- gpfMyFOM(nl, ll, lesionVector, lesionID, lesionWeight, maxNL, maxLL, K1 - 1, K2, FOM, FPFValue)
-          jkPseudoValues[i, j, k] <- fomArray[i, j] * K1 - jkFomValues[i, j, k] * (K1 - 1)
-        }
-        jkPseudoValues[i, j, ] <- jkPseudoValues[i, j, ] + (fomArray[i, j] - mean(jkPseudoValues[i, j, ]))
-      }
-    }
-  } else if (FOM %in% c("MaxLLF", "HrSe")) {
+  }  else if (FOM %in% c("MaxLLF", "HrSe")) { # after checking StOldCode.R, HrSe belongs in this group, depends only on abnormal cases
+    # FOMs defined over ABNORMAL cases
     jkFomValues <- array(dim = c(I, J, K2))
     jkPseudoValues <- array(dim = c(I, J, K2))
-    for (i in 1:I) {
-      for (j in 1:J) {
-        for (k in 1:K2) {
-          nl <- NL[i, j, -(k + K1), ]
-          ll <- LL[i, j, -k, ]
-          dim(nl) <- c(K - 1, maxNL)
-          dim(ll) <- c(K2 - 1, max(lesionVector))
-          lesID <- lesionID[-k, ]
-          dim(lesID) <- c(K2 - 1, max(lesionVector))
-          lesWght <- lesionWeight[-k, ]
-          dim(lesWght) <- c(K2 - 1, max(lesionVector))
-          jkFomValues[i, j, k] <- gpfMyFOM(nl, ll, lesionVector[-k], lesID, lesWght, maxNL, maxLL, K1, K2 - 1, FOM, FPFValue)
-          jkPseudoValues[i, j, k] <- fomArray[i, j] * K2 - jkFomValues[i, j, k] * (K2 - 1)
-        }
-        jkPseudoValues[i, j, ] <- jkPseudoValues[i, j, ] + (fomArray[i, j] - mean(jkPseudoValues[i, j, ]))
-      }
-    }
-  } else {
+  } else if (FOM %in% c("Wilcoxon", "HrAuc", "SongA1", 
+                        "AFROC", "AFROC1", "wAFROC1", "wAFROC",
+                        "MaxNLFAllCases", "ROI", "SongA2",
+                        "PCL", "ALROC")) { # TBA may not handle ROI correctly
+    # FOMs defined over ALL cases
     jkFomValues <- array(dim = c(I, J, K))
     jkPseudoValues <- array(dim = c(I, J, K))
-    for (i in 1:I) {
-      for (j in 1:J) {
-        for (k in 1:K) {
-          if (k <= K1) {
-            nl <- NL[i, j, -k, ]
-            ll <- LL[i, j, , ]
-            dim(nl) <- c(K - 1, maxNL)
-            dim(ll) <- c(K2, max(lesionVector))
-            jkFomValues[i, j, k] <- gpfMyFOM(nl, ll, lesionVector, lesionID, lesionWeight, maxNL, maxLL, K1 - 1, K2, FOM, FPFValue)
-          } else {
-            nl <- NL[i, j, -k, ]
-            ll <- LL[i, j, -(k - K1), ]
-            dim(nl) <- c(K - 1, maxNL)
-            dim(ll) <- c(K2 - 1, max(lesionVector))
-            lesWght <- lesionWeight[-(k - K1), ]
-            dim(lesWght) <- c(K2 - 1, max(lesionVector))
-            lesID <- lesionID[-(k - K1), ]
-            dim(lesID) <- c(K2 - 1, max(lesionVector))
-            jkFomValues[i, j, k] <- gpfMyFOM(nl, ll, lesionVector[-(k - K1)], lesID, lesWght, maxNL, maxLL, K1, K2 - 1, FOM, FPFValue)
-          }
-          jkPseudoValues[i, j, k] <- fomArray[i, j] * K - jkFomValues[i, j, k] * (K - 1)
+  } else stop("Illegal FOM specified")
+  
+  t <- dataset$descriptions$truthTableStr
+  fomArray <- UtilFigureOfMerit(dataset, FOM, FPFValue)
+  lastCase <- 0
+  caseTransitions <- array(dim = J)
+  for (i in 1:I) {
+    for (j in 1:J) {
+      # NOTATION
+      # k1_ij_logi = logical array of NORMAL cases meeting the i,j criteria, length K1 
+      # k2_ij_logi = logical array of ABNORMAL cases meeting the i,j criteria, length K2 
+      # k_ij_logi = logical array of ALL cases meeting the i,j criteria, length K 
+      k1_ij_logi <- !is.na(t[i,j,,1])
+      # i.e., indices of normal cases meeting the i,j criteria
+      k2_ij_logi <- !is.na(t[i,j,,2])[(K1+1):K]
+      # i.e., indices of abnormal cases meeting the i,j criteria
+      k_ij_logi <- !is.na(t[i,j,,1]) | !is.na(t[i,j,,2]) 
+      # i.e., indices of all cases meeting the i,j criteria
+      if (sum(k_ij_logi) == 0) next
+      perCase_ij <- dataset$lesions$perCase[k2_ij_logi] 
+      # i.e., perCase indices for all abnormal cases meeting the i,j criteria
+      K1_ij <- sum(!is.na(t[i,j,,1]))
+      K2_ij <- sum(!is.na(t[i,j,,2]))
+      K_ij <- K1_ij + K2_ij
+      lID_ij <- dataset$lesions$IDs[k2_ij_logi,1:maxLL, drop = FALSE]
+      lW_ij <- dataset$lesions$weights[k2_ij_logi,1:maxLL, drop = FALSE]
+      nl_ij <- NL[i, j, k_ij_logi, 1:maxNL]; dim(nl_ij) <- c(K_ij, maxNL)
+      # i.e., NL ratings for all cases meeting the i,j criteria
+      ll_ij <- LL[i, j, k2_ij_logi, 1:maxLL]; dim(ll_ij) <- c(K2_ij, maxLL)
+      # i.e., LL ratings for all cases meeting the i,j criteria
+      
+      if (FOM %in% c("MaxNLF", "ExpTrnsfmSp", "HrSp")) {
+        for (k in 1:K1_ij) {
+          # NOTATION
+          # kIndxNor: case index for the 3rd dimension of normal cases, 
+          # ranges from 1 to K1
+          kIndxNor <- which(k1_ij_logi)[k];if (is.na(kIndxNor)) 
+            stop("Indexing error in UtilPseudoValues")
+          # FOMs defined over NORMAL cases
+          nlij_jk <- nl_ij[-k, ];dim(nlij_jk) <- c(K_ij - 1, maxNL)
+          llij_jk <- ll_ij;dim(llij_jk) <- c(K2_ij, maxLL)
+          lV_j_jk <- perCase_ij
+          lW_j_jk <- lW_ij;dim(lW_j_jk) <- c(K2_ij, maxLL)
+          lID_j_jk <- lID_ij;dim(lID_j_jk) <- c(K2_ij, maxLL)
+          if (is.na(jkFomValues[i, j, kIndxNor])) {
+            jkFomValues[i, j, kIndxNor] <- 
+              MyFom_ij(nlij_jk, llij_jk, lV_j_jk, 
+                       lID_j_jk, lW_j_jk, maxNL, maxLL, 
+                       K1_ij - 1, K2_ij, FOM, FPFValue)
+          } else stop("overwriting UtilPseudoValues")
+          if (is.na(jkPseudoValues[i, j, kIndxNor])) {
+            jkPseudoValues[i, j, kIndxNor] <- 
+              fomArray[i, j] * K1_ij - jkFomValues[i, j, kIndxNor] * (K1_ij - 1)
+          } else stop("overwriting UtilPseudoValues")
         }
-        jkPseudoValues[i, j, ] <- jkPseudoValues[i, j, ] + (fomArray[i, j] - mean(jkPseudoValues[i, j, ]))
+      } else if (FOM %in% c("MaxLLF", "HrSe")) { 
+        # FOMs defined over ABNORMAL cases
+        for (k in 1:K2_ij) {
+          # NOTATION
+          # kIndxAbn: case index for the 3rd dimension of abormnal cases, 
+          # ranges from 1 to K2
+          kIndxAbn <- which(k2_ij_logi)[k];if (is.na(kIndxAbn)) 
+            stop("Indexing error in UtilPseudoValues")
+          nlij_jk <- nl_ij[-(k+K1_ij), ];dim(nlij_jk) <- c(K_ij - 1, maxNL)
+          llij_jk <- ll_ij[-k, ];dim(llij_jk) <- c(K2_ij - 1, maxLL)
+          lV_j_jk <- perCase_ij[-k]
+          lW_j_jk <- lW_ij[-k, ];dim(lW_j_jk) <- c(K2_ij - 1, maxLL)
+          lID_j_jk <- lID_ij[-k, ];dim(lID_j_jk) <- c(K2_ij - 1, maxLL)
+          if (is.na(jkFomValues[i, j, kIndxAbn])) {
+            jkFomValues[i, j, kIndxAbn] <- 
+              MyFom_ij(nlij_jk, llij_jk, lV_j_jk, 
+                       lID_j_jk, lW_j_jk, maxNL, maxLL, 
+                       K1_ij, K2_ij - 1, FOM, FPFValue)
+          } else stop("overwriting UtilPseudoValues 3")
+          if (is.na(jkPseudoValues[i, j, kIndxAbn])) {
+            jkPseudoValues[i, j, kIndxAbn] <- 
+              fomArray[i, j] * K2_ij - jkFomValues[i, j, kIndxAbn] * (K2_ij - 1)
+          } else stop("overwriting UtilPseudoValues")
+        }
+      } else { 
+        # FOMs defined over ALL cases
+        for (k in 1:K_ij) {
+          # NOTATION
+          # kIndxAll: case index for the 3rd dimension of all cases, 
+          # ranges from 1 to K
+          kIndxAll <- which(k_ij_logi)[k];if (is.na(kIndxAll)) 
+            stop("Indexing error in UtilPseudoValues")
+          if (k <= K1_ij) {
+            nlij_jk <- nl_ij[-k, ];dim(nlij_jk) <- c(K_ij - 1, maxNL)
+            llij_jk <- ll_ij;dim(llij_jk) <- c(K2_ij, maxLL)
+            lV_j_jk <- perCase_ij
+            lID_j_jk <- lID_ij;dim(lID_j_jk) <- c(K2_ij, maxLL)
+            lW_j_jk <- lW_ij;dim(lW_j_jk) <- c(K2_ij, maxLL)
+            if (is.na(jkFomValues[i, j, kIndxAll])) {
+              jkFomValues[i, j, kIndxAll] <- 
+                MyFom_ij(nlij_jk, llij_jk, lV_j_jk, 
+                         lID_j_jk, lW_j_jk, maxNL, maxLL, 
+                         K1_ij - 1, K2_ij, FOM, FPFValue)
+            } else stop("overwriting UtilPseudoValues")
+            if (is.na(jkPseudoValues[i, j, kIndxAll])) {
+              jkPseudoValues[i, j, kIndxAll] <- 
+                fomArray[i, j] * K_ij - jkFomValues[i, j, kIndxAll] * (K_ij - 1)
+            } else stop("overwriting UtilPseudoValues")
+          } else {
+            nlij_jk <- nl_ij[-k, ];dim(nlij_jk) <- c(K_ij - 1, maxNL)
+            llij_jk <- ll_ij[-(k - K1_ij), ];dim(llij_jk) <- c(K2_ij - 1, maxLL)
+            lV_j_jk <- perCase_ij[-(k - K1_ij)]
+            lW_j_jk <- lW_ij[-(k - K1_ij), ];dim(lW_j_jk) <- c(K2_ij - 1, maxLL)
+            lID_j_jk <- lID_ij[-(k - K1_ij), ];dim(lID_j_jk) <- c(K2_ij - 1, maxLL)
+            if (is.na(jkFomValues[i, j, kIndxAll])) {
+              jkFomValues[i, j, kIndxAll] <- 
+                MyFom_ij(nlij_jk, llij_jk, lV_j_jk, 
+                         lID_j_jk, lW_j_jk, maxNL, maxLL, 
+                         K1_ij, K2_ij - 1, FOM, FPFValue)
+            } else stop("overwriting UtilPseudoValues")
+            if (is.na(jkPseudoValues[i, j, kIndxAll])) {
+              jkPseudoValues[i, j, kIndxAll] <- 
+                fomArray[i, j] * K_ij - jkFomValues[i, j, kIndxAll] * (K_ij - 1)
+            } else stop("overwriting UtilPseudoValues")
+          }
+        }
       }
+      # center the pseudovalues 
+      if (FOM %in% c("MaxNLF", "ExpTrnsfmSp", "HrSp")) {
+        # FOMs defined over NORMAL cases
+        jkPseudoValues[i, j, which(k1_ij_logi)] <- 
+          jkPseudoValues[i, j, which(k1_ij_logi)] + 
+          (fomArray[i, j] - mean(jkPseudoValues[i, j, which(k1_ij_logi)]))
+      }  else if (FOM %in% c("MaxLLF", "HrSe")) {
+        # FOMs defined over ABNORMAL cases
+        jkPseudoValues[i, j, which(k2_ij_logi)] <- 
+          jkPseudoValues[i, j, which(k2_ij_logi)] + 
+          (fomArray[i, j] - mean(jkPseudoValues[i, j, which(k2_ij_logi)]))
+      } else {
+        # FOMs defined over ALL cases
+        jkPseudoValues[i, j, which(k_ij_logi)] <- 
+          jkPseudoValues[i, j, which(k_ij_logi)] + 
+          (fomArray[i, j] - mean(jkPseudoValues[i, j, which(k_ij_logi)]))
+      }
+      caseTransitions[j] <- lastCase
+      lastCase <- (lastCase + K_ij) %% K
     }
   }
+  
+  caseTransitions <- c(caseTransitions, K)
   return(list(
     jkPseudoValues = jkPseudoValues, 
-    jkFomValues = jkFomValues
+    jkFomValues = jkFomValues,
+    caseTransitions = caseTransitions
   ))
 }
+
+
+
+

@@ -1,7 +1,7 @@
-#' Simulate paired binned data for testing FitCorCbmRoc
+#' Simulate paired binned data for testing FitCorCbm
 #'
 #' @description Simulates single treatment 2-reader binned ROC dataset, simulated according to the CORCBM model,
-#' for the purpose of testing the fitting program \code{\link{FitCorCbmRoc}}.
+#' for the purpose of testing the fitting program \code{\link{FitCorCbm}}.
 #'
 #' @param seed The seed variable, default is 123; set to NULL for truly random seed
 #' @param K1 The number of non-diseased cases, default is 50
@@ -21,7 +21,7 @@
 #' See referenced publication.
 #'
 #'
-#' @return The return value is the desired dataset, suitable for testing FitCorCbmRoc
+#' @return The return value is the desired dataset, suitable for testing FitCorCbm
 #'
 #'
 #'
@@ -30,10 +30,9 @@
 ## seed <- 1 # this gives unequal numbers of bins in X and Y directions for 50/50 dataset
 #' dataset <- SimulateCorCbmDataset()
 #'
-#' \dontrun{
+#' \donttest{
 #' ## this takes very long
-#' dataset <- SimulateCorCbmDataset(K1 = 5000, K2 = 5000)
-#'
+#' ## dataset <- SimulateCorCbmDataset(K1 = 5000, K2 = 5000)
 #'}
 #'
 #'

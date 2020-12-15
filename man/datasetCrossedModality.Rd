@@ -4,18 +4,28 @@
 \name{datasetCrossedModality}
 \alias{datasetCrossedModality}
 \title{John Thompson crossed treatment FROC dataset}
-\format{A list with 9 elements:
+\format{
+A list with 3 elements: \code{$ratings}, \code{$lesions} and \code{$descriptions}; \code{$ratings}
+   contain 3 elements, \code{$NL}, \code{$LL} and \code{$LL_IL} as sub-lists; \code{$lesions}
+   contain 3 elements, \code{$perCase}, \code{$IDs} and \code{$weights} as sub-lists; \code{$descriptions}
+   contain 7 elements, \code{$fileName}, \code{$type}, \code{$name},
+   \code{$truthTableStr}, \code{$design}, \code{$modalityID} and \code{$readerID} as sub-lists;
 \itemize{
-\item{\code{NL}}{ Ratings array [1:2, 1:4, 1:11, 1:68, 1:5], of non-lesion localizations, NLs}
-\item{\code{LL}}{ Ratings array [1:2, 1:4, 1:11, 1:34, 1:3], of lesion localizations, LLs}
-\item{\code{lesionVector}}{ array [1:34], number of lesions per diseased case, all set to 1}
-\item{\code{lesionID}}{ array [1:34, 3], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:34, 3] weights (or clinical importance) of lesions, all set to 1}
-\item{\code{dataType}}{ "FROC", the data type}
-\item{\code{modalityID1}}{ [1:2] "F" "I", treatment labels}
-\item{\code{modalityID2}}{ [1:4] "20" "40"  "60"  "80", treatment labels}
-\item{\code{readerID}}{ [1:11] "1" "10" "11" ..., reader labels}
-}}
+\item{\code{rating$NL}}{, num [1:2, 1:4, 1:11, 1:68, 1:5], ratings of non-lesion localizations, NLs}
+\item{\code{rating$LL}}{, num [1:2, 1:4, 1:11, 1:34, 1:3], ratings of lesion localizations, LLs}
+\item{\code{rating$LL_IL}}{NA, this placeholder is used only for LROC data}
+\item{\code{lesions$perCase}}{, int [1:34], number of lesions per diseased case}
+\item{\code{lesions$IDs}}{, num [1:34, 1:3] , numeric labels of lesions on diseased cases}
+\item{\code{lesions$weights}}{, num [1:34, 1:3], weights (or clinical importances) of lesions}
+\item{\code{descriptions$fileName}}{, chr, "datasetCrossedModality", base name of dataset in `data` folder}
+\item{\code{descriptions$type}}{, chr "FROC", the data type}
+\item{\code{descriptions$name}}{, chr "THOMPSON-X-MOD", the name of the dataset}
+\item{\code{descriptions$truthTableStr}}{, NA, truth table structure}
+\item{\code{descriptions$design}}{, chr "FCTRL-X-MOD", study design, factorial dataset}
+\item{\code{descriptions$modalityID}}{, chr [1:2] "F" "I", treatment label(s)}
+\item{\code{descriptions$readerID}}{, chr [1:4] "20" "40" "60" "80", reader labels}
+}
+}
 \usage{
 datasetCrossedModality
 }

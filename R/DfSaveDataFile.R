@@ -16,21 +16,22 @@
 #' 
 #' @examples
 #' \donttest{
-#' DfSaveDataFile(dataset = dataset05, 
-#'    fileName = "rocData2.xlsx", format = "JAFROC")
-#' DfSaveDataFile(dataset = dataset02, 
-#'    fileName = "rocData2.csv", format = "MRMC")
-#' DfSaveDataFile(dataset = dataset02, 
-#'    fileName = "rocData2.lrc", format = "MRMC", 
-#'    dataDescription = "ExampleROCdata1")
-#' DfSaveDataFile(dataset = dataset02, 
-#'    fileName = "rocData2.txt", format = "MRMC", 
-#'    dataDescription = "ExampleROCdata2")
-#' DfSaveDataFile(dataset = dataset02, 
-#'    fileName = "dataset05.imrmc", format = "iMRMC", 
-#'    dataDescription = "ExampleROCdata3") 
+#' ## DfSaveDataFile(dataset = dataset05, 
+#' ##    fileName = "rocData2.xlsx", format = "JAFROC")
+#' ## DfSaveDataFile(dataset = dataset02, 
+#' ##    fileName = "rocData2.csv", format = "MRMC")
+#' ## DfSaveDataFile(dataset = dataset02, 
+#' ##    fileName = "rocData2.lrc", format = "MRMC", 
+#' ##     dataDescription = "ExampleROCdata1")
+#' ## DfSaveDataFile(dataset = dataset02, 
+#' ##    fileName = "rocData2.txt", format = "MRMC", 
+#' ##     dataDescription = "ExampleROCdata2")
+#' ##  DfSaveDataFile(dataset = dataset02, 
+#' ##    fileName = "dataset05.imrmc", format = "iMRMC", 
+#' ##    dataDescription = "ExampleROCdata3") 
 #' }
-#'  
+#'
+#' @import openxlsx  
 #' @importFrom tools file_ext
 #' 
 #' @export
@@ -60,15 +61,15 @@ SaveJAFROC <- function(dataset, fileName) {
   if (!fileExt %in% c("xls", "xlsx")) {
     stop("The extension of JAFROC file name must be *.xls or *.xlsx.")
   }
-  NL <- dataset$NL
-  LL <- dataset$LL
-  lesionVector <- dataset$lesionVector
-  lesionID <- dataset$lesionID
-  lesionWeight <- dataset$lesionWeight
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  lesionVector <- dataset$lesions$perCase
+  lesionID <- dataset$lesions$IDs
+  lesionWeight <- dataset$lesions$weights
   maxNL <- dim(NL)[4]
-  dataType <- dataset$dataType
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  dataType <- dataset$descriptions$type
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]
@@ -148,7 +149,7 @@ SaveJAFROC <- function(dataset, fileName) {
 
 SaveLrc <- function(dataset, fileName, dataDescription) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
-  if (dataset$dataType != "ROC") {
+  if (dataset$descriptions$type != "ROC") {
     stop("Only ROC data file can be saved as *.lrc format.")
   }
   fileExt <- file_ext(fileName)
@@ -156,15 +157,15 @@ SaveLrc <- function(dataset, fileName, dataDescription) {
     stop("The extension of LRC file name must be *.lrc")
   }
   write(dataDescription, fileName)
-  NL <- dataset$NL
-  LL <- dataset$LL
-  # lesionVector <- dataset$lesionVector
-  # lesionID <- dataset$lesionID
-  # lesionWeight <- dataset$lesionWeight
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  # lesionVector <- dataset$lesions$perCase
+  # lesionID <- dataset$lesions$IDs
+  # lesionWeight <- dataset$lesions$weights
   # maxNL <- dim(NL)[4]
-  # dataType <- dataset$dataType
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  # dataType <- dataset$descriptions$type
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]
@@ -221,21 +222,21 @@ SaveLrc <- function(dataset, fileName, dataDescription) {
 
 SaveImrmc <- function(dataset, fileName, dataDescription) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
-  if (dataset$dataType != "ROC") 
+  if (dataset$descriptions$type != "ROC") 
     stop("Only ROC data file can be saved as iMRMC format.")
   fileExt <- file_ext(fileName)
   if (fileExt != "imrmc") {
     stop("The extension of iMRMC file name must be *.imrmc.")
   }
-  NL <- dataset$NL
-  LL <- dataset$LL
-  # lesionVector <- dataset$lesionVector
-  # lesionID <- dataset$lesionID
-  # lesionWeight <- dataset$lesionWeight
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  # lesionVector <- dataset$lesions$perCase
+  # lesionID <- dataset$lesions$IDs
+  # lesionWeight <- dataset$lesions$weights
   # maxNL <- dim(NL)[4]
-  # dataType <- dataset$dataType
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  # dataType <- dataset$descriptions$type
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]
@@ -257,17 +258,21 @@ SaveImrmc <- function(dataset, fileName, dataDescription) {
     for (j in 1:J) {
       for (k in 1:K1) {
         if (NL[i, j, k, 1] != UNINITIALIZED) {
-          write(sprintf("%s,%d,%s,%f", dataset$readerID[j], k, dataset$modalityID[i], NL[i, j, k, 1]), fileName, append = TRUE)
+          write(sprintf("%s,%d,%s,%f", dataset$descriptions$readerID[j], k, 
+                        dataset$descriptions$modalityID[i], NL[i, j, k, 1]), fileName, append = TRUE)
         } else {
-          write(sprintf("%s,%d,%s,%f", dataset$readerID[j], k, dataset$modalityID[i], -2000), fileName, append = TRUE)
+          write(sprintf("%s,%d,%s,%f", dataset$descriptions$readerID[j], k, 
+                        dataset$descriptions$modalityID[i], -2000), fileName, append = TRUE)
         }
       }
       
       for (k in 1:K2) {
         if (LL[i, j, k, 1] != UNINITIALIZED) {
-          write(sprintf("%s,%d,%s,%f", dataset$readerID[j], k + K1, dataset$modalityID[i], LL[i, j, k, 1]), fileName, append = TRUE)
+          write(sprintf("%s,%d,%s,%f", dataset$descriptions$readerID[j], 
+                        k + K1, dataset$descriptions$modalityID[i], LL[i, j, k, 1]), fileName, append = TRUE)
         } else {
-          write(sprintf("%s,%d,%s,%f", dataset$readerID[j], k + K1, dataset$modalityID[i], -2000), fileName, append = TRUE)
+          write(sprintf("%s,%d,%s,%f", dataset$descriptions$readerID[j], 
+                        k + K1, dataset$descriptions$modalityID[i], -2000), fileName, append = TRUE)
         }
       }
     }
@@ -278,22 +283,17 @@ SaveImrmc <- function(dataset, fileName, dataDescription) {
 
 SaveOrDbmMrmc <- function(dataset, fileName) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
-  if (dataset$dataType != "ROC") {
+  if (dataset$descriptions$type != "ROC") {
     stop("Only ROC data file can be saved in MRMC format.")
   }
   fileExt <- file_ext(fileName)
   if (!fileExt %in% c("csv", "lrc", "txt")) {
     stop("The extension of MRMC file name must be *.txt or *.csv or *.lrc.")
   }
-  NL <- dataset$NL
-  LL <- dataset$LL
-  # lesionVector <- dataset$lesionVector
-  # lesionID <- dataset$lesionID
-  # lesionWeight <- dataset$lesionWeight
-  # maxNL <- dim(NL)[4]
-  # dataType <- dataset$dataType
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]
@@ -305,17 +305,23 @@ SaveOrDbmMrmc <- function(dataset, fileName) {
     for (j in 1:J) {
       for (k in 1:K1) {
         if (NL[i, j, k, 1] != UNINITIALIZED) {
-          write(sprintf("%s,%s,%d,%d,%f", dataset$readerID[j], dataset$modalityID[i], k, 0, NL[i, j, k, 1]), fileName, append = TRUE)
+          write(sprintf("%s,%s,%d,%d,%f", dataset$descriptions$readerID[j], 
+                        dataset$descriptions$modalityID[i], k, 0, NL[i, j, k, 1]), fileName, append = TRUE)
         } else {
-          write(sprintf("%s,%s,%d,%d,%f", dataset$readerID[j], dataset$modalityID[i], k, 0, -2000), fileName, append = TRUE)
+          write(sprintf("%s,%s,%d,%d,%f", dataset$descriptions$readerID[j], 
+                        dataset$descriptions$modalityID[i], k, 0, -2000), fileName, append = TRUE)
         }
       }
       
       for (k in 1:K2) {
         if (LL[i, j, k, 1] != UNINITIALIZED) {
-          write(sprintf("%s,%s,%d,%d,%f", dataset$readerID[j], dataset$modalityID[i], k + K1, 1, LL[i, j, k, 1]), fileName, append = TRUE)
+          write(sprintf("%s,%s,%d,%d,%f", dataset$descriptions$readerID[j], 
+                        dataset$descriptions$modalityID[i], k + K1, 1, LL[i, j, k, 1]), 
+                fileName, append = TRUE)
         } else {
-          write(sprintf("%s,%s,%d,%d,%f", dataset$readerID[j], dataset$modalityID[i], k + K1, 1, -2000), fileName, append = TRUE)
+          write(sprintf("%s,%s,%d,%d,%f", dataset$descriptions$readerID[j], 
+                        dataset$descriptions$modalityID[i], k + K1, 1, -2000), 
+                fileName, append = TRUE)
         }
       }
     }
@@ -325,7 +331,7 @@ SaveOrDbmMrmc <- function(dataset, fileName) {
 
 SaveLrc <- function(dataset, fileName, dataDscrpt) {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
-  if (dataset$dataType != "ROC") {
+  if (dataset$descriptions$type != "ROC") {
     stop("Only ROC data file can be saved as *.lrc format.")
   }
   fileExt <- file_ext(fileName)
@@ -333,15 +339,15 @@ SaveLrc <- function(dataset, fileName, dataDscrpt) {
     stop("The extension of LRC file name must be *.lrc")
   }
   write(dataDscrpt, fileName)
-  NL <- dataset$NL
-  LL <- dataset$LL
-  # lesionVector <- dataset$lesionVector
-  # lesionID <- dataset$lesionID
-  # lesionWeight <- dataset$lesionWeight
+  NL <- dataset$ratings$NL
+  LL <- dataset$ratings$LL
+  # lesionVector <- dataset$lesions$perCase
+  # lesionID <- dataset$lesions$IDs
+  # lesionWeight <- dataset$lesions$weights
   # maxNL <- dim(NL)[4]
-  # dataType <- dataset$dataType
-  modalityID <- dataset$modalityID
-  readerID <- dataset$readerID
+  # dataType <- dataset$descriptions$type
+  modalityID <- dataset$descriptions$modalityID
+  readerID <- dataset$descriptions$readerID
   I <- length(modalityID)
   J <- length(readerID)
   K <- dim(NL)[3]

@@ -13,12 +13,13 @@
 #' 
 #' @examples 
 #' binormalPlot <- PlotBinormalFit(c(1, 2), c(0.5, 0.5))
-#' print(binormalPlot)
+#' ## print(binormalPlot)
 #' 
 #' @import ggplot2
 #' @export
 
 PlotBinormalFit <- function(a, b){
+
   if (length(a) != length(b))
     stop("The lengths of a and b do not match.")
   plotZeta <- seq(-3, 20, by = 0.1)
@@ -29,7 +30,7 @@ PlotBinormalFit <- function(a, b){
     TPF <- pnorm(a[i] - b[i] * plotZeta)  
     TPF <- c(1, TPF, 0)
     
-    plotBM <- rbind(plotBM, data.frame(FPF = FPF, TPF = TPF, Treatment = as.character(i)))
+    plotBM <- rbind(plotBM, data.frame(FPF = FPF, TPF = TPF, Treatment = as.character(i), stringsAsFactors = FALSE))
   }
   bmROCCurve <- with(plotBM,{
     ggplot() + geom_line(mapping = aes(x = FPF, y = TPF, color = Treatment), data = plotBM, size = 1)

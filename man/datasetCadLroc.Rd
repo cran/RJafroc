@@ -4,28 +4,37 @@
 \name{datasetCadLroc}
 \alias{datasetCadLroc}
 \title{Nico Karssemeijer LROC dataset (CAD vs. radiologists)}
-\format{A list with 9 elements:
+\format{
+A list with 3 elements: \code{$ratings}, \code{$lesions} and \code{$descriptions}; \code{$ratings}
+   contain 3 elements, \code{$NL}, \code{$LL} and \code{$LL_IL} as sub-lists; \code{$lesions}
+   contain 3 elements, \code{$perCase}, \code{$IDs} and \code{$weights} as sub-lists; \code{$descriptions}
+   contain 7 elements, \code{$fileName}, \code{$type}, \code{$name},
+   \code{$truthTableStr}, \code{$design}, \code{$modalityID} and \code{$readerID} as sub-lists;
 \itemize{
-\item{\code{NL}}{ Ratings array [1, 1:10, 1:200, 1], of false positives, FPs}
-\item{\code{LLCl}}{ Ratings array [1, 1:10, 1:80, 1], of true positives with correct localization, TPCls}
-\item{\code{LLIl}}{ Ratings array [1, 1:10, 1:80, 1], of true positives with incorrect localization, TPIls}
-\item{\code{lesionVector}}{ array [1:80], number of lesions per diseased case, all set to 1}
-\item{\code{lesionID}}{ array [1:80, 1], labels of lesions on diseased cases, all set to 1}
-\item{\code{lesionWeight}}{ array [1:80, 1], weights (or clinical importance) of lesions, all set to 1}
-\item{\code{dataType}}{ "LROC", the data type}
-\item{\code{modalityID}}{ [1:2] "0" "1", treatment labels}
-\item{\code{readerID}}{ [1:10] "1" "2" ..., reader labels}
-}}
+\item{\code{rating$NL}}{, num [1, 1:10, 1:200, 1], ratings of localizations on normal cases}
+\item{\code{rating$LL}}{, num [1, 1:10, 1:80, 1], ratings of correct localizations on abnormal cases}
+\item{\code{rating$LL_IL}}{num [1, 1:10, 1:80, 1], ratings of incorrect localizations on abnormal cases}
+\item{\code{lesions$perCase}}{, int [1:80], number of lesions per diseased case}
+\item{\code{lesions$IDs}}{, num [1:80, 1] , numeric labels of lesions on diseased cases}
+\item{\code{lesions$weights}}{, num [1:80, 1], weights (or clinical importances) of lesions}
+\item{\code{descriptions$fileName}}{, chr, "datasetCadLroc", base name of dataset in `data` folder}
+\item{\code{descriptions$type}}{, chr "LROC", the data type}
+\item{\code{descriptions$name}}{, chr "NICO-CAD-LROC", the name of the dataset}
+\item{\code{descriptions$truthTableStr}}{, num [1:2, 1:4, 1:200, 1:2], truth table structure}
+\item{\code{descriptions$design}}{, chr "FCTRL", study design, factorial dataset}
+\item{\code{descriptions$modalityID}}{, chr "1", treatment label(s)}
+\item{\code{descriptions$readerID}}{, chr [1:10] "1" "2" "3" "4" ..., reader labels}
+}
+}
 \usage{
 datasetCadLroc
 }
 \description{
 This is the actual LROC data corresponding to \code{dataset09}, which was the inferred
-ROC data. Note that the \code{LL} field is split into two, \code{LLCl}, representing true 
-positives where the lesions were correctly localized, and \code{LLIl}, representing true 
+ROC data. Note that the \code{LL} field is split into two, \code{LL}, representing true 
+positives where the lesions were correctly localized, and \code{LL_IL}, representing true 
 positives where the lesions were incorrectly localized. The first reader is CAD
-and the remaining readers are radiologists. The function 
-\code{\link{StSignificanceTestingSingleFixedFactor}} analyzes such datasets.
+and the remaining readers are radiologists.
 }
 \examples{
 str(datasetCadLroc)

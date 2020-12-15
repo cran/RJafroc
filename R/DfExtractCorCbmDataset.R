@@ -21,7 +21,7 @@
 #' is that implied by the first treatement
 #' and the second reader, which is one arm, and the other arm is that implied by the second
 #' treatment paired with the first
-#' reader. Using this method any allowed pairing can be extracted and analyzed by \code{\link{FitCorCbmRoc}}.
+#' reader. Using this method any allowed pairing can be extracted and analyzed by \code{\link{FitCorCbm}}.
 #' The utility of this software is
 #' in designing a ratings simulator that is statistically matched to a real dataset.
 #'
@@ -29,7 +29,7 @@
 #' 
 #' \donttest{
 #' ## Extract the paired data corresponding to the second and third readers in the first treatment
-#' ##from the include ROC dataset
+#' ## from the included ROC dataset
 #' dataset11_23 <- DfExtractCorCbmDataset(dataset05, trts = 1, rdrs = c(2,3))
 #'
 #' ## Extract the paired data corresponding to the third reader in the first and second treatments
@@ -38,36 +38,36 @@
 #' ## Extract the data corresponding to the first reader in the first
 #' ## treatment paired with the data
 #' ## from the third reader in the second treatment
-#' ## (the indices are at different positions in the respective arrays)
+#' ## (the bin indices are at different positions in the two arrays)
 #' dataset12_13 <- DfExtractCorCbmDataset(dataset05,
 #' trts = c(1,2), rdrs = c(1,3))
 #' }
 #' @export
 
 DfExtractCorCbmDataset <- function(dataset, trts = 1, rdrs = 1){
+
   dataset <- DfBinDataset(dataset, desiredNumBins = 5, opChType = "ROC")
-  if (dataset$dataType != "ROC") {
+  if (dataset$descriptions$type != "ROC") {
     stop("This program requires an ROC dataset")
   }
-  I <- length(dataset$NL[,1,1,1])
-  J <- length(dataset$NL[1,,1,1])
-  K <- length(dataset$NL[1,1,,1])
-  K2 <- length(dataset$LL[1,1,,1])
-  K1 <- K - K2
-  
+  K <- length(dataset$ratings$NL[1,1,,1])
+  K2 <- length(dataset$ratings$LL[1,1,,1])
+
   lt <- length(trts);lr <- length(rdrs)
   if ((lt == 1) && (lr == 2)){
     ds <- DfExtractDataset(dataset, trts, rdrs)
-    ds$modalityID <- "1"
-    ds$readerID <- c("1", "2")
+    ds$descriptions$modalityID <- "1"
+    ds$descriptions$readerID <- c("1", "2")
+    ds$descriptions$fileName <- paste0("DfExtractCorCbmDataset(", ds$descriptions$fileName,")")
     return(ds)
   } else if ((lt == 2) && (lr == 1)) {
     ds <- DfExtractDataset(dataset, trts, rdrs)
-    NL <- ds$NL;dim(NL) <- c(1,2,K,1)
-    LL <- ds$LL;dim(LL) <- c(1,2,K2,1)
-    ds$NL <- NL;ds$LL <- LL
-    ds$modalityID <- "1"
-    ds$readerID <- c("1", "2")
+    NL <- ds$ratings$NL;dim(NL) <- c(1,2,K,1)
+    LL <- ds$ratings$LL;dim(LL) <- c(1,2,K2,1)
+    ds$ratings$NL <- NL;ds$ratings$LL <- LL
+    ds$descriptions$modalityID <- "1"
+    ds$descriptions$readerID <- c("1", "2")
+    ds$descriptions$fileName <- paste0("DfExtractCorCbmDataset(", ds$descriptions$fileName,")")
     return(ds)
   } else if ((lt == 2) && (lr == 2)) {
     for (i in 1:lt){
@@ -81,12 +81,13 @@ DfExtractCorCbmDataset <- function(dataset, trts = 1, rdrs = 1){
         }
       }
     }
-    NL <- rbind(dsX$NL,dsY$NL);dim(NL) <- c(1,2,K,1)
-    LL <- rbind(dsX$LL,dsY$LL);dim(LL) <- c(1,2,K2,1)
+    NL <- rbind(dsX$ratings$NL,dsY$ratings$NL);dim(NL) <- c(1,2,K,1)
+    LL <- rbind(dsX$ratings$LL,dsY$ratings$LL);dim(LL) <- c(1,2,K2,1)
     ds <- dsX
-    ds$NL <- NL;ds$LL <- LL
-    ds$modalityID <- "1"
-    ds$readerID <- c("1", "2")
+    ds$ratings$NL <- NL;ds$ratings$LL <- LL
+    ds$descriptions$modalityID <- "1"
+    ds$descriptions$readerID <- c("1", "2")
+    ds$descriptions$fileName <- paste0("DfExtractCorCbmDataset(", ds$descriptions$fileName,")")
     return(ds)
   } else stop("Illegal combination of treatments and readers")
   

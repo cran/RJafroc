@@ -1,29 +1,58 @@
 #' Read a data file 
 #' 
-#' @description Read a disk file and create a dataset object from it.
+#' @description Read a disk file and create a ROC, FROC or LROC dataset object 
+#'    from it.
 #' 
 #' @param fileName A string specifying the name of the file. 
-#'    The file-extension must match the format specified below
-#' @param format A string specifying the format of the data in the file. 
-#'    It can be \code{"JAFROC"}, the default, which requires a .xlsx Excel file,
-#'    \bold{not .xls}, \code{"MRMC"} or \code{"iMRMC"}. 
-#' @param newExcelFileFormat This argument only applies to the \code{"JAFROC"} format. 
-#'    The default is \code{FALSE}. if \code{TRUE} the function accommodates 3 
+#'    The file-extension must match the format specified below.
+#'    
+#' @param format A string specifying the format of the data file. 
+#'    It can be \code{"JAFROC"}, the default, which requires a \code{.xlsx} Excel file
+#'    (\bold{not \code{.xls}}), \code{"MRMC"} or \code{"iMRMC"}. 
+#'    For \code{"MRMC"} the format is determined by the data file extension 
+#'    (\code{.csv} or \code{.txt} or \code{.lrc}) 
+#'    as specified in \url{https://perception.lab.uiowa.edu/}. For \code{"iMRMC"} the 
+#'    file extension is \code{.imrmc} and the format is described in 
+#'    \url{https://code.google.com/archive/p/imrmc/}. \bold{See following note for
+#'    important information about deprecation of the \code{"MRMC"} format}.
+#'    
+#'    
+#' @param newExcelFileFormat Logical. Must be true to read LROC data. 
+#'    This argument only applies to the \code{"JAFROC"} format. 
+#'    The default is \code{FALSE}. If \code{TRUE} the function accommodates 3 
 #'    additional columns
 #'    in the \code{Truth} worksheet. If \code{FALSE}, the original function (as in version 
 #'    1.2.0) is used and the three extra columns, if present, throws an error.  
+#'    
+#' @param lrocForcedMark Logical: For LROC dataset only: is a forced mark required 
+#'    on every image? The default is \code{NA}. If a mark is not required, set 
+#'    it to \code{FALSE} otherwise to \code{TRUE}.  
+#'    
 #' @param delimiter The string delimiter to be used for the \code{"MRMC"} 
-#'    format ("," is the default).
+#'    format ("," is the default), see \url{https://perception.lab.uiowa.edu/}.
 #'    This parameter is not used when reading \code{"JAFROC"} 
 #'    or \code{"iMRMC"} data files.
+#'    
 #' @param sequentialNames A logical variable: if \code{TRUE}, consecutive integers 
 #'    (starting from 1) will be used as the 
 #'    treatment and reader IDs (i.e., names). Otherwise, treatment 
 #'    and reader IDs in the original data file will be used.
 #' 
+#' @note The \code{"MRMC"} format is deprecated. For non-JAFROC formats four file 
+#'    extensions (\code{.csv}, \code{.txt}, \code{.lrc} and \code{.imrmc}) are possible, 
+#'    all of which are restricted to ROC data. Only the \code{iMRMC} format is actively 
+#'    supported, i.e, files with extension \code{.imrmc}. Other formats (\code{.csv}, 
+#'    \code{.txt}, \code{.lrc}) are deprecated. Such files can still be read by this 
+#'    function and then saved to a JAFROC format file for further analysis within this 
+#'    package. \bold{For non-JAFROC data file formats, the \code{readerID} and 
+#'    \code{modalityID} fields  must be unique integers}.
+#' 
 #' @return A dataset with the structure specified in \code{\link{RJafroc-package}}.
 #' 
 #' @examples
+#' fileName <- system.file("extdata", "toyFiles/ROC/rocCr.xlsx", 
+#' package = "RJafroc", mustWork = TRUE)
+#' rdrArr1D <- DfReadDataFile(fileName, newExcelFileFormat = TRUE)
 #'
 #' 
 #' \donttest{
@@ -49,7 +78,9 @@
 #' @export
 
 DfReadDataFile <- function (fileName, format = "JAFROC", 
-                            newExcelFileFormat = FALSE, delimiter = ",", 
+                            newExcelFileFormat = FALSE, 
+                            lrocForcedMark = NA,
+                            delimiter = ",", 
                             sequentialNames = FALSE) 
 {
   
@@ -57,10 +88,12 @@ DfReadDataFile <- function (fileName, format = "JAFROC",
     # handle JAFROC format Excel files
     if (!(file_ext(fileName) == "xlsx")) 
       stop("The extension of JAFROC data file must be .xlsx, NOT .xls.\n")
-    if (!newExcelFileFormat) 
-      return((ReadJAFROCOldFormat(fileName, sequentialNames))) 
-    else 
-      return(ReadJAFROCNewFormat(fileName, sequentialNames))
+    if (!newExcelFileFormat) { 
+      if (!is.na(lrocForcedMark)) stop("Attempt to read possibly LROC dataset with newExcelFileFormat flag set to FALSE") 
+      return((ReadJAFROCOldFormat(fileName, sequentialNames)))
+    } else {
+      return(ReadJAFROCNewFormat(fileName, lrocForcedMark, sequentialNames))
+    }
   } else {
     # handle non-JAFROC format text files
     if (format == "iMRMC") {
@@ -148,7 +181,7 @@ preCheck4BadEntries <- function(truthTable) {
 
 # SPLIT-PLOT-A: Reader nested within test; Hillis 2014 Table VII part (a)
 # SPLIT-PLOT-C: Case nested within reader; Hillis 2014 Table VII part (c)
-checkTruthTable <- function (truthTable) 
+checkTruthTable <- function (truthTable, lrocForcedMark) 
 {
   
   preCheck4BadEntries (truthTable)
@@ -156,8 +189,14 @@ checkTruthTable <- function (truthTable)
   type <- (toupper(truthTable[,6][which(!is.na(truthTable[,6]))]))[1]
   design <- (toupper(truthTable[,6][which(!is.na(truthTable[,6]))]))[2]
   if (design == "CROSSED") design <- "FCTRL"
-  if (!(type %in% c("FROC", "ROC"))) stop("Unsupported data type: must be ROC or FROC.\n")
+  if (!(type %in% c("FROC", "ROC", "LROC"))) stop("Unsupported data type: must be ROC, FROC or LROC.\n")
   if (!(design %in% c("FCTRL", "SPLIT-PLOT-A", "SPLIT-PLOT-C"))) stop("Study design must be FCTRL, SPLIT-PLOT-A or SPLIT-PLOT-C\n")
+  
+  if (type == "LROC") {
+    if (is.na(lrocForcedMark)) stop("For LROC dataset one must set the lrocForcedMark flag to a logical") 
+  } else {
+    if (!is.na(lrocForcedMark)) stop("For non-LROC dataset one cannot set the lrocForcedMark flag to a logical") 
+  }
   
   df <- truthTable[1:5]
   df["caseLevelTruth"] <- (truthTable$LesionID > 0)

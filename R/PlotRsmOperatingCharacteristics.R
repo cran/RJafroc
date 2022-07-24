@@ -1,10 +1,8 @@
-#' RSM predicted operating characteristics, ROC highest rating pdfs and FOMs,
-#'    for FROC data
+#' RSM predicted operating characteristics, ROC pdfs and AUCs
 #' 
-#' @description Visualize RSM predicted ROC, AFROC, wAFROC, FROC and pdf 
-#'    (probability density functions of highest ratings curves 
-#'    for non-diseased and diseased cases), for sets of search model parameters: 
-#'    mu, lambda, nu and zeta1.
+#' @description Visualize RSM predicted ROC, AFROC, wAFROC and FROC curves, and ROC pdfs, 
+#'    given \bold{equal-length arrays} of search model parameters: mu, lambda, nu and 
+#'    zeta1.
 #' 
 #' @param mu Array: the mean of the Gaussian distribution for the 
 #'    ratings of latent LLs (continuous ratings of lesions that are found by the 
@@ -23,11 +21,10 @@
 #'    \code{1 - exp(nu*mu)}, the success probability of the binomial distribution.
 #' 
 #' @param zeta1 Array, the lowest reporting threshold; if missing the default 
-#'    is -3. [Used to demonstrate continuity of the slope of the ROC at the 
-#'    end point; TBA Online Appendix 17.H.3] 
+#'    is an array of -3s. 
 #'
 #' @param lesDistr Array: the probability mass function of the 
-#'    lesion distribution for diseased cases. See \link{UtilLesionDistr}. 
+#'    lesion distribution for diseased cases. See \link{UtilLesionDistrVector}. 
 #' 
 #' @param relWeights The relative weights of the lesions; a vector of 
 #'    length equal to \code{length(maxLL)}. The default is zero, in which case
@@ -72,8 +69,8 @@
 #' \item{\code{AFROCPlot}}     {The predicted AFROC plots}
 #' \item{\code{wAFROCPlot}}    {The predicted wAFROC plots}
 #' \item{\code{FROCPlot}}  {The predicted FROC plots}
-#' \item{\code{PDFPlot}}   {The predicted pdf plots}
-#' \item{\code{aucROC}}    {The predicted ROC AUCs}
+#' \item{\code{PDFPlot}}   {The predicted ROC pdf plots, highest rating generated}
+#' \item{\code{aucROC}}    {The predicted ROC AUCs, highest rating generated}
 #' \item{\code{aucAFROC}}  {The predicted AFROC AUCs}
 #' \item{\code{aucwAFROC}} {The predicted wAFROC AUCs}
 #' \item{\code{aucFROC}}   {The predicted FROC AUCs}
@@ -101,6 +98,7 @@
 #' 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples} (CRC Press, Boca Raton, FL). 
+#' \url{https://www.routledge.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #' 
 #' @examples
 #' ## Following example is for mu = 2, lambda = 1, nu = 0.6, in one treatment and   
@@ -132,13 +130,17 @@ PlotRsmOperatingCharacteristics <- function(mu,
   if (!all(c(length(mu) == length(lambda), length(mu) == length(nu), length(mu) == length(zeta1))))
     stop("Parameters mu, lambda, nu and zeta1 have different lengths.")
   
-  lesWghtDistr <- UtilLesionWeightsDistr(length(lesDistr), relWeights)
-  lesDistr <- UtilLesionDistr(lesDistr)
-  
+  lesWghtDistr <- UtilLesionWeightsMatrixLesDistr(lesDistr, relWeights)
+
   plotStep <- 0.01
-  plotStep <- 0.1 # delete after debug
+  # begin bug fix 12/7/21
+  # plotStep <- 0.1 # delete after debug
   zeta <- array(list(), dim = length(mu))
-  for (i in 1:length(mu)) zeta[[i]] <- seq(from = zeta1[i], to = max(mu)+5, by = plotStep)
+  for (i in 1:length(mu)) {
+    if (zeta1[i] == -Inf) temp1 <- -3 else temp1 <- zeta1[i]  
+    zeta[[i]] <- seq(from = temp1, to = max(mu)+5, by = plotStep)
+  }
+  # end bug fix 12/7/21
   
   ROCPlot <- NA
   FROCPlot <- NA
@@ -161,15 +163,18 @@ PlotRsmOperatingCharacteristics <- function(mu,
     if (mu[i] <= 0 ) stop("mu must be greater than zero")
     if (lambda[i] < 0 ) stop("lambda must be greater than zero")
     if (nu[i] < 0 ) stop("nu must be greater than zero")
-    
-    lambdaP[i] <- lambda[i] / mu[i]
-    if (abs(nu[i] * mu[i]) <= 1e-6 ) nuP[i] <- 1e-6 else nuP[i] <- (1-exp(-nu[i] * mu[i]))
-    FPF <- sapply(zeta[[i]], xROC, lambdaP = lambdaP[i])
-    TPF <- sapply(zeta[[i]], yROC, mu = mu[i], lambdaP = lambdaP[i], nuP = nuP[i], lesDistr = lesDistr)
-    NLF <- sapply(zeta[[i]], xFROC, lambdaP = lambdaP[i])
-    LLF <- sapply(zeta[[i]], yFROC, mu = mu[i], nuP = nuP[i])
-    
-    maxFPF <- xROC(-20, lambdaP[i])
+    x <- UtilIntrinsic2PhysicalRSM(mu[i], lambda[i], nu[i])
+    lambdaP <- x$lambdaP
+    nuP <- x$nuP
+    FPF <- sapply(zeta[[i]], xROC, lambdaP = lambdaP) # C++ function uses lambdaP
+    TPF <- sapply(zeta[[i]], yROC, mu = mu[i], lambdaP = lambdaP, nuP = nuP, lesDistr = lesDistr)
+    NLF <- sapply(zeta[[i]], RSM_xFROC, lambda = lambdaP)
+    LLF <- sapply(zeta[[i]], RSM_yFROC, mu = mu[i], nu = nuP)
+# begin bug fix
+# found bug 11/24/21 two places, here and as indicated by # bug fix 11/24/21
+# found ROC AUC did not change with zeta1 as it should   
+#    maxFPF <- xROC(-20, lambdaP[i]) # this is wrong
+    maxFPF <- xROC(zeta1[i], lambdaP) # this is correct
     if( OpChType == "ALL" ||  OpChType == "ROC"){
       ROCPoints <- rbind(ROCPoints, data.frame(FPF = FPF, 
                                                TPF = TPF, 
@@ -179,8 +184,10 @@ PlotRsmOperatingCharacteristics <- function(mu,
                                                TPF = c(TPF[1], 1), 
                                                Treatment = as.character(i), 
                                                stringsAsFactors = FALSE))
-      maxTPF <- yROC(-20, mu[i], lambdaP[i], nuP[i], lesDistr)
-      AUC <- integrate(y_ROC_FPF, 0, maxFPF, mu = mu[i], lambdaP = lambdaP[i], nuP = nuP[i], lesDistr =lesDistr)$value
+#       maxTPF <- yROC(-20, mu[i], lambdaP, nuP, lesDistr)
+      maxTPF <- yROC(zeta1[i], mu[i], lambdaP, nuP, lesDistr)
+# end bug fix
+      AUC <- integrate(y_ROC_FPF, 0, maxFPF, mu = mu[i], lambdaP = lambdaP, nuP = nuP, lesDistr =lesDistr)$value
       aucROC[i] <- AUC + (1 + maxTPF) * (1 - maxFPF) / 2
     }
     
@@ -191,11 +198,11 @@ PlotRsmOperatingCharacteristics <- function(mu,
                                                  stringsAsFactors = FALSE))
       if (is.null(nlfAlpha)){
         maxNLF <- max(NLF)
-        aucFROC[i] <- integrate(intFROC, 0, maxNLF, mu= mu[i], lambdaP = lambdaP[i], nuP = nuP[i])$value
+        aucFROC[i] <- integrate(intFROC, 0, maxNLF, mu= mu[i], lambda = lambdaP, nu = nuP)$value
       }else{
         maxNLF <- max(NLF)
         if (nlfAlpha <= maxNLF){
-          aucFROC[i] <- integrate(intFROC, 0, nlfAlpha, mu= mu[i], lambdaP = lambdaP[i], nuP = nuP[i])$value
+          aucFROC[i] <- integrate(intFROC, 0, nlfAlpha, mu= mu[i], lambda = lambdaP, nu = nuP)$value
         }else{
           stop("nlfAlpha cannot be greater than the maximum of NLF.")
         }
@@ -211,13 +218,13 @@ PlotRsmOperatingCharacteristics <- function(mu,
                                                    LLF = c(LLF[1], 1), 
                                                    Treatment = as.character(i), 
                                                    stringsAsFactors = FALSE))
-      maxLLF <- yFROC(-20, mu[i], nuP[i])
-      AUC <- integrate(y_AFROC_FPF, 0, maxFPF, mu = mu[i], lambdaP = lambdaP[i], nuP = nuP[i])$value
+      maxLLF <- RSM_yFROC(zeta1[i], mu[i], nu[i]) # bug fix 11/24/21
+      AUC <- integrate(y_AFROC_FPF, 0, maxFPF, mu = mu[i], lambda = lambdaP, nu = nuP)$value
       aucAFROC[i] <- AUC + (1 + maxLLF) * (1 - maxFPF) / 2
     }
     
     if( OpChType == "ALL" ||  OpChType == "wAFROC"){
-      wLLF <- sapply(zeta[[i]], ywAFROC, mu[i], nuP[i], lesDistr, lesWghtDistr)
+      wLLF <- sapply(zeta[[i]], ywAFROC, mu[i], nuP, lesDistr, lesWghtDistr)
       wAFROCPoints <- rbind(wAFROCPoints, data.frame(FPF = FPF, 
                                                      wLLF = wLLF, 
                                                      Treatment = as.character(i), 
@@ -226,8 +233,8 @@ PlotRsmOperatingCharacteristics <- function(mu,
                                                      wLLF = c(wLLF[1], 1), 
                                                      Treatment = as.character(i), 
                                                      stringsAsFactors = FALSE))
-      maxWLLF <- ywAFROC(-20, mu[i], nuP[i], lesDistr, lesWghtDistr) 
-      AUC <- integrate(y_wAFROC_FPF, 0, maxFPF, mu = mu[i], lambdaP = lambdaP[i], nuP = nuP[i], lesDistr, lesWghtDistr)$value
+      maxWLLF <- ywAFROC(zeta1[i], mu[i], nuP, lesDistr, lesWghtDistr) # bug fix 11/24/21
+      AUC <- integrate(y_wAFROC_FPF, 0, maxFPF, mu = mu[i], lambda = lambdaP, nu = nuP, lesDistr, lesWghtDistr)$value
       aucwAFROC[i] <- AUC + (1 + maxWLLF) * (1 - maxFPF) / 2
     }
     

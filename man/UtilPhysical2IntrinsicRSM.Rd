@@ -50,5 +50,6 @@ paradigm, Phys Med Biol 51, 3449-3462.
 Chakraborty DP (2006) ROC Curves predicted by a model of visual search, Phys Med Biol 51, 3463--3482.
 
 Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
-Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL.
+Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
+\url{https://www.routledge.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 }

@@ -1,4 +1,4 @@
-ReadJAFROCNewFormat <- function(fileName, sequentialNames) 
+ReadJAFROCNewFormat <- function(fileName, lrocForcedMark, sequentialNames) 
 {
   UNINITIALIZED <- RJafrocEnv$UNINITIALIZED
   # wb <- loadWorkbook(fileName) # openxlsx
@@ -16,7 +16,7 @@ ReadJAFROCNewFormat <- function(fileName, sequentialNames)
   if (length(truthFileIndex) == 0) stop("TRUTH table worksheet cannot be found in the Excel file.")
   truthTable <- data.frame( read_xlsx(fileName, truthFileIndex, range = cell_cols(1:6) ) )
   if (length(truthTable) != 6) stop("Old Excel format file encountered; cannot use newExcelFileFormat = TRUE")
-  cTT <- checkTruthTable(truthTable) # cTT = checkTruthTable
+  cTT <- checkTruthTable(truthTable, lrocForcedMark) # cTT = checkTruthTable
   
   truthTableSort <- cTT$truthTableSort 
   rdrArr1D <- cTT$rdrArr1D
@@ -147,6 +147,8 @@ ReadJAFROCNewFormat <- function(fileName, sequentialNames)
   modalityIDUnique <- as.character(unique(c(NLModalityIDCol, LLModalityIDCol)))
   I <- length(modalityIDUnique)
   readerIDUnique <- as.character(unique(c(NLReaderIDCol, LLReaderIDCol)))
+  # following  to preserve ordering does not work as names are prededed with Rdr
+  # readerIDUnique <- as.character(sort(unique(as.integer(c(NLReaderIDCol, LLReaderIDCol)))))
   J <- length(readerIDUnique)
   
   maxNL <- 0
@@ -241,10 +243,35 @@ ReadJAFROCNewFormat <- function(fileName, sequentialNames)
   
   name <- NA
   if ((design == "FCTRL") || (design == "CROSSED")) design <- "FCTRL"
-  return(convert2dataset(NL, LL, LL_IL = NA, 
-                         perCase, IDs, weights,
-                         fileName, type, name, truthTableStr, design,
-                         modalityID, readerID))
   
+  if (type != "LROC") {
+    # return the ROC or FROC dataset object
+    return(convert2dataset(NL, LL, LL_IL = NA, 
+                           perCase, IDs, weights,
+                           fileName, type, name, truthTableStr, design,
+                           modalityID, readerID))
+  } else {
+    # code added 6/11/21
+    # handle LROC dataset here
+    # move the ratings of diseased cases from NL array to LL_IL
+    LL_IL <- NL[,,(K1+1):(K1+K2),,drop = F]
+    # this completes the move of the ratings; replace the moved ratings
+    # with negative infinities
+    NL[,,(K1+1):(K1+K2),] <- -Inf
+    # the following checks that if a case does not
+    # appear in TP sheet it must appear in FP sheet, i.e., the forced mark in 
+    # LROC paradigm; if it is not forced, then it is possible for a mark to not
+    # appear in either TP or FP sheet, in which case the check is bypassed
+    if (lrocForcedMark) {
+      x1 <- LL_IL
+      x2 <- LL
+      if (any(which(x1 != -Inf) != which(x2 == -Inf))) stop("Error in LROC file")
+    }
+    # return the LROC dataset object
+    return(convert2dataset(NL, LL, LL_IL, 
+                           perCase, IDs, weights,
+                           fileName, type, name, truthTableStr, design,
+                           modalityID, readerID))
+  }
 } 
 

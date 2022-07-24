@@ -46,7 +46,7 @@ The return value is a list with the following elements:
    Use \code{print} to display the object}
 }
 \description{
-Fit an RSM-predicted ROC curve to a \strong{binned single-modality single-treatment ROC dataset}
+Fit an RSM-predicted ROC curve to a \strong{binned single-treatment single-reader ROC dataset}
 }
 \details{
 If dataset is FROC, first convert it to ROC, using \code{\link{DfFroc2Roc}}. MLE ROC algorithms 
@@ -65,41 +65,41 @@ If dataset is FROC, first convert it to ROC, using \code{\link{DfFroc2Roc}}. MLE
 \examples{
 \donttest{
 ## Test with included ROC data (some bins have zero counts)
-lesDistr <- UtilLesionDistr(dataset02)
-retFit <- FitRsmRoc(dataset02, lesDistr[,2])
+lesDistr <- UtilLesionDistrVector(dataset02)
+retFit <- FitRsmRoc(dataset02, lesDistr)
 ## print(retFit$fittedPlot)
 
 ## Test with included degenerate ROC data
-lesDistr <- UtilLesionDistr(datasetDegenerate)
-retFit <- FitRsmRoc(datasetDegenerate, lesDistr[,2])
+lesDistr <- UtilLesionDistrVector(datasetDegenerate)
+retFit <- FitRsmRoc(datasetDegenerate, lesDistr)
 
 ## Test with single interior point data
 fp <- c(rep(1,7), rep(2, 3))
 tp <- c(rep(1,5), rep(2, 5))
 binnedRocData <- Df2RJafrocDataset(fp, tp)
-lesDistr <- UtilLesionDistr(binnedRocData)
-retFit <- FitRsmRoc(binnedRocData, lesDistr[,2])
+lesDistr <- UtilLesionDistrVector(binnedRocData)
+retFit <- FitRsmRoc(binnedRocData, lesDistr)
 
 ## Test with two interior data points
 fp <- c(rep(1,7), rep(2, 5), rep(3, 3))
 tp <- c(rep(1,3), rep(2, 5), rep(3, 7))
 binnedRocData <- Df2RJafrocDataset(fp, tp)
-lesDistr <- UtilLesionDistr(binnedRocData)
-retFit <- FitRsmRoc(binnedRocData, lesDistr[,2])
+lesDistr <- UtilLesionDistrVector(binnedRocData)
+retFit <- FitRsmRoc(binnedRocData, lesDistr)
 
 
 ## Test with three interior data points
 fp <- c(rep(1,12), rep(2, 5), rep(3, 3), rep(4, 5)) #25
 tp <- c(rep(1,3), rep(2, 5), rep(3, 7), rep(4, 10)) #25
 binnedRocData <- Df2RJafrocDataset(fp, tp)
-lesDistr <- UtilLesionDistr(binnedRocData)
-retFit <- FitRsmRoc(binnedRocData, lesDistr[,2])
+lesDistr <- UtilLesionDistrVector(binnedRocData)
+retFit <- FitRsmRoc(binnedRocData, lesDistr)
 
 ## test for TONY data, i = 2 and j = 3 
 ## only case permitting chisqure calculation
-lesDistr <- UtilLesionDistr(dataset01)
+lesDistr <- UtilLesionDistrVector(dataset01)
 rocData <- DfFroc2Roc(dataset01)
-retFit <- FitRsmRoc(rocData, lesDistr[,2], trt = 2, rdr = 3)
+retFit <- FitRsmRoc(rocData, lesDistr, trt = 2, rdr = 3)
 ## print(retFit$fittedPlot)
 retFit$ChisqrFitStats
 }
@@ -112,5 +112,6 @@ paradigm. Phys Med Biol 51, 3449-3462.
 Chakraborty DP (2006) ROC Curves predicted by a model of visual search. Phys Med Biol 51, 3463--3482.
 
 Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
-Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL.
+Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
+\url{https://www.routledge.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 }

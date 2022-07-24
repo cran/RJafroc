@@ -1,25 +1,73 @@
 library(devtools)
 library(rhub)
 library(RJafroc)
-paths <- rhub::platforms()
 
-# > paths[[1]]
-# [1] "debian-clang-devel"            "debian-gcc-devel"              "debian-gcc-devel-nold"        
-# [4] "debian-gcc-patched"            "debian-gcc-release"            "fedora-clang-devel"           
-# [7] "fedora-gcc-devel"              "linux-x86_64-centos6-epel"     "linux-x86_64-centos6-epel-rdt"
-# [10] "linux-x86_64-rocker-gcc-san"   "macos-highsierra-release"      "macos-highsierra-release-cran"
-# [13] "solaris-x86-patched"           "solaris-x86-patched-ods"       "ubuntu-gcc-devel"             
-# [16] "ubuntu-gcc-release"            "ubuntu-rchk"                   "windows-x86_64-devel"         
-# [19] "windows-x86_64-oldrel"         "windows-x86_64-patched"        "windows-x86_64-release"  
+platforms <- rhub::platforms()
+print(platforms)
+# debian-clang-devel:
+#   Debian Linux, R-devel, clang, ISO-8859-15 locale
+# debian-gcc-devel:
+#   Debian Linux, R-devel, GCC
+# debian-gcc-devel-nold:
+#   Debian Linux, R-devel, GCC, no long double
+# debian-gcc-patched:
+#   Debian Linux, R-patched, GCC
+# debian-gcc-release:
+#   Debian Linux, R-release, GCC
+# fedora-clang-devel:
+#   Fedora Linux, R-devel, clang, gfortran
+# fedora-gcc-devel:
+#   Fedora Linux, R-devel, GCC
+# linux-x86_64-rocker-gcc-san:
+#   Debian Linux, R-devel, GCC ASAN/UBSAN
+# macos-highsierra-release:
+#   macOS 10.13.6 High Sierra, R-release, brew
+# macos-highsierra-release-cran:
+#   macOS 10.13.6 High Sierra, R-release, CRAN's setup
+# macos-m1-bigsur-release:
+#   Apple Silicon (M1), macOS 11.6 Big Sur, R-release
+# solaris-x86-patched:
+#   Oracle Solaris 10, x86, 32 bit, R-release
+# solaris-x86-patched-ods:
+#   Oracle Solaris 10, x86, 32 bit, R release, Oracle Developer Studio 12.6
+# ubuntu-gcc-devel:
+#   Ubuntu Linux 20.04.1 LTS, R-devel, GCC
+# ubuntu-gcc-release:
+#   Ubuntu Linux 20.04.1 LTS, R-release, GCC
+# windows-x86_64-devel:
+#   Windows Server 2022, R-devel, 64 bit
+# windows-x86_64-oldrel:
+#   Windows Server 2022, R-oldrel, 32/64 bit
+# windows-x86_64-patched:
+#   Windows Server 2022, R-patched, 32/64 bit
+# windows-x86_64-release:
+#   Windows Server 2022, R-release, 32/64 bit
 
-# update DESCRIPTION ...DONE
-# update cran-comments ...DONE
+packagePath <- "/Users/Dev/GitHub/RJafroc_2.1.0.tar.gz"
+if (!file.exists(packagePath))
+  packagePath <- devtools::build()
 
-start <- 1; end <- 21; for (i in start:end) rhub::check(platform = paths[[1]][i])
-devtools::check_win_devel()
-devtools::check_win_release()
-devtools::check_win_oldrelease()
+# for (indx in 11:11) {
+#   if (indx != 11) next
+#   if (indx == 12) next
+#   if (indx == 13) next
+#   print(cat(platforms[[1]][indx]))
+#   chk1 <- rhub::check(packagePath, platform = platforms[[1]][indx]) # OK
+# }
 
-devtools::revdep()
+# Next three need to be run individually in Console
+# devtools::check_win_devel()
+# devtools::check_win_release()
+# devtools::check_win_oldrelease()
 
-indx -> c(5, 16, 17, 18, 20);for (i in indx) rhub::check(platform = paths[[1]][i])
+# rhub::check_for_cran() # OK detritus file lastMiKTeXException?
+
+# devtools::revdep() # OK
+
+# After acceptance, transfer files to developer branch:
+# DESCRIPTION
+# cran-comments.md
+# cran-submission.R
+# RJafroc-package.Rd
+
+

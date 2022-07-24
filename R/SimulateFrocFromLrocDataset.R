@@ -24,6 +24,7 @@
 #' frocDataset <- SimulateFrocFromLrocDataset(datasetCadLroc)
 #' lrocAuc <- UtilFigureOfMerit(datasetCadLroc, FOM = "Wilcoxon")
 #' frocHrAuc <- UtilFigureOfMerit(frocDataset, FOM = "HrAuc")   
+#' testthat::expect_equal(lrocAuc, frocHrAuc)
 #' 
 #' @export
 

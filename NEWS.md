@@ -1,4 +1,132 @@
-# RJafroc 2.0.1
+# RJafroc 2.1.0
+
+
+## TEMP CRAN submission process
+* Version 2.1.0
+* This is on `cran4` branch.
+* Steps to reduce file size to less than 5 Mb:
+    + Removed `RoiData.xlsx`.
+* Otherwise identical to `developer` and `master` as of 07/7/22.
+* Not yet On CRAN
+
+
+## Extensive changes to handling of `lesDist` and `relWeights` 7/19/22
+* Removed unnecessary dimension on `lesDist`, it is now always 1D
+* Affected files are `UtilLesDistrVector.R` and `UtilLesionWeightsMatrix.R`
+* `lesDistr` and `relWeight` must have same lengths and sum to unity
+* `relWeight = 0` imposes equal weights
+* can remove a lesion by setting the corresponding lesDist entry to zero
+* need further testing on above capability
+
+## added `Ch19Vig1FrocSampleSize.Rmd` 6/7/22
+* Added added `Ch19Vig2FrocSampleSize.Rmd` and `Ch19Vig2FrocSampleSize.Rmd`
+* These vignettes got accidentally removed, perhaps because it was failing tests
+* R CMD CHK works
+* Found lots of instances of four backticks, instead of 3; this is probably why some vignettes were not loading on website
+
+
+## created `DfWriteExcelDataFile` 3/15/22
+* needed to write Nico simulated FROC data to JAFROC format excel file
+* removed JAFROC format writes capability from `DfSaveDataFile`; it is now in `DfWriteExcelDataFile`
+
+
+## fixed wAFROC1_dpc 3/11/22
+* needed to divide final value by (K * K2)
+* cpp code unaffected; this only affected R version used to debug
+* checked R code vs cpp; see `JT_R_Py_Foms.xlsx` in `PyJafrocscraps` directory
+
+## added example to ChisqrGoodnessOfFit code 3/8/22
+
+## argument of St functions 1/24/22
+* `analysisOption` must be `DBM` or `OR`
+* Not "ORH"
+
+## Clarified weights matrix 1/7/22
+* See `test-RSM-formulae.R`
+* Search in code for `rsm-pred-wafroc-curve`: `rsmFormulae.R` and `UtilAnalyticalAucsRSM.R`
+* See `RJafrocFrocBook`, search for `rsm-pred-wafroc-curve`
+* Push to `developer` and `master`
+
+
+## TBDIF 12-26-21
+* TBDIF: To be done in future
+* Created much confusion in `RJafrocFrocBook`, chapter on `3-fits`
+* `RsmFormulae.R`: This file is a mess. 
+* Remove AUCs in `PlotRsmOperatingCharacteristics`? - these are done in UtilAnalyticalAucsRsm
+* Add to tests? 
+* Replace error function with Phi functions?
+* Remove redundant column in weights matrix
+* change `lambdaP` to lambda and lambda to `lambdaI` and corresponding changes in book
+
+
+## Changed `RSM_yROC` to accept physical parameters 12-26-21
+* So as to be consistent with `RSM_xROC`
+* Created much confusion in `RJafrocFrocBook`, chapter on `3-fits`
+* Added checks for valid RSM parameters in `RsmFormulae.R` .
+* Changed all such functions in `RsmFormulae.R` to accept physical parameters.  
+
+
+## Fixed `PlotRsmOperatingCharacteristics` not working for `zeta1 = -Inf`
+* Global search string "bug fix 12/7/21" to locate all changes.
+* Starting value of for-loop cannot be `-Inf`; detect it and set to -3
+
+
+## Fixed `PlotRsmOperatingCharacteristics` returning correct plots but incorrect AUCs
+* Global search string "bug fix 11/24/21" to locate all changes.
+* Basic issue was that I was using `zeta1` = -20 instead of the supplied value.
+
+
+## Fixed Issue 73 and deprecated the MRMC file format 10-28-21 - 10-29-21
+* Global search string "T1-RRRC for ROC data #73"" to locate all changes.
+* Basic issue was missing `truthTableStr` in any file `*.imrc` when read by `DfReadDataFile`.
+* See under `tests`: `StSignificanceTestingCadVsRad: Issue T1-RRRC for ROC data #73` for recreation of this issue.
+* Updated `R` and `RStudio`.
+* File `DfExtracDataset.R` was also affected: the change fixes an error that did not get caught before.
+* Updated documentation and links in `StSignificanceTestingCadVsRad.R`.
+* Note that **For non-JAFROC data file formats, the `readerID` and `modalityID` fields must be unique integers**, as indicated in documentation of `DfReadDataFile()`.
+* Giving thought to removing support for all non-JAFROC formatted files; otherwise I need to maintain support for four file extensions (`*.lrc`, `*.txt`, `*.csv` and `*.imrmc`) for the simplest data structure (one rating for each modality-reader-case). This is unnecessarily complicating the code. Final resolution: **I will support only `*.imrmc`**. Other formats can still be read by `DfReadDataFile()` and then saved to a `JAFROC` format file for analysis within the `RJafroc` package. 
+
+
+## Added ability to read Excel format LROC datasets 6/11/21 - 6/14/21
+* Extended `DfReadDataFile` to accommodate LROC data; added flag `lrocForcedMark`
+* Must use `newExcelFileFormat = T` for this capability
+* Added toy LROC files: see `inst/extdata/toyFiles/LROC/lroc*.xlsx`
+* See `ReadJAFROCNewFormat.R`, just before final `return`, for added code 
+* Added tests in `test-DfReadDataFile()`.
+
+
+## Corrected sample size vignettes 4/12/21 and 4/14/21
+* `Ch19Vig1FrocSampleSize.Rmd` and `Ch19Vig2FrocSampleSize.Rmd`
+* Fixed `SsFrocNhRsmModel.R` to not return lesion distribution and weights
+* Fixed vignettes that were using the old structure returned by sig. testing function
+* Fixed 2 FROC SS vignettes; fixed `SsFrocNhRsmModel.R` to do binning internal to the function
+* Added a test for `SsFrocNhRsmModel()`.
+* Updated `Rcpp` to 1.0.6. NOTE: version 1.0.6.6 created horrendous errors - R aborts.
+
+
+## Intrinsic vs. physical RSM parameters 4/2/21
+* All C++ functions take physical parameters 
+* Rest take intrinsic parameters (2 exceptions, like `RSM_xROC` and `RSM_pdfN`)
+* Cleanup:
+    + `PlotRsmOperatingCharacteristics.R`, 
+    + `UtilAnallyticalAucsRSM.R`, 
+    + `rsmFormulae.R`
+    + affected related test files: `test-RSM-formulae.R` and `test-model-aucs.R`
+    + Used `goodValues` to check that nothing has changed
+
+
+## Moved to `RJafrocBook` 1/3/21
+* Vignette `Ch10Vig1QuickStart` 
+* Vignette `Ch10Vig2QuickStart`
+* Function `Compare3ProperRocFits.R`
+* Associated files in `inst`: `MRMCRuns` and `ANALYZED`
+
+
+## Added functions RSM_pdfN and RSM_pdfD 
+* Needed for Swets predictions in book; but of general utility.
+* Other new functions added of type `RSM_*()`
+* Need to vectorize all Cpp functions; no need to carry both scalar and vector types.
+* Add `tests` for new functions `RSM_*()`
 
 
 ## CRAN submission process
@@ -6,13 +134,13 @@
 * This is on `cran3` branch.
 * Steps to reduce file size to less than 5 Mb:
     + Removed `tests` and `vignettes` (this needs to be done on all computers I am using).
-    + Removed all files from `ints/MRMCRuns` except `Tony`, the one that is used in an example.
+    + Removed all files from `inst/MRMCRuns` except `Tony`, the one that is used in an example.
     + Removed `CrossedModalities.xlsx` and references to it.
     + Removed `DfReadLrocDataFile.R` and `findings.txt`. Ran `devtools::document()` to fix `NAMESPACE`.
     + Removed `RoiData.xlsx`.
 * Otherwise identical to `developer` and `master` as of 12/8/20.
 * `testthat` failure on Ubuntu developer is resolved, see `master` branch: `checkEnvironment = FALSE` in `expect_equal()` on `ggplot2` comparisons to `goodValues`.
-* Removed non-functioning website 
+* On CRAN
 
 
 ## Simplify handling of lesion distribution and lesion weights
@@ -305,13 +433,13 @@ k <- which(unique(truthTableSort$CaseID) == LLCaseIDCol[l]) - K1
 * Moved VanDyke results to inst/IowaResults/VanDyke.txt
 
 
-## Compared to latest official Iowa code
-* `mrmc_setup_w10_July_2019.exe`; VanDyke `VanDyke.lrc` dataset; `Dropobox/IowaSoftware/VanDyke.lrc`.
-* `OR DBM MRMC 2.51 <beta> Build 20181028 </beta>` `miplmrmc`.
-* Software only runs under Windows XP.
-* Tried Windows 8 on different machines (iMac and MacBookPro) under `VmWare Fusion`; no luck, even after following directions twice on (non functional website removed at CRAN request). 
-* Need to compare OR ouputs - WIP.
-* Need to fix documentation on `StSignificanceTesting` - WIP.
+## Compared to latest official code
+* `mrmc_setup_w10_July_2019.exe`; VanDyke `VanDyke.lrc` dataset; `Dropobox/IowaSoftware/VanDyke.lrc`
+* `OR DBM MRMC 2.51 <beta> Build 20181028 </beta>` `miplmrmc`
+* Software only runs under Windows XP
+* Tried Windows 8 on different machines (iMac and MacBookPro) under `VmWare Fusion`; no luck, even after following directions twice on [website](https://perception.lab.uiowa.edu/software/or-dbm-mrmc-251/or-dbm-mrmc-251-program-and-manual-prior-version)
+* Need to compare OR ouputs - WIP
+* Need to fix documentation on `StSignificanceTesting` - WIP
 
 
 ## Discovered error
@@ -329,7 +457,7 @@ k <- which(unique(truthTableSort$CaseID) == LLCaseIDCol[l]) - K1
 
 
 ## Fixing significance testing with independent calculations in `RJafrocBook`
-* Need to modify `RJafroc` to eliminate code duplication and improve style in all signficance testing functions - move this to issues
+* Need to modify `RJafroc` to eliminate code duplication and improve style in all significance testing functions - move this to issues
 * I am only getting to understand it now (as I work on `RJafrocBook`)
 * One reader case can now be handled by `StSignificanceTesting(rocData1R, FOM = "Wilcoxon", method = "ORH")`
 * May not need `StSignificanceTestingSingleFixedFactor` which currently only handles `DBMH` method - add to issues

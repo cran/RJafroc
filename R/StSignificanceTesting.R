@@ -18,7 +18,9 @@
 #' @param alpha The significance level of the test of the null hypothesis that all 
 #'    treatment effects are zero; the default is 0.05
 #' @param method The significance testing method to be used:  
-#'    \code{"DBM"} (the default) or \code{"OR"}, representing the Dorfman-Berbaum-Metz
+#'    \code{"DBM"} (the default), representing the 
+#'    Dorfman-Berbaum-Metz method or \code{"OR"}, representing the 
+#'    Obuchowski-Rockette method.
 #'    and the Obuchowski-Rockette significance testing methods, respectively. 
 #' @param covEstMethod The covariance matrix estimation method
 #'    in \code{ORH} analysis (for \code{method = "DBM"} the jackknife is always used).
@@ -96,6 +98,7 @@
 #' 
 #' Chakraborty DP (2017) \emph{Observer Performance Methods for Diagnostic Imaging - Foundations, 
 #' Modeling, and Applications with R-Based Examples}, CRC Press, Boca Raton, FL. 
+#' \url{https://www.routledge.com/Observer-Performance-Methods-for-Diagnostic-Imaging-Foundations-Modeling/Chakraborty/p/book/9781482214840}
 #'
 #'
 #' @importFrom stats pf pt qt
@@ -151,7 +154,7 @@ StSignificanceTesting <- function(dataset, FOM, FPFValue = 0.2, alpha = 0.05, me
       errMsg <- paste0(covEstMethod, " is not an allowed covariance estimation method for ORH analysis.")
       stop(errMsg)
     }
-  } else stop("Incorrect `method` argument: must be `DBM` or `ORH`")
+  } else stop("Incorrect `method` argument: must be `DBM` or `OR`")
   
   if (((dataset$descriptions$design == "SPLIT-PLOT-C") || (dataset$descriptions$design == "SPLIT-PLOT-A")) && method == "DBM") 
     stop("Must use method = ORH for SPLIT-PLOT-A or SPLIT-PLOT-C dataset")

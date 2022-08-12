@@ -1,6 +1,6 @@
-e7d1837cf80b56b6e52dca3221184df6 *DESCRIPTION
+387258c6c0a3a30bb3b08935ae675443 *DESCRIPTION
 1373e274366ab2322ab4b3342d44baef *NAMESPACE
-c0f51c54d845264c8edbbd6fb657089f *NEWS.md
+f7c55b23533d53088f9aa25ee7da44d9 *NEWS.md
 7d41d9d2fda897007185cb1deaf3b4fd *R/ChisqrGoodnessOfFit.R
 f5583c78e6741d0a8a2d15dae258c89e *R/Df2RJafrocDataset.R
 402496c22b27e86f647bf5535957d7c4 *R/DfBinDataset.R
@@ -19,7 +19,7 @@ bbcd2d26c20272d27ef366b67d089bf4 *R/DfCreateCorCbmDataset.R
 8f131c30094efb19e837f7a73cf8b206 *R/DfWriteExcelDataFile.R
 6f45daf3269879d62a8bdabf3fc7bfa7 *R/EnvironmentVariables.R
 c6a8e98abcd0c9affddb0763a48daf6c *R/FitBinormalRoc.R
-486b08be02d59c3070771ab4a312bb1b *R/FitCbmRoc.R
+dc00222cc8d79f79c5c8df62f806a949 *R/FitCbmRoc.R
 d58c365014a915d2729def16b75449fa *R/FitCorCbm.R
 9399e9e37cb1d152e7eba4a7b290165d *R/FitRsmRoc.R
 ced1ecc25e833ee8c911e9b81f590a1b *R/ORAnalysisFactorial.R
@@ -121,7 +121,7 @@ f791e11a1a32ee090dc133de5d5034d9 *inst/Iowa/readIowa.R
 fa924d8a19a672ad866c07c3537dc62c *inst/JAFROC/FedRoc.xlsx
 a3feb038334ec709cdc3419b3650d2b6 *inst/JAFROC/VanDyke.xlsx
 5b5d09f49f9d5cae620b0d72b0bebed3 *inst/JAFROC/VanDykeROC.txt
-c979d2cf37e91456b14f5150be957fe2 *inst/cranSubmission/cranSubmission.R
+108c1b9c3d39df22412a50c23f4fb7f2 *inst/cranSubmission/cranSubmission.R
 d51e6305bcc0bae490911bb9af114d7b *inst/extdata/CadFrocData.xlsx
 abe2073660fd2ddda425262732c77f7a *inst/extdata/CrossedModalities.xlsx
 5644399e8a942c85714626131fa3c344 *inst/extdata/Froc.xlsx
@@ -203,14 +203,14 @@ b46bf52f263851627cf17b462b318105 *man/DfReadLrocDataFile.Rd
 e4d2cb8e77f299752a625306eb9bf993 *man/DfSaveDataFile.Rd
 44c89a4bee6c66f479a447895c2b231c *man/DfWriteExcelDataFile.Rd
 f5107984c6ecec7cfb0bc87367d20f75 *man/FitBinormalRoc.Rd
-d783d01de1002ff067718d180f24b26e *man/FitCbmRoc.Rd
+07dc0c2b65893b959976b2b7a63aa73c *man/FitCbmRoc.Rd
 1e4009c4f115f1a9279ebe72fd9eaa86 *man/FitCorCbm.Rd
 9432386512c2a5c6fb7ffab179973506 *man/FitRsmRoc.Rd
 be5b67cc44a8ff38a3e001810cbc7f29 *man/PlotBinormalFit.Rd
 1b93cb9ec5155ce95eda618c2eb89c36 *man/PlotCbmFit.Rd
 70ce680a3dea40980c61fb446b9d5503 *man/PlotEmpiricalOperatingCharacteristics.Rd
 5afb5a62c426c8567a646e02df8dccba *man/PlotRsmOperatingCharacteristics.Rd
-d99e13c389213b32f6845c88b9aef4c8 *man/RJafroc-package.Rd
+5553d0cd63cb32ab90ffb3076f02ca0c *man/RJafroc-package.Rd
 897e36326a316523557196bfb16ad303 *man/RSM_erf.Rd
 1d6725a64ba88cae4212d8d43d68fdb6 *man/RSM_pdfD.Rd
 71ac9905de21b51923ed2dd142c68992 *man/RSM_pdfN.Rd

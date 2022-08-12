@@ -1,13 +1,18 @@
-# RJafroc 2.1.0
+# RJafroc 2.1.1
+
+## CRAN resubmission 8/12/22
+* Version 2.1.1
+* On `cran211` branch.
+* Eliminates two html rendering notes occurring on 2.1.0.
+* Corrected 2 URL formatting errors, in DESCRIPTION and `RJafroc-package.Rd`.
 
 
-## TEMP CRAN submission process
+## CRAN accepted 7/24/22
 * Version 2.1.0
-* This is on `cran4` branch.
+* On `cran210` branch.
 * Steps to reduce file size to less than 5 Mb:
     + Removed `RoiData.xlsx`.
 * Otherwise identical to `developer` and `master` as of 07/7/22.
-* Not yet On CRAN
 
 
 ## Extensive changes to handling of `lesDist` and `relWeights` 7/19/22

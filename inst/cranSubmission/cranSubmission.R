@@ -5,9 +5,9 @@ library(RJafroc)
 platforms <- rhub::platforms()
 print(platforms)
 # debian-clang-devel:
-#   Debian Linux, R-devel, clang, ISO-8859-15 locale
+#   Debian Linux, R-devel, clang, ISO-8859-15 locale  ##done
 # debian-gcc-devel:
-#   Debian Linux, R-devel, GCC
+#   Debian Linux, R-devel, GCC                        ##done
 # debian-gcc-devel-nold:
 #   Debian Linux, R-devel, GCC, no long double
 # debian-gcc-patched:
@@ -24,8 +24,6 @@ print(platforms)
 #   macOS 10.13.6 High Sierra, R-release, brew
 # macos-highsierra-release-cran:
 #   macOS 10.13.6 High Sierra, R-release, CRAN's setup
-# macos-m1-bigsur-release:
-#   Apple Silicon (M1), macOS 11.6 Big Sur, R-release
 # solaris-x86-patched:
 #   Oracle Solaris 10, x86, 32 bit, R-release
 # solaris-x86-patched-ods:
@@ -34,41 +32,36 @@ print(platforms)
 #   Ubuntu Linux 20.04.1 LTS, R-devel, GCC
 # ubuntu-gcc-release:
 #   Ubuntu Linux 20.04.1 LTS, R-release, GCC
+# ubuntu-rchk:
+#   Ubuntu Linux 20.04.1 LTS, R-devel with rchk
 # windows-x86_64-devel:
 #   Windows Server 2022, R-devel, 64 bit
 # windows-x86_64-oldrel:
-#   Windows Server 2022, R-oldrel, 32/64 bit
+#   Windows Server 2022, R-oldrel, 32/64 bit        ##done
 # windows-x86_64-patched:
 #   Windows Server 2022, R-patched, 32/64 bit
 # windows-x86_64-release:
 #   Windows Server 2022, R-release, 32/64 bit
-
-packagePath <- "/Users/Dev/GitHub/RJafroc_2.1.1.tar.gz"
+  
+  
+packagePath <- "/Users/Dev/GitHub/RJafroc_2.1.2.tar.gz"
 if (!file.exists(packagePath))
   packagePath <- devtools::build()
 
-for (indx in 2:2) {
-  next
+for (indx in 2:2) { 
+  # indx = 1 took very long time, still running
   # if (indx != 11) next
   # if (indx == 12) next
   # if (indx == 13) next
   print(cat(platforms[[1]][indx]))
-  chk1 <- rhub::check(packagePath, platform = platforms[[1]][indx]) # OK
+  chk1 <- rhub::check(packagePath, platform = platforms[[1]][indx])
 }
 
 # devtools::check_win_devel()
 # devtools::check_win_release()
 # devtools::check_win_oldrelease()
 
-# rhub::check_for_cran() # OK detritus file lastMiKTeXException?
+# rhub::check_for_cran() 
 
 # devtools::revdep() # OK
-
-# After acceptance, transfer files to developer branch:
-# DESCRIPTION
-# cran-comments.md
-# cran-submission.R
-# RJafroc-package.Rd
-# NEWS.md
-
 

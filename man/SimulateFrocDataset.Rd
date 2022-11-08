@@ -9,9 +9,9 @@ SimulateFrocDataset(mu, lambda, nu, zeta1, I, J, K1, K2, perCase, seed = NULL)
 \arguments{
 \item{mu}{The mu parameter of the RSM}
 
-\item{lambda}{The intrinsic lambda parameter of the RSM (not the physical parameter)}
+\item{lambda}{The RSM lambda parameter}
 
-\item{nu}{The intrinsic nu parameter of the RSM (not the physical parameter)}
+\item{nu}{The RSM nu parameter}
 
 \item{zeta1}{The lowest reporting threshold}
 
@@ -43,7 +43,7 @@ See book chapters on the Radiological Search Model (RSM) for details.
 set.seed(1) 
 K1 <- 5;K2 <- 7;
 maxLL <- 2;perCase <- floor(runif(K2, 1, maxLL + 1))
-mu <- 1;lambda <- 1;nu <- 1 ;zeta1 <- -1
+mu <- 1;lambda <- 1;nu <- 0.99 ;zeta1 <- -1
 I <- 2; J <- 5
 
 frocDataRaw <- SimulateFrocDataset(

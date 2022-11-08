@@ -7,11 +7,11 @@
 SimulateLrocDataset(mu, lambda, nu, zeta1, I, J, K1, K2, lesionVector)
 }
 \arguments{
-\item{mu}{The intrinsic mu parameter of the RSM}
+\item{mu}{The mu parameter of the RSM}
 
-\item{lambda}{The intrinsic lambda parameter of the RSM (not the physical parameter)}
+\item{lambda}{The RSM lambda parameter}
 
-\item{nu}{The intrinsic nu parameter of the RSM (not the physical parameter)}
+\item{nu}{The RSM nu parameter}
 
 \item{zeta1}{The lowest reporting threshold}
 
@@ -34,7 +34,7 @@ Simulates an uncorrelated LROC dataset for specified numbers of
 }
 \details{
 See book chapters on the Radiological Search Model (RSM) for details.
-   The spproach is to first simulate an FROC dataset and then convert it to an Lroc
+   The approach is to first simulate an FROC dataset and then convert it to an Lroc
    dataset. The correlations between FROC ratings on the same case are assumed to be zero.
 }
 \examples{

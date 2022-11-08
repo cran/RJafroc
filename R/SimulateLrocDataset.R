@@ -3,9 +3,9 @@
 #' @description  Simulates an uncorrelated LROC dataset for specified numbers of
 #'    readers and treatments 
 #' 
-#' @param mu     The intrinsic mu parameter of the RSM
-#' @param lambda The intrinsic lambda parameter of the RSM (not the physical parameter)
-#' @param nu     The intrinsic nu parameter of the RSM (not the physical parameter)
+#' @param mu     The mu parameter of the RSM
+#' @param lambda The RSM lambda parameter
+#' @param nu     The RSM nu parameter
 #' @param zeta1  The lowest reporting threshold
 #' @param I      The number of treatments
 #' @param J      The number of readers
@@ -16,7 +16,7 @@
 #' @return The return value is an LROC dataset.
 #' 
 #' @details See book chapters on the Radiological Search Model (RSM) for details.
-#'    The spproach is to first simulate an FROC dataset and then convert it to an Lroc
+#'    The approach is to first simulate an FROC dataset and then convert it to an Lroc
 #'    dataset. The correlations between FROC ratings on the same case are assumed to be zero.
 #' 
 #' @examples
@@ -41,9 +41,8 @@
 #' @export
 
 SimulateLrocDataset <- function(mu, lambda, nu, zeta1, I, J, K1, K2, lesionVector){
-  lambdaP <- lambda/mu
-  nuP <- 1-exp(-nu*mu)
-  nNL <- rpois(I * J * (K1 + K2), lambdaP)
+  
+  nNL <- rpois(I * J * (K1 + K2), lambda)
   dim(nNL) <- c(I,J,K1+K2)
   maxNL <- max(nNL)
   NL <- array(-Inf, dim = c(I, J, K1 + K2, maxNL))
@@ -64,7 +63,7 @@ SimulateLrocDataset <- function(mu, lambda, nu, zeta1, I, J, K1, K2, lesionVecto
   for (i in 1:I) {
     for (j in 1:J) {  
       for (k in 1:K2){
-        nLL <- rbinom(1, lesionVector[k], nuP)
+        nLL <- rbinom(1, lesionVector[k], nu)
         ll <- rnorm(nLL, mu)
         ll <- ll[order(ll, decreasing = TRUE)]
         ll[ll < zeta1] <- -Inf

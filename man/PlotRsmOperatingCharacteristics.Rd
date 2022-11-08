@@ -9,7 +9,7 @@ PlotRsmOperatingCharacteristics(
   lambda,
   nu,
   zeta1,
-  lesDistr,
+  lesDistr = 1,
   relWeights = 0,
   OpChType = "ALL",
   legendPosition = c(1, 0),
@@ -21,27 +21,17 @@ PlotRsmOperatingCharacteristics(
 )
 }
 \arguments{
-\item{mu}{Array: the mean of the Gaussian distribution for the 
-ratings of latent LLs (continuous ratings of lesions that are found by the 
-observer's search mechanism). The ratings of NLs are distributed as N(0,1).}
+\item{mu}{Array: the RSM mu parameter.}
 
-\item{lambda}{Array: the \emph{intrinsic} Poisson distribution parameter 
-which models the random numbers of latent NLs (suspicious regions that do 
-not correspond to actual lesions) per case. The corresponding 
-\emph{physical} parameter is \code{lambda/mu}. Two conversion functions 
-are provided: \code{\link{UtilIntrinsic2PhysicalRSM}} and 
-\code{\link{UtilPhysical2IntrinsicRSM}}.}
+\item{lambda}{Array: the RSM lambda parameter.}
 
-\item{nu}{Array: the \emph{intrinsic} parameter which models the random 
-numbers of latent LLs (suspicious regions that correspond to actual 
-lesions) per diseased case. The corresponding \emph{physical} parameter is 
-\code{1 - exp(nu*mu)}, the success probability of the binomial distribution.}
+\item{nu}{Array: the RSM nu parameter.}
 
 \item{zeta1}{Array, the lowest reporting threshold; if missing the default 
 is an array of -3s.}
 
 \item{lesDistr}{Array: the probability mass function of the 
-lesion distribution for diseased cases. See \link{UtilLesionDistrVector}.}
+lesion distribution for diseased cases. The default is 1. See \link{UtilLesionDistrVector}.}
 
 \item{relWeights}{The relative weights of the lesions; a vector of 
 length equal to \code{length(maxLL)}. The default is zero, in which case
@@ -70,7 +60,7 @@ as determined by the data.}
 
 \item{nlfAlpha}{Upper limit of the integrated area under the FROC plot. 
 Default is "\code{NULL}", which means the maximum NLF range is used 
-(i.e., lambda/mu). Attempt to integrate outside the maximum NLF will 
+(i.e., lambda). Attempt to integrate outside the maximum NLF will 
 generate an error.}
 }
 \value{
@@ -109,10 +99,9 @@ RSM is the Radiological Search Model described in the book. This
 ## mu = 3, lambda = 1.5, nu = 0.8, in the other treatment. 20\% of the diseased 
 ## cases have a single lesion, 40\% have two lesions, 10\% have 3 lesions, 
 ## and 30\% have 4 lesions.  
-lesDistr <- c(0.2, 0.4, 0.1, 0.3)
 
 PlotRsmOperatingCharacteristics(mu = c(2, 3), lambda = c(1, 1.5), nu = c(0.6, 0.8),
-   lesDistr = lesDistr, legendPosition = "bottom", nlfRange = c(0, 1), llfRange = c(0, 1))
+   lesDistr = c(0.2, 0.4, 0.1, 0.3), legendPosition = "bottom")
 
 }
 \references{
